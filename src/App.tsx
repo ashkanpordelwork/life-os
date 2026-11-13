@@ -29,6 +29,7 @@ import { Sigh } from './screens/Sigh';
 import { Nsdr } from './screens/Nsdr';
 import { Roadmap } from './screens/Roadmap';
 import { Reminders } from './screens/Reminders';
+import { TabBar, useScrollTopOnMount } from './screens/AppNav';
 const Styleguide = lazy(() => import('./screens/Styleguide').then((m) => ({ default: m.Styleguide })));
 
 /** Screens that need a logged-in user. */
@@ -47,6 +48,7 @@ function GuestOnly({ children }: { children: ReactNode }) {
 
 /** Each screen fades and slides in a little; the old one fades out quickly. */
 function Page({ children }: { children: ReactNode }) {
+  useScrollTopOnMount();
   return (
     <motion.div
       className="page"
@@ -105,6 +107,7 @@ export function App() {
         <SessionProvider>
           <HashRouter>
             <AnimatedRoutes />
+            <TabBar />
           </HashRouter>
         </SessionProvider>
       </OnboardingProvider>

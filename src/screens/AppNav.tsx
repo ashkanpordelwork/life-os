@@ -1,31 +1,55 @@
+import { useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { NavBar } from '../components/NavBar';
 import { NavItem } from '../components/NavItem';
 import { t } from '../i18n';
 
+type Tab = 'today' | 'progress' | 'roadmap' | 'you';
+const TABS: { key: Tab; path: string; icon: 'home' | 'route' | 'monitoring' | 'person' }[] = [
+  { key: 'today', path: '/today', icon: 'home' },
+  { key: 'roadmap', path: '/roadmap', icon: 'route' },
+  { key: 'progress', path: '/progress', icon: 'monitoring' },
+  { key: 'you', path: '/you', icon: 'person' },
+];
+
 /**
- * Bottom navigation, fixed to the bottom of the screen.
- * It is rendered outside the moving page (portal), because on iPhone Safari a glass (blurred)
- * bar inside an animated page can render blank. A spacer keeps page content above it.
- * Today, Roadmap, Progress and You.
+ * Space for the bottom navigation inside a tab screen, so the last card is never hidden.
+ * The bar itself is TabBar (one instance for the whole app).
  */
-export function AppNav({ active }: { active: 'today' | 'progress' | 'roadmap' | 'you' }) {
+export function AppNav(_: { active: Tab }) {
+  return <div className="app-nav-space" aria-hidden="true" />;
+}
+
+/**
+ * Bottom navigation, fixed to the bottom of the screen. Rendered once, outside the moving pages
+ * (portal): it does not flicker between tabs, the active pill slides, and on iPhone Safari a glass bar
+ * inside an animated page can render blank. Tapping the current tab scrolls back to the top (iOS).
+ */
+export function TabBar() {
   const navigate = useNavigate();
-  return (
-    <>
-      <div className="app-nav-space" aria-hidden="true" />
-      {createPortal(
-        <div className="app-nav">
-          <NavBar>
-            <NavItem label={t('nav.today')} icon="home" active={active === 'today'} onClick={() => navigate('/today')} />
-            <NavItem label={t('nav.roadmap')} icon="route" active={active === 'roadmap'} onClick={() => navigate('/roadmap')} />
-            <NavItem label={t('nav.progress')} icon="monitoring" active={active === 'progress'} onClick={() => navigate('/progress')} />
-            <NavItem label={t('nav.you')} icon="person" active={active === 'you'} onClick={() => navigate('/you')} />
-          </NavBar>
-        </div>,
-        document.body,
-      )}
-    </>
+  const { pathname } = useLocation();
+  const active = TABS.find((x) => x.path === pathname)?.key;
+  if (!active) return null;
+  return createPortal(
+    <div className="app-nav">
+      <NavBar>
+        {TABS.map((x) => (
+          <NavItem
+            key={x.key}
+            label={t(`nav.${x.key}`)}
+            icon={x.icon}
+            active={active === x.key}
+            onClick={() => (active === x.key ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate(x.path))}
+          />
+        ))}
+      </NavBar>
+    </div>,
+    document.body,
   );
+}
+
+/** A new screen starts at the top (fixes landing half-way down after a long page). */
+export function useScrollTopOnMount() {
+  useLayoutEffect(() => { window.scrollTo(0, 0); }, []);
 }
