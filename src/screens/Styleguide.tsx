@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import { AnswerRow } from '../components/AnswerRow';
 import { IconButton } from '../components/IconButton';
+import { BottomSheet } from '../components/BottomSheet';
 import { SprintStrip } from '../components/SprintStrip';
 import { TextButton } from '../components/TextButton';
 import { TextField } from '../components/TextField';
@@ -136,6 +137,7 @@ export function Styleguide() {
   const [nav, setNav] = useState(0);
   const [tinyChip, setTinyChip] = useState(false);
   const [replay, setReplay] = useState(0);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const areas: AreaVariant[] = ['Move', 'Nutrition', 'Sleep', 'Mind'];
   const levels: EvidenceLevel[] = ['Strong', 'Moderate', 'Low', 'Uncertain'];
@@ -402,6 +404,16 @@ export function Styleguide() {
         </Spec>
         <Spec name="MetaChip as a button" desc="Tiny mode on Today. Pressed = brand border and text.">
           <div className="sg-wrap"><MetaChip icon="bolt" label="Tiny mode" onClick={() => setTinyChip(!tinyChip)} pressed={tinyChip} /></div>
+        </Spec>
+        <Spec name="BottomSheet" desc="From Busy day / Rest day. White sheet, radius 28 on top, grabber, 45% scrim. Close with the scrim, Escape, or drag down. Optional art on the top edge.">
+          <div className="sg-wrap">
+            <Button variant="Secondary" label="Open sheet" onClick={() => setSheetOpen(true)} />
+            <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="Take today off?" decoration={<Mascot name="rest-busy-day" size={136} />}>
+              <p className="text-body-m text-primary">Streak safe. Nothing owed.</p>
+              <Button block label="Log a rest day" onClick={() => setSheetOpen(false)} />
+              <Button block variant="Ghost" label="Never mind" onClick={() => setSheetOpen(false)} />
+            </BottomSheet>
+          </div>
         </Spec>
         <Spec name="CheckCircle" desc="The 44x44 check target inside HabitCard and PatchCard.">
           <div className="sg-wrap"><Variant label="Todo"><CheckCircle done={false} /></Variant><Variant label="Done"><CheckCircle done /></Variant></div>

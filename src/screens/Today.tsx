@@ -2,6 +2,9 @@ import { motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
+import { BottomSheet } from '../components/BottomSheet';
+import { Button } from '../components/Button';
+import { Mascot } from '../components/Mascot';
 import { IconButton } from '../components/IconButton';
 import { MetaChip } from '../components/MetaChip';
 import { PatchCard } from '../components/PatchCard';
@@ -11,7 +14,7 @@ import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { Area } from '../data/types';
-import { areaScoresFromAnswers, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, type AnswerIndex } from '../engine';
+import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
@@ -32,7 +35,8 @@ function greeting(name: string, firstDay: boolean): string {
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone } = useSession();
+  const { profile, sprint, checkins, today, setDone, setRest } = useSession();
+  const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
   const [tiny, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
 
   const stats = useMemo(() => {
@@ -53,11 +57,16 @@ export function Today() {
   const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined);
   const doneCount = items.filter((i) => doneToday.has(i.id)).length;
   const allDone = items.length > 0 && doneCount === items.length;
-  const firstDay = day === 1 && checkins.length === 0;
+  const firstDay = day === 1 && !checkins.some((c) => c.item_id !== REST_ID);
+  const resting = checkins.some((c) => c.day === today && c.item_id === REST_ID);
+  const restAllowed = canRestToday(checkins, today) && doneCount === 0;
 
-  const toggleTiny = () => {
-    setTiny((v) => { try { localStorage.setItem(TINY_KEY, v ? '0' : '1'); } catch { /* ignore */ } return !v; });
+  const saveTiny = (on: boolean) => {
+    setTiny(on);
+    try { localStorage.setItem(TINY_KEY, on ? '1' : '0'); } catch { /* ignore */ }
   };
+  // Tiny mode off -> ask first (Busy day sheet). On -> one tap turns it off.
+  const onTinyChip = () => (tiny ? saveTiny(false) : setSheet('busy'));
 
   const tick = async (id: string) => {
     const done = !doneToday.has(id);
@@ -87,7 +96,7 @@ export function Today() {
         <h2 className="text-title-m text-primary">{t('today.section')}</h2>
         <div className="today__progress">
           <SegmentedProgress variant="today" total={items.length} filled={doneCount} />
-          <span className="text-mono-caption text-primary">{doneCount}/{items.length}</span>
+          <span className="text-mono-caption text-primary">{resting ? t('today.resting') : `${doneCount}/${items.length}`}</span>
         </div>
       </div>
 
@@ -98,6 +107,7 @@ export function Today() {
             title={item.title}
             meta={tiny ? item.versions.tiny.time : formatMinutes(item.duration_min, t)}
             done={doneToday.has(item.id)}
+            dimmed={resting}
             onOpen={() => navigate(`/patch/${item.id}`)}
             onToggle={() => tick(item.id)}
             checkLabel={t('today.markDone', { title: item.title })}
@@ -108,10 +118,32 @@ export function Today() {
       <SprintStrip label={`Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
 
       <div className="today__chip">
-        {allDone
-          ? <MetaChip icon="task_alt" label={t('today.allDone')} />
-          : <MetaChip icon="bolt" label={t(tiny ? 'today.tinyOn' : 'today.tiny')} onClick={toggleTiny} pressed={tiny} />}
+        {allDone ? (
+          <MetaChip icon="task_alt" label={t('today.allDone')} />
+        ) : resting ? (
+          <MetaChip icon="verified_user" label={t('today.restOn')} />
+        ) : (
+          <>
+            <MetaChip icon="bolt" label={t(tiny ? 'today.tinyOn' : 'today.tiny')} onClick={onTinyChip} pressed={tiny} />
+            {restAllowed && <MetaChip icon="bedtime" label={t('today.rest')} onClick={() => setSheet('rest')} />}
+          </>
+        )}
       </div>
+
+      <BottomSheet open={sheet === 'busy'} onClose={() => setSheet(null)} title={t('today.busyTitle')} decoration={<Mascot name="rest-busy-day" size={136} />}>
+        <p className="text-body-m text-primary">{t('today.busyBody')}</p>
+        <ul className="today__tiny-list">
+          {items.map((i) => <li key={i.id} className="text-body-s text-primary">{i.tiny_version}</li>)}
+        </ul>
+        <Button block label={t('today.busyUse')} onClick={() => { saveTiny(true); setSheet(null); }} />
+        <Button block variant="Ghost" label={t('today.busyKeep')} onClick={() => setSheet(null)} />
+      </BottomSheet>
+
+      <BottomSheet open={sheet === 'rest'} onClose={() => setSheet(null)} title={t('today.restTitle')}>
+        <p className="text-body-m text-primary">{t('today.restBody')}</p>
+        <Button block label={t('today.restLog')} onClick={async () => { setSheet(null); await setRest(true); }} />
+        <Button block variant="Ghost" label={t('today.restCancel')} onClick={() => setSheet(null)} />
+      </BottomSheet>
 
       <Spacer />
       <AppNav active="today" />

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { backend, type Checkin, type Profile, type UserInfo } from '../backend';
 import type { Sprint, VersionKey } from '../data/types';
-import { dayKey } from '../engine';
+import { REST_ID, dayKey } from '../engine';
 import { useOnboarding } from './onboarding';
 
 interface SessionState {
@@ -22,7 +22,10 @@ interface SessionApi extends SessionState {
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   saveSprint: (sprint: Sprint) => Promise<void>;
+  /** Tick or untick a patch for today. Ticking on a rest day ends the rest day. */
   setDone: (itemId: string, done: boolean, version?: VersionKey) => Promise<void>;
+  /** Log (or remove) today's rest day. */
+  setRest: (on: boolean) => Promise<void>;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -99,8 +102,22 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           ? [...p.checkins.filter((x) => !(x.day === c.day && x.item_id === itemId)), c]
           : p.checkins.filter((x) => !(x.day === c.day && x.item_id === itemId)),
       }));
+      const wasResting = done && before.some((x) => x.day === c.day && x.item_id === REST_ID);
+      if (wasResting) setS((p) => ({ ...p, checkins: p.checkins.filter((x) => !(x.day === c.day && x.item_id === REST_ID)) }));
       try {
         await backend.setCheckin(s.user.id, c, done);
+        if (wasResting) await backend.setCheckin(s.user.id, { day: c.day, item_id: REST_ID, version: 'standard' }, false);
+      } catch {
+        setS((p) => ({ ...p, checkins: before }));
+      }
+    },
+    async setRest(on) {
+      if (!s.user) return;
+      const c: Checkin = { day: dayKey(new Date()), item_id: REST_ID, version: 'standard' };
+      const before = s.checkins;
+      setS((p) => ({ ...p, checkins: on ? [...p.checkins.filter((x) => !(x.day === c.day && x.item_id === REST_ID)), c] : p.checkins.filter((x) => !(x.day === c.day && x.item_id === REST_ID)) }));
+      try {
+        await backend.setCheckin(s.user.id, c, on);
       } catch {
         setS((p) => ({ ...p, checkins: before }));
       }

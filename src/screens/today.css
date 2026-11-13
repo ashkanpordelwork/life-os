@@ -4,5 +4,6 @@
 .today__section { display: flex; align-items: center; justify-content: space-between; }
 .today__progress { display: flex; align-items: center; gap: var(--space-8); }
 .today__card { inline-size: 100%; }
-.today__chip { display: flex; justify-content: center; }
+.today__chip { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-8); }
+.today__tiny-list { display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding: var(--space-12) var(--space-16); list-style: none; border-radius: var(--radius-md); background: var(--color-bg-subtle); }
 .app-nav { position: sticky; inset-block-end: calc(var(--space-16) + env(safe-area-inset-bottom)); z-index: 10; }

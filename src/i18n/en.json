@@ -175,7 +175,18 @@
     "tinyOn": "Tiny mode · on",
     "allDone": "All done · see you tomorrow",
     "notifications": "Reminders",
-    "markDone": "Mark {title} done"
+    "markDone": "Mark {title} done",
+    "busyTitle": "Busy day?",
+    "busyBody": "Tiny versions. About 20 s each.",
+    "busyUse": "Use tiny versions",
+    "busyKeep": "Keep as planned",
+    "rest": "Rest day",
+    "restTitle": "Take today off?",
+    "restBody": "Streak safe. Nothing owed.",
+    "restLog": "Log a rest day",
+    "restCancel": "Never mind",
+    "resting": "Resting",
+    "restOn": "Rest day · streak safe"
   },
   "nav": {
     "today": "Today",
@@ -220,5 +231,10 @@
       "S"
     ],
     "dayLabel": "{day}: {n} of {total} done"
+  },
+  "you": {
+    "label": "Sprint {nn}",
+    "email": "Signed in as",
+    "signOut": "Sign out"
   }
 }

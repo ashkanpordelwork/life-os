@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, currentStreak, dayKey, heatLevel, sprintDay, totalActiveDays, weekDays } from './streak';
+import { REST_ID, addDays, canRestToday, currentStreak, dayKey, heatLevel, sprintDay, totalActiveDays, weekDays } from './streak';
 
 const c = (day: string, item_id = 'SL01') => ({ day, item_id });
 
@@ -52,5 +52,29 @@ describe('dates', () => {
 describe('heatLevel', () => {
   it('maps 0–3 patches to HeatCell levels', () => {
     expect([0, 1, 2, 3].map((n) => heatLevel(n, 3))).toEqual([0, 1, 3, 4]);
+  });
+});
+
+describe('rest days (owner rules)', () => {
+  const rest = (day: string) => ({ day, item_id: REST_ID });
+
+  it('a rest day keeps the streak but does not add to it', () => {
+    const list = [c('2026-11-10'), c('2026-11-11'), rest('2026-11-12'), c('2026-11-13')];
+    expect(currentStreak(list, '2026-11-13')).toBe(3);
+  });
+
+  it('resting today keeps yesterday\'s streak', () => {
+    expect(currentStreak([c('2026-11-11'), c('2026-11-12'), rest('2026-11-13')], '2026-11-13')).toBe(2);
+  });
+
+  it('rest days are not counted as active days', () => {
+    expect(totalActiveDays([rest('2026-11-12'), c('2026-11-13')])).toBe(1);
+  });
+
+  it('allows only 1 rest day per week (Mon–Sun)', () => {
+    expect(canRestToday([], '2026-11-13')).toBe(true);
+    expect(canRestToday([rest('2026-11-10')], '2026-11-13')).toBe(false); // same week
+    expect(canRestToday([rest('2026-11-08')], '2026-11-13')).toBe(true); // last Sunday, other week
+    expect(canRestToday([rest('2026-11-13')], '2026-11-13')).toBe(false); // already resting
   });
 });

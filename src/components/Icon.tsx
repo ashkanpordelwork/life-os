@@ -21,7 +21,7 @@ export type IconName =
   | 'directions_walk' | 'event' | 'fitness_center' | 'home' | 'info' | 'insights' | 'lock' | 'mail' | 'notifications'
   | 'local_cafe' | 'local_fire_department' | 'monitoring' | 'person'
   | 'restaurant' | 'route' | 'science' | 'self_improvement' | 'sunny'
-  | 'task_alt' | 'timer' | 'trending_up' | 'tune' | 'water_drop';
+  | 'task_alt' | 'timer' | 'trending_up' | 'tune' | 'verified_user' | 'water_drop';
 
 type IconProps = {
   name: IconName;
