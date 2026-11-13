@@ -20,6 +20,7 @@ import { You } from './screens/You';
 import { Review } from './screens/Review';
 import { Progress } from './screens/Progress';
 import { ScoreByArea } from './screens/ScoreByArea';
+import { Insights } from './screens/Insights';
 import { Roadmap } from './screens/Roadmap';
 import { Reminders } from './screens/Reminders';
 const Styleguide = lazy(() => import('./screens/Styleguide').then((m) => ({ default: m.Styleguide })));
@@ -73,6 +74,7 @@ function AnimatedRoutes() {
         <Route path="/review" element={page(<RequireUser><Review /></RequireUser>)} />
         <Route path="/roadmap" element={page(<RequireUser><Roadmap /></RequireUser>)} />
         <Route path="/progress" element={page(<RequireUser><Progress /></RequireUser>)} />
+        <Route path="/progress/insights" element={page(<RequireUser><Insights /></RequireUser>)} />
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
         <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
         <Route path="/sleep-times" element={page(<RequireUser><SleepTimesEdit /></RequireUser>)} />

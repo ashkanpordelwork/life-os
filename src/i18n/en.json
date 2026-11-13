@@ -344,5 +344,30 @@
     "total": "About {h} h of sleep",
     "editTitle": "Sleep times",
     "save": "Save"
+  },
+  "insights": {
+    "title": "Insights",
+    "open": "Insights",
+    "openSubtitle": "Patterns from your days",
+    "sprintLabel": "Sprint {n} so far",
+    "sprintBody": "of days with a patch done",
+    "levelAria": "{p}% of days. Level 2 needs {need}%.",
+    "levelOpen": "Level 2 is open",
+    "levelOnTrack": "On track for Level 2",
+    "levelNeed": "Level 2 at {need}%",
+    "patchesTitle": "Patch by patch",
+    "daysOf": "{n} / {total} days",
+    "daysTitle": "Your best days",
+    "dayValue": "{day}: {n} active days in the last {weeks} weeks",
+    "daysEmpty": "Tick a patch to start the chart.",
+    "longest": "Best streak",
+    "notesTitle": "What we notice",
+    "notEnough": "A few more days and patterns show up here. {n} to go.",
+    "noteDay": "{day} is your strongest day.",
+    "noteSteady": "{title} is your steadiest patch this Sprint.",
+    "noteUp": "Your score is up {x} since you started.",
+    "noteDown": "Your score is down {x} since you started. Small steps still count.",
+    "daysTap": "Tap a day to see it.",
+    "levelLater": "Level 2 opens from Sprint 3 at {need}%"
   }
 }

@@ -5,6 +5,7 @@ import { AnimatedNumber } from '../components/AnimatedNumber';
 import { BottomSheet } from '../components/BottomSheet';
 import { Chip } from '../components/Chip';
 import { HeatCell } from '../components/HeatCell';
+import { ListRow } from '../components/ListRow';
 import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
 import { StatChip } from '../components/StatChip';
@@ -102,6 +103,7 @@ export function Progress() {
           <StatChip fill icon="trending_up" value={<AnimatedNumber value={score} decimals={1} />} label={t('today.score')} />
         </button>
       </div>
+      <ListRow icon="insights" title={t('insights.open')} subtitle={t('insights.openSubtitle')} onClick={() => navigate('/progress/insights')} />
       <Spacer />
       <AppNav active="progress" />
 

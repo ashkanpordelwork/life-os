@@ -7,3 +7,4 @@ export * from './recommend';
 export * from './streak';
 export * from './theme';
 export * from './timeHint';
+export * from './insights';
