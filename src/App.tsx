@@ -31,6 +31,7 @@ import { Nsdr } from './screens/Nsdr';
 import { ErrorZone, FocusSession, SelfTest, WoopTool } from './screens/FocusTools';
 import { NutritionTool } from './screens/NutritionTool';
 import { JetLag } from './screens/JetLag';
+import { Supplements } from './screens/Supplements';
 import { Roadmap } from './screens/Roadmap';
 import { Reminders } from './screens/Reminders';
 import { TabBar, useScrollTopOnMount } from './screens/AppNav';
@@ -100,6 +101,7 @@ function AnimatedRoutes() {
         <Route path="/tool/focus" element={page(<RequireUser><FocusSession /></RequireUser>)} />
         <Route path="/tool/woop" element={page(<RequireUser><WoopTool /></RequireUser>)} />
         <Route path="/tool/errors" element={page(<RequireUser><ErrorZone /></RequireUser>)} />
+        <Route path="/library/supplements" element={page(<RequireUser><Supplements /></RequireUser>)} />
         <Route path="/tool/jet-lag" element={page(<RequireUser><JetLag /></RequireUser>)} />
         <Route path="/tool/nutrition" element={page(<RequireUser><NutritionTool /></RequireUser>)} />
         <Route path="/tool/self-test" element={page(<RequireUser><SelfTest /></RequireUser>)} />

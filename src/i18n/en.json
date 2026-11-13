@@ -657,5 +657,19 @@
       "Exercise in the local morning.",
       "Wear blue/green-blocking glasses at night."
     ]
+  },
+  "supps": {
+    "title": "Supplement guides",
+    "subtitle": "Reference only, with safety notes",
+    "warn": "Not medical advice. Talk to your doctor first, especially if you take medication. Try one at a time. Pick tested products (NSF or USP).",
+    "warnRisk": "You told us about a health risk (pregnancy, heart or illness). Don't take any of these without your doctor.",
+    "groups": {
+      "sleep": "Sleep",
+      "stress": "Stress",
+      "focus": "Focus",
+      "omega": "Omega-3",
+      "avoid": "Be careful"
+    },
+    "footer": "Life OS never adds supplements to your Sprint. Habits come first."
   }
 }

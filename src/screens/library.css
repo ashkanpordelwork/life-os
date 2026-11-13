@@ -53,3 +53,10 @@
 /* Jet-lag */
 .jet__row { display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
 .jet__list { display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding-inline-start: var(--space-20); }
+/* Supplement guides */
+.supps__warn { display: flex; align-items: flex-start; gap: var(--space-8); padding: var(--space-12) var(--space-16); border-radius: var(--radius-md); background: var(--color-status-gold-bg); color: var(--color-status-gold); }
+.supps__warn--risk { background: var(--color-status-danger-bg); color: var(--color-status-danger); }
+.supps__card { display: flex; flex-direction: column; gap: var(--space-4); }
+.supps__card + .supps__card { padding-block-start: var(--space-12); border-block-start: 1px solid var(--color-border-default); }
+.supps__caution { display: flex; align-items: flex-start; gap: var(--space-4); color: var(--color-status-gold); }
+.supps__card .nutri__row > :last-child { white-space: normal; text-align: end; flex-shrink: 1; max-inline-size: 50%; }

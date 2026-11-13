@@ -87,6 +87,7 @@ export function Library() {
       {tab === 'learn' && (
         <>
           <p className="text-body-s text-secondary">{t('library.learnIntro')}</p>
+          <ListRow icon="science" title={t('supps.title')} subtitle={t('supps.subtitle')} onClick={() => navigate('/library/supplements')} />
           <div className="chip-wrap">
             {(['All', ...AREAS] as const).map((a) => (
               <Chip key={a} label={a === 'All' ? t('review.all') : t(`review.areas.${a}`)} selected={area === a} onToggle={() => setArea(a)} />

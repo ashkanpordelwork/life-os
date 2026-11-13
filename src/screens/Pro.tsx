@@ -19,7 +19,7 @@ const FEATURES: { key: string; icon: IconName; ready: boolean }[] = [
   { key: 'focus', icon: 'bolt', ready: true },
   { key: 'nutrition', icon: 'restaurant', ready: true },
   { key: 'travel', icon: 'event', ready: true },
-  { key: 'supplements', icon: 'science', ready: false },
+  { key: 'supplements', icon: 'science', ready: true },
 ];
 
 /**
