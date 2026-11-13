@@ -20,6 +20,8 @@ type PatchCardProps = {
   checkLabel?: string;
   /** Faded at 50% (Figma Today rest day). Still tappable. */
   dimmed?: boolean;
+  /** No check circle (Sprint review: the decision chips sit below instead). */
+  hideCheck?: boolean;
 };
 
 /**
@@ -31,7 +33,7 @@ type PatchCardProps = {
  * - Today: body opens the patch (`onOpen`), the circle ticks it (`onToggle`).
  * Motion: card shrinks a little while pressed; the check pops (CheckCircle).
  */
-export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed }: PatchCardProps) {
+export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed, hideCheck }: PatchCardProps) {
   const body = (
     <>
       <IconTile glyph={glyph} size="M" />
@@ -63,9 +65,9 @@ export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, 
   return (
     <motion.div className="patch-card glass-card" animate={{ opacity: dimmed ? 0.5 : 1 }} whileTap={{ scale: 0.98 }} transition={motionTokens.press}>
       <button type="button" className="patch-card__open" onClick={onOpen}>{body}</button>
-      <button type="button" role="checkbox" aria-checked={done} aria-label={checkLabel ?? title} className="patch-card__check" onClick={onToggle}>
+      {!hideCheck && <button type="button" role="checkbox" aria-checked={done} aria-label={checkLabel ?? title} className="patch-card__check" onClick={onToggle}>
         <CheckCircle done={done} />
-      </button>
+      </button>}
     </motion.div>
   );
 }

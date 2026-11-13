@@ -236,5 +236,35 @@
     "label": "Sprint {nn}",
     "email": "Signed in as",
     "signOut": "Sign out"
+  },
+  "review": {
+    "cta": "Review Sprint {nn}",
+    "topTitle": "Sprint {n} review",
+    "title": "How did it go?",
+    "subtitle": "Keep, swap or drop each patch.",
+    "daysDone": "{n} / {total} days",
+    "keep": "Keep",
+    "swap": "Swap",
+    "drop": "Drop",
+    "seeSuggestions": "See suggestions",
+    "continue": "Continue",
+    "nextTitle": "Sprint {n}",
+    "pickCount": "{n} of {total}",
+    "suggestTitle": "Suggested for you",
+    "suggestSubtitle": "Based on what slipped in Sprint {n}.",
+    "confirmPick": "Confirm pick",
+    "browse": "Browse all patches",
+    "browseTitle": "Browse patches",
+    "all": "All",
+    "readyTitle": "Ready?",
+    "startsToday": "Starts today",
+    "confirm": "Confirm Sprint {n}",
+    "empty": "No more patches to suggest right now. Keep one instead.",
+    "areas": {
+      "Movement": "Move",
+      "Nutrition": "Nutrition",
+      "Sleep": "Sleep",
+      "Mind": "Mind"
+    }
   }
 }

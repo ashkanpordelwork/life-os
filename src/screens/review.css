@@ -1,0 +1,5 @@
+.review__step { display: flex; flex: 1; flex-direction: column; gap: var(--space-16); inline-size: 100%; }
+/* Figma: the patch row inside the review panel has no glass of its own. */
+.review__patch .patch-card { background: transparent; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+/* Figma "Patch review" and "Start" panels: padding 12, gap 10. */
+.review__step .glass-panel { padding: var(--space-12); gap: 10px; }

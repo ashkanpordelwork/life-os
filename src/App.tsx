@@ -15,6 +15,7 @@ import { Today } from './screens/Today';
 import { PatchDetail } from './screens/PatchDetail';
 import { Done } from './screens/Done';
 import { You } from './screens/You';
+import { Review } from './screens/Review';
 const Styleguide = lazy(() => import('./screens/Styleguide').then((m) => ({ default: m.Styleguide })));
 
 /** Screens that need a logged-in user. */
@@ -62,6 +63,7 @@ function AnimatedRoutes() {
         <Route path="/today" element={page(<RequireUser><Today /></RequireUser>)} />
         <Route path="/patch/:id" element={page(<RequireUser><PatchDetail /></RequireUser>)} />
         <Route path="/done" element={page(<RequireUser><Done /></RequireUser>)} />
+        <Route path="/review" element={page(<RequireUser><Review /></RequireUser>)} />
         <Route path="/you" element={page(<RequireUser><You /></RequireUser>)} />
         <Route path="/styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
         <Route path="*" element={<Navigate to="/" replace />} />

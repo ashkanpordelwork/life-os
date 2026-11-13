@@ -19,6 +19,7 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
+import { reviewDue, reviewLabel } from './Review';
 import { formatMinutes, pad2 } from './flow';
 import './today.css';
 
@@ -116,6 +117,7 @@ export function Today() {
       ))}
 
       <SprintStrip label={`Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
+      {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
       <div className="today__chip">
         {allDone ? (
