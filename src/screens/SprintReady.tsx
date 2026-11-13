@@ -2,6 +2,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useSession } from '../state/session';
 import { Button } from '../components/Button';
 import { GlassPanel } from '../components/GlassPanel';
+import { Confetti } from '../components/Confetti';
 import { Mascot } from '../components/Mascot';
 import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
@@ -24,6 +25,7 @@ export function SprintReady() {
 
   return (
     <Screen align="center">
+      <Confetti />
       <Spacer />
       <Mascot name="core-pointing" size={238} animated />
       <p className="text-mono-label text-brand text-center">{t('ready.label', { nn, days: sprint.length_days })}</p>

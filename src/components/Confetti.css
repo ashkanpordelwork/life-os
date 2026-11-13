@@ -1,0 +1,9 @@
+.confetti { position: fixed; inset-block-start: 22%; inset-inline-start: 50%; inline-size: 0; block-size: 0; pointer-events: none; z-index: 5; }
+.confetti__piece { position: absolute; border-radius: 2px; }
+.confetti__piece--round { border-radius: 50%; }
+.confetti__piece--brand { background: var(--color-brand-main); }
+.confetti__piece--move { background: var(--color-area-move); }
+.confetti__piece--nutrition { background: var(--color-area-nutrition); }
+.confetti__piece--sleep { background: var(--color-area-sleep); }
+.confetti__piece--mind { background: var(--color-heat-2); }
+.confetti__piece--gold { background: var(--color-status-gold-bg); }

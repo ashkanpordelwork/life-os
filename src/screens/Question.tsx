@@ -1,4 +1,6 @@
+import { motion } from 'motion/react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { haptic, motionTokens } from '../styles/motion';
 import { AnswerRow } from '../components/AnswerRow';
 import { Button } from '../components/Button';
 import { IconTile, type Glyph } from '../components/IconTile';
@@ -9,7 +11,7 @@ import { AREAS, type Area } from '../data/types';
 import type { AnswerIndex } from '../engine';
 import { t, tList } from '../i18n';
 import { useOnboarding } from '../state/onboarding';
-import { QUESTION_ROUTES, TIMES_ROUTE, TOTAL_STEPS, areaFromSlug } from './flow';
+import { HEALTH_ROUTE, QUESTION_ROUTES, TIMES_ROUTE, TOTAL_STEPS, areaFromSlug } from './flow';
 import './onboarding.css';
 
 const GLYPH: Record<Area, Glyph> = { Movement: 'Move', Nutrition: 'Nutrition', Sleep: 'Sleep', Mind: 'Mind' };
@@ -27,7 +29,7 @@ export function Question() {
   const step = index + 2 + (index > AREAS.indexOf('Sleep') ? 1 : 0);
   const selected = state.answers[area];
   const back = index === 0 ? '/symptoms' : AREAS[index - 1] === 'Sleep' ? TIMES_ROUTE : QUESTION_ROUTES[AREAS[index - 1]];
-  const next = area === 'Sleep' ? TIMES_ROUTE : index === AREAS.length - 1 ? '/score' : QUESTION_ROUTES[AREAS[index + 1]];
+  const next = area === 'Sleep' ? TIMES_ROUTE : index === AREAS.length - 1 ? HEALTH_ROUTE : QUESTION_ROUTES[AREAS[index + 1]];
 
   return (
     <Screen>
@@ -37,7 +39,9 @@ export function Question() {
       <h2 className="text-title-l text-primary">{t(`questions.${area}.question`)}</h2>
       <div className="answer-list" role="radiogroup" aria-label={t(`questions.${area}.question`)}>
         {tList(`questions.${area}.answers`).map((label, i) => (
-          <AnswerRow key={label} label={label} selected={selected === i} onSelect={() => setAnswer(area, i as AnswerIndex)} />
+          <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.06 + i * motionTokens.stagger }}>
+            <AnswerRow label={label} selected={selected === i} onSelect={() => { haptic(8); setAnswer(area, i as AnswerIndex); }} />
+          </motion.div>
         ))}
       </div>
       <Spacer />

@@ -5,6 +5,7 @@ import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
 import { TopBar } from '../components/TopBar';
 import { ITEMS } from '../data';
+import { flagsFromHealth } from '../data/safetyRules';
 import type { Area } from '../data/types';
 import { areaScoresFromAnswers, recommend, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
@@ -24,8 +25,8 @@ export function PickPatches() {
   const offers = useMemo(() => {
     if (missing) return [];
     const scores = areaScoresFromAnswers(state.answers as Record<Area, AnswerIndex>);
-    return recommend({ items: ITEMS, symptoms: state.symptoms, scores, sprintNumber: SPRINT_NUMBER });
-  }, [missing, state.answers, state.symptoms]);
+    return recommend({ items: ITEMS, symptoms: state.symptoms, scores, sprintNumber: SPRINT_NUMBER, flags: flagsFromHealth(state.health) });
+  }, [missing, state.answers, state.symptoms, state.health]);
 
   // Start with the top 3 offers picked (as in Figma). Reset if the offers changed.
   const offerIds = offers.map((o) => o.item.id);

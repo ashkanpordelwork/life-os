@@ -423,5 +423,47 @@
       "Move your attention through your body, one spot at a time.",
       "Just feel. No need to stop your thoughts."
     ]
+  },
+  "health": {
+    "topTitle": "Health check",
+    "title": "Anything we should know?",
+    "subtitle": "Tick what's true for you now. We'll leave out patches that aren't safe for you.",
+    "pregnant": "Pregnant",
+    "heart": "Heart condition",
+    "ill": "Ill right now (cold or flu)",
+    "insomnia": "Trouble falling asleep",
+    "private": "Only used to pick your patches."
+  },
+  "safety": {
+    "label": "Safety",
+    "title": "Stop if it hurts.",
+    "notAdvice": "Not medical advice",
+    "ok": "I understand",
+    "risk": "Check with your doctor first. We'll skip cold exposure and hard cardio for you."
+  },
+  "intro": {
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Let's start",
+    "sprint": {
+      "label": "Sprint",
+      "title": "14 days, 3 patches.",
+      "body": "A Sprint is 14 days with the same 3 small habits. About 12 minutes a day."
+    },
+    "patch": {
+      "label": "Patch",
+      "title": "One small habit.",
+      "body": "Tick it off each day. Busy? The tiny version takes about 20 seconds and still counts."
+    },
+    "release": {
+      "label": "Release",
+      "title": "Keep, swap or drop.",
+      "body": "At the end of a Sprint you review each patch and check your score again."
+    },
+    "levels": {
+      "label": "Levels",
+      "title": "Bigger patches unlock.",
+      "body": "Do a patch on 70% of a Sprint's days, and Level 2 opens from Sprint 3."
+    }
   }
 }

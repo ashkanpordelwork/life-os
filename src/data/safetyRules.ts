@@ -1,4 +1,9 @@
-import type { ChecklistItem, NeedTag } from './types';
+import type { ChecklistItem, HealthAnswers, NeedTag } from './types';
+
+/** Engine flags from the Health check answers. */
+export function flagsFromHealth(h: HealthAnswers | undefined): SafetyContext['flags'] {
+  return { insomnia: !!h?.insomnia, healthRisk: !!(h?.pregnant || h?.heart || h?.ill) };
+}
 
 /** What the engine knows about the user when filtering. */
 export interface SafetyContext {
@@ -40,8 +45,8 @@ export const SAFETY_RULES: SafetyRule[] = [
   },
   {
     code: 'R06',
-    description: 'Viral illness, pregnancy or heart condition blocks cold exposure (ST02).',
-    blocks: (item, ctx) => item.id === 'ST02' && !!ctx.flags?.healthRisk,
+    description: 'Viral illness, pregnancy or heart condition blocks cold exposure (ST02) and hard cardio (EX03, "health lock" in engine-spec 3-B).',
+    blocks: (item, ctx) => (item.id === 'ST02' || item.id.startsWith('EX03')) && !!ctx.flags?.healthRisk,
   },
   {
     code: 'R13',

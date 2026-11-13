@@ -9,6 +9,9 @@ import { Symptoms } from './screens/Symptoms';
 import { Question } from './screens/Question';
 import { StartingScore } from './screens/StartingScore';
 import { SleepTimesStep } from './screens/SleepTimesStep';
+import { Health } from './screens/Health';
+import { Safety } from './screens/Safety';
+import { Intro } from './screens/Intro';
 import { SleepTimesEdit } from './screens/SleepTimesEdit';
 import { PickPatches } from './screens/PickPatches';
 import { SprintReady } from './screens/SprintReady';
@@ -65,6 +68,9 @@ function AnimatedRoutes() {
         <Route path="/" element={page(<Welcome />)} />
         <Route path="/symptoms" element={page(<Symptoms />)} />
         <Route path="/question/:area" element={page(<Question />)} />
+        <Route path="/intro" element={page(<Intro />)} />
+        <Route path="/health" element={page(<Health />)} />
+        <Route path="/safety" element={page(<Safety />)} />
         <Route path="/times" element={page(<SleepTimesStep />)} />
         <Route path="/score" element={page(<StartingScore />)} />
         <Route path="/patches" element={page(<PickPatches />)} />

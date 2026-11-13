@@ -67,6 +67,15 @@ export interface ChecklistItem {
   todo?: string[];
 }
 
+/** Self-reported health answers (onboarding Health check). Used by safety rules R01 and R06. */
+export interface HealthAnswers {
+  pregnant?: boolean;
+  heart?: boolean;
+  ill?: boolean;
+  /** Trouble falling asleep (R01). */
+  insomnia?: boolean;
+}
+
 export type SprintTheme = 'Morning basics' | 'Move more' | 'Eat on time' | 'Sleep base' | 'Calm focus';
 
 export interface Sprint {

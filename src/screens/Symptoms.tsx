@@ -23,7 +23,7 @@ export function Symptoms() {
   };
   return (
     <Screen>
-      <TopBar title={t('symptomsScreen.topTitle')} trailing={t('common.step', { n: 1, total: TOTAL_STEPS })} onBack={() => navigate('/')} />
+      <TopBar title={t('symptomsScreen.topTitle')} trailing={t('common.step', { n: 1, total: TOTAL_STEPS })} onBack={() => navigate('/intro')} />
       <SegmentedProgress total={TOTAL_STEPS} filled={1} />
       <h2 className="text-title-l text-primary">{t('symptomsScreen.title')}</h2>
       <p className="text-body-s text-secondary">{t('symptomsScreen.subtitle')}</p>

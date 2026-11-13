@@ -13,6 +13,7 @@ create table if not exists public.profiles (
 alter table public.profiles add column if not exists start_answers jsonb;
 alter table public.profiles add column if not exists wake_time text;
 alter table public.profiles add column if not exists bed_time text;
+alter table public.profiles add column if not exists health jsonb;
 
 create table if not exists public.sprints (
   user_id uuid not null references auth.users (id) on delete cascade,

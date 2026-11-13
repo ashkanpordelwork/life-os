@@ -10,3 +10,9 @@
   list-style: none;
 }
 .hero { display: flex; justify-content: center; inline-size: 100%; }
+/* Safety (Figma 2032:3562): the chip row is centred. */
+.safety__facts { display: flex; justify-content: center; }
+/* Intro slides (designed in code) */
+.intro__top { display: flex; align-items: center; justify-content: space-between; min-block-size: var(--size-touch); }
+.intro__slide { display: flex; flex-direction: column; gap: var(--space-12); touch-action: pan-y; cursor: grab; }
+.intro__dots { padding-inline: var(--space-40); }

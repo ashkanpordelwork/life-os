@@ -21,7 +21,7 @@ export function Welcome() {
       <h1 className="text-title-l text-primary text-center">{t('welcome.title')}</h1>
       <p className="text-body-m text-secondary text-center">{t('welcome.subtitle')}</p>
       <Spacer />
-      <Button block label={t('welcome.start')} onClick={() => navigate('/symptoms')} />
+      <Button block label={t('welcome.start')} onClick={() => navigate('/intro')} />
       <Button block variant="Ghost" label={t('welcome.account')} onClick={() => navigate('/login')} />
     </Screen>
   );

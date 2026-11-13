@@ -73,18 +73,19 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async loadProfile(userId) {
       // The extra columns come from a later schema update. If it hasn't been run yet, fall back.
-      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time').eq('id', userId).maybeSingle();
+      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health').eq('id', userId).maybeSingle();
       if (res.error) res = await sb.from('profiles').select('name, symptoms, answers').eq('id', userId).maybeSingle();
       const row = check(res) as Record<string, any> | null;
       if (!row) return null;
       return {
         name: row.name ?? '', symptoms: row.symptoms ?? [], answers: row.answers ?? {},
         start_answers: row.start_answers ?? undefined, wake_time: row.wake_time ?? undefined, bed_time: row.bed_time ?? undefined,
+        health: row.health ?? undefined,
       };
     },
     async saveProfile(userId, p) {
       const base = { id: userId, name: p.name, symptoms: p.symptoms, answers: p.answers };
-      const full = { ...base, start_answers: p.start_answers ?? null, wake_time: p.wake_time ?? null, bed_time: p.bed_time ?? null };
+      const full = { ...base, start_answers: p.start_answers ?? null, wake_time: p.wake_time ?? null, bed_time: p.bed_time ?? null, health: p.health ?? null };
       const res = await sb.from('profiles').upsert(full);
       if (res.error && /column|schema/i.test(res.error.message)) check(await sb.from('profiles').upsert(base));
       else check(res);

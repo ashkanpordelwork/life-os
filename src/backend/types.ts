@@ -1,4 +1,4 @@
-import type { Area, NeedTag, Sprint, VersionKey } from '../data/types';
+import type { Area, HealthAnswers, NeedTag, Sprint, VersionKey } from '../data/types';
 import type { AnswerIndex } from '../engine';
 
 export interface UserInfo {
@@ -17,6 +17,7 @@ export interface Profile {
   /** "HH:MM", 24-hour. */
   wake_time?: string;
   bed_time?: string;
+  health?: HealthAnswers;
 }
 
 export interface Checkin {

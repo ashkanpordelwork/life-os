@@ -13,6 +13,7 @@ import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
 import { TopBar } from '../components/TopBar';
 import { ITEMS, getItem } from '../data';
+import { flagsFromHealth, SAFETY_RULES } from '../data/safetyRules';
 import { AREAS, type Area, type ChecklistItem, type Sprint } from '../data/types';
 import {
   LEVEL_UP_COMPLETION, addDays, allowedLevels, areaScoresFromAnswers, dayKey, levelFilter, overallScore, recommend,
@@ -67,7 +68,12 @@ export function Review() {
   const l2Before = allowedLevels(sprint?.number ?? 1, { l2Open: levelCtx.l2Open }).includes(2) || levelCtx.l2Open;
 
   const pool = useMemo(
-    () => levelFilter(ITEMS.filter((i) => i.kind === 'patch' && !excluded.has(i.id)), nextNumber, levelCtx),
+    () => levelFilter(
+      ITEMS.filter((i) => i.kind === 'patch' && !excluded.has(i.id))
+        // Browse also respects safety (e.g. no hard cardio with a health risk).
+        .filter((i) => !SAFETY_RULES.some((r) => r.blocks(i, { symptoms: profile?.symptoms ?? [], flags: flagsFromHealth(profile?.health) }))),
+      nextNumber, levelCtx,
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [sprint, nextNumber, completion],
   );
@@ -80,7 +86,7 @@ export function Review() {
   const suggestions = useMemo(() => {
     const scores = nowScores ?? startScores;
     if (!scores) return pool.slice(0, 3);
-    return recommend({ items: pool, symptoms: profile?.symptoms ?? [], scores, sprintNumber: nextNumber, levels: levelCtx }).map((o) => o.item).slice(0, 3);
+    return recommend({ items: pool, symptoms: profile?.symptoms ?? [], scores, sprintNumber: nextNumber, levels: levelCtx, flags: flagsFromHealth(profile?.health) }).map((o) => o.item).slice(0, 3);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, profile, nextNumber, answers]);
 

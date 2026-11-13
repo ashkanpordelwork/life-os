@@ -60,7 +60,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (!profile || (!sprint && d.sprint)) {
       profile = {
         name: user.name || profile?.name || '', symptoms: d.symptoms, answers: d.answers,
-        start_answers: d.answers, wake_time: d.wake_time, bed_time: d.bed_time,
+        start_answers: d.answers, wake_time: d.wake_time, bed_time: d.bed_time, health: d.health,
       };
       await backend.saveProfile(user.id, profile);
     }

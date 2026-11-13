@@ -5,8 +5,11 @@ import { AREAS } from '../data/types';
 import type { OnboardingState } from '../state/onboarding';
 
 /** Onboarding steps shown in the TopBar counter and segments:
- *  Symptoms + 4 questions + sleep times (after the Sleep question) + score = 7. */
-export const TOTAL_STEPS = 7;
+ *  Symptoms + 4 questions + sleep times (after Sleep) + health check (after Mind) + score = 8.
+ *  The Safety screen (Figma 2032:3562) between health check and score has no counter, as in Figma. */
+export const TOTAL_STEPS = 8;
+export const HEALTH_ROUTE = '/health';
+export const HEALTH_STEP = 7;
 export const TIMES_ROUTE = '/times';
 export const TIMES_STEP = 5;
 
