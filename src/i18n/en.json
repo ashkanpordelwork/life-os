@@ -212,6 +212,7 @@
     "notToday": "Not today"
   },
   "slots": {
+    "ALL_DAY": "All day",
     "MORNING": "Morning",
     "DESK": "At your desk",
     "LUNCH": "After a meal",

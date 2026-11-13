@@ -39,7 +39,7 @@ export function timeHint(item: ChecklistItem, wake: string, bed: string): TimeHi
 }
 
 /** Rough place in the day for items without a clock time, so Today can sort everything. */
-const SLOT_ORDER: Record<Slot, number> = { MORNING: 0, DESK: 1, LUNCH: 2, EVENING: 3, BEDTIME: 4 };
+const SLOT_ORDER: Record<Slot, number> = { ALL_DAY: 0, MORNING: 0, DESK: 1, LUNCH: 2, EVENING: 3, BEDTIME: 4 };
 
 /** Sort key in minutes after midnight (wake-relative for slots). */
 export function dayOrder(item: ChecklistItem, wake: string, bed: string): number {

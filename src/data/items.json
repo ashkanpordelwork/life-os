@@ -225,7 +225,7 @@
     ],
     "level": 1,
     "tier": "free",
-    "slot": "DESK",
+    "slot": "ALL_DAY",
     "duration_min": 45,
     "params": {
       "steps_per_day": [

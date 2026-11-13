@@ -12,7 +12,8 @@ export const NEED_TAGS: NeedTag[] = ['msk', 'fog', 'sleep', 'energy', 'meals', '
  *  library = read-only card; stack = bundle of items; nudge = reminder only. */
 export type ItemKind = 'patch' | 'task' | 'tool' | 'library' | 'stack' | 'nudge';
 
-export type Slot = 'MORNING' | 'DESK' | 'LUNCH' | 'EVENING' | 'BEDTIME';
+/** ALL_DAY added in code (owner decision) for patches spread over the day, e.g. daily steps. */
+export type Slot = 'ALL_DAY' | 'MORNING' | 'DESK' | 'LUNCH' | 'EVENING' | 'BEDTIME';
 export type Tier = 'free' | 'pro';
 export type Level = 1 | 2 | 3;
 
