@@ -377,9 +377,8 @@
     "tools": "Tools",
     "learn": "Learn",
     "toolsIntro": "Quick help for the moment you need it.",
-    "learnIntro": "Every patch, why it works, and where it comes from.",
+    "learnIntro": "Every patch and why it works.",
     "level": "Level {n}",
-    "source": "Book: {ids}",
     "unlocks": "Unlocks in a later Sprint",
     "open": "Library",
     "openSubtitle": "Tools and the science behind each patch"

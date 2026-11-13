@@ -48,7 +48,7 @@ export function PatchDetail() {
 
   return (
     <Screen>
-      <TopBar title={t('patch.topTitle')} trailing={item.id} onBack={() => navigate('/today')} />
+      <TopBar title={t('patch.topTitle')} onBack={() => navigate('/today')} />
       <div className="patch__hero">
         <IconTile glyph={item.glyph} size="L" />
         <div className="patch__title">

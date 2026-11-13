@@ -90,7 +90,6 @@ export function Library() {
               ))}
             </GlassPanel>
             <div className="chip-wrap">
-              <MetaChip icon="science" label={t('library.source', { ids: open.sources.join(', ') })} />
               {open.level > 1 && <MetaChip icon="lock" label={t('library.unlocks')} />}
             </div>
           </div>
