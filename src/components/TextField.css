@@ -1,0 +1,26 @@
+.text-field { display: flex; flex-direction: column; gap: 6px; inline-size: 100%; }
+.text-field__box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  block-size: 52px;
+  padding-inline: var(--space-16);
+  border-radius: 14px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-default);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.text-field__box:focus-within { border-color: var(--color-border-focus); box-shadow: 0 0 0 3px var(--color-brand-soft); }
+.text-field__box--error { border-color: var(--color-status-danger); }
+.text-field__icon { color: var(--color-text-secondary); }
+.text-field__input {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+}
+.text-field__input::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.text-field__error { color: var(--color-status-danger); }

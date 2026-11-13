@@ -6,6 +6,7 @@
   min-block-size: var(--size-touch);
 }
 .toggle__track {
+  transition: background-color 0.2s ease;
   position: relative;
   display: block;
   inline-size: 52px;
@@ -23,4 +24,4 @@
   border-radius: var(--radius-pill);
   background: var(--color-surface-card);
 }
-.toggle--on .toggle__knob { inset-inline-start: 25px; }
+

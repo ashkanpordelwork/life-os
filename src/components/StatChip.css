@@ -10,3 +10,4 @@
   border-radius: var(--radius-lg);
 }
 .stat-chip__icon { display: flex; color: var(--color-text-brand); }
+.stat-chip--fill { flex: 1 0 0; min-inline-size: 0; inline-size: auto; }

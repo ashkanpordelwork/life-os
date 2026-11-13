@@ -48,19 +48,39 @@
   "questions": {
     "Movement": {
       "question": "Days you moved 20+ min last week?",
-      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+      "answers": [
+        "0 days",
+        "1–2 days",
+        "3–4 days",
+        "5 days or more"
+      ]
     },
     "Nutrition": {
       "question": "Days you ate a real breakfast?",
-      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+      "answers": [
+        "0 days",
+        "1–2 days",
+        "3–4 days",
+        "5 days or more"
+      ]
     },
     "Sleep": {
       "question": "Nights you slept 7+ hours?",
-      "answers": ["0 nights", "1–2 nights", "3–4 nights", "5 nights or more"]
+      "answers": [
+        "0 nights",
+        "1–2 nights",
+        "3–4 nights",
+        "5 nights or more"
+      ]
     },
     "Mind": {
       "question": "Days you took a real break?",
-      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+      "answers": [
+        "0 days",
+        "1–2 days",
+        "3–4 days",
+        "5 days or more"
+      ]
     }
   },
   "score": {
@@ -83,7 +103,8 @@
     "sprintDef": "Sprint: 14 days with the same 3 patches.",
     "patchDef": "Patch: one small habit you tick off each day.",
     "releaseDef": "Release: at the end, you keep, swap or drop each patch.",
-    "cta": "Go to Today"
+    "cta": "Go to Today",
+    "ctaSignup": "Save my Sprint"
   },
   "styleguide": {
     "title": "Life OS design system",
@@ -99,6 +120,105 @@
     "icons": "Icons",
     "components": "Components",
     "layout": "Layout components (added in code)",
-    "mascots": "Mascots"
+    "mascots": "Mascots",
+    "motion": "Motion"
+  },
+  "auth": {
+    "brand": "Life OS",
+    "loginTitle": "Welcome back",
+    "signupTitle": "Create your account",
+    "email": "Email",
+    "emailPlaceholder": "you@work.com",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "passwordNew": "At least 8 characters",
+    "login": "Log in",
+    "signup": "Create account",
+    "forgot": "Forgot password?",
+    "newHere": "New here?",
+    "haveAccount": "Have an account?",
+    "terms": "By continuing you agree to the Terms and Privacy Policy.",
+    "resetSent": "If this email has an account, a reset link is on its way.",
+    "resetNeedEmail": "Type your email first, then tap “Forgot password?”.",
+    "confirmSent": "Almost there. Open the link we sent to {email}, then log in.",
+    "localMode": "Test mode: data stays on this phone only.",
+    "errors": {
+      "required": "Fill in this field.",
+      "emailFormat": "This doesn't look like an email.",
+      "short": "Use at least 8 characters.",
+      "invalid": "Wrong email or password.",
+      "exists": "This email already has an account. Try logging in.",
+      "weak": "Pick a stronger password (at least 8 characters).",
+      "email": "This email can't be used.",
+      "confirm": "Confirm your email first. Check your inbox.",
+      "network": "No connection. Try again.",
+      "unknown": "Something went wrong. Try again."
+    }
+  },
+  "today": {
+    "label": "Sprint {nn} · Day {dd}",
+    "hi": "Hi, {name}",
+    "hiNoName": "Hi there",
+    "morning": "Morning, {name}",
+    "afternoon": "Afternoon, {name}",
+    "evening": "Evening, {name}",
+    "morningNoName": "Good morning",
+    "afternoonNoName": "Good afternoon",
+    "eveningNoName": "Good evening",
+    "streak": "Streak",
+    "days": "Days",
+    "score": "Score",
+    "section": "Today",
+    "tiny": "Tiny mode",
+    "tinyOn": "Tiny mode · on",
+    "allDone": "All done · see you tomorrow",
+    "notifications": "Reminders",
+    "markDone": "Mark {title} done"
+  },
+  "nav": {
+    "today": "Today",
+    "roadmap": "Roadmap",
+    "progress": "Progress",
+    "you": "You",
+    "soon": "Coming soon"
+  },
+  "patch": {
+    "topTitle": "Patch",
+    "versions": {
+      "tiny": "Tiny",
+      "standard": "Standard",
+      "stretch": "Stretch"
+    },
+    "why": "Why this works",
+    "evidencePending": "Evidence not rated yet",
+    "safetyMove": "Stop if it hurts.",
+    "markDone": "Mark done",
+    "undo": "Not done yet",
+    "notToday": "Not today"
+  },
+  "slots": {
+    "MORNING": "Morning",
+    "DESK": "At your desk",
+    "LUNCH": "After a meal",
+    "EVENING": "Evening",
+    "BEDTIME": "Before bed"
+  },
+  "done": {
+    "streak": "Day streak",
+    "title": "Done.",
+    "week": "This week",
+    "cta": "Back to Today",
+    "weekdays": [
+      "M",
+      "T",
+      "W",
+      "T",
+      "F",
+      "S",
+      "S"
+    ],
+    "dayLabel": "{day}: {n} of {total} done"
   }
 }

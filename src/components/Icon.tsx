@@ -17,11 +17,11 @@ for (const [path, url] of Object.entries(files)) {
 export const iconNames = Object.keys(urls).sort();
 
 export type IconName =
-  | 'air' | 'arrow_back' | 'bedtime' | 'bolt' | 'check' | 'chevron_right'
-  | 'directions_walk' | 'event' | 'fitness_center' | 'home' | 'info'
+  | 'air' | 'arrow_back' | 'bedtime' | 'bolt' | 'calendar_today' | 'check' | 'chevron_right'
+  | 'directions_walk' | 'event' | 'fitness_center' | 'home' | 'info' | 'insights' | 'lock' | 'mail' | 'notifications'
   | 'local_cafe' | 'local_fire_department' | 'monitoring' | 'person'
   | 'restaurant' | 'route' | 'science' | 'self_improvement' | 'sunny'
-  | 'timer' | 'trending_up' | 'tune' | 'water_drop';
+  | 'task_alt' | 'timer' | 'trending_up' | 'tune' | 'water_drop';
 
 type IconProps = {
   name: IconName;

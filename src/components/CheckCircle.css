@@ -7,6 +7,7 @@
   block-size: var(--size-touch);
 }
 .check-circle {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,4 +16,20 @@
   border-radius: var(--radius-pill);
   border: 2px solid var(--color-text-secondary);
 }
-.check-circle--done { border: 0; background: var(--color-status-success); color: var(--color-surface-card); }
+.check-circle__fill {
+  position: absolute;
+  inset: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--color-status-success);
+  color: var(--color-surface-card);
+}
+.check-circle__ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-status-success);
+  pointer-events: none;
+}

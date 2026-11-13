@@ -1,0 +1,12 @@
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--size-touch);
+  block-size: var(--size-touch);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-glass);
+  border: 1px solid var(--color-border-glass);
+  color: var(--color-text-primary);
+}

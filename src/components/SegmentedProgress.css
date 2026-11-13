@@ -1,3 +1,9 @@
-.segments { display: flex; gap: var(--space-4); inline-size: 100%; }
-.segments__bar { flex: 1 0 0; min-inline-size: 1px; block-size: 4px; border-radius: 2px; background: var(--color-progress-track); }
-.segments__bar--on { background: var(--color-action-primary); }
+.segments { display: flex; gap: var(--space-4); }
+.segments__bar { position: relative; overflow: hidden; background: var(--color-progress-track); }
+.segments__fill { position: absolute; inset: 0; background: var(--color-action-primary); transform-origin: left center; }
+[dir='rtl'] .segments__fill { transform-origin: right center; }
+
+.segments--steps { inline-size: 100%; }
+.segments--steps .segments__bar { flex: 1 0 0; min-inline-size: 1px; block-size: 4px; border-radius: 2px; }
+.segments--today .segments__bar { inline-size: 24px; block-size: 6px; border-radius: 3px; }
+.segments--sprint .segments__bar { inline-size: 18px; block-size: 8px; border-radius: 3px; }

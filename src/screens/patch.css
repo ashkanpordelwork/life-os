@@ -1,0 +1,6 @@
+.patch__hero { display: flex; align-items: center; gap: var(--space-12); }
+.patch__title { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
+.patch__facts { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.patch__versions { display: flex; gap: var(--space-8); }
+.patch__safety { display: flex; align-items: center; gap: var(--space-8); }
+.patch__actions { display: flex; flex-direction: column; gap: var(--space-8); }

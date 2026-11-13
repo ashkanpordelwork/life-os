@@ -1,3 +1,6 @@
+import { motion, useReducedMotion } from 'motion/react';
+import { motionTokens } from '../styles/motion';
+
 // Mascot poses exported as SVG from the Figma `Components` page (Mascot Components frame).
 const files = import.meta.glob('../assets/mascots/*.svg', {
   eager: true,
@@ -29,9 +32,20 @@ type MascotProps = {
   /** Rendered width in px. Height follows the artwork ratio. */
   size: number;
   alt?: string;
+  /** Hero use: pops in, then floats gently up and down. */
+  animated?: boolean;
 };
 
 /** Mascot artwork (image). Decorative by default. */
-export function Mascot({ name, size, alt = '' }: MascotProps) {
-  return <img src={urls[name]} alt={alt} width={size} style={{ inlineSize: size, blockSize: 'auto' }} />;
+export function Mascot({ name, size, alt = '', animated = false }: MascotProps) {
+  const reduce = useReducedMotion();
+  const img = <img src={urls[name]} alt={alt} width={size} style={{ inlineSize: size, blockSize: 'auto' }} draggable={false} />;
+  if (!animated || reduce) return img;
+  return (
+    <motion.div initial={{ scale: 0.6, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} transition={{ ...motionTokens.pop, delay: 0.05 }}>
+      <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, delay: 0.6 }}>
+        {img}
+      </motion.div>
+    </motion.div>
+  );
 }

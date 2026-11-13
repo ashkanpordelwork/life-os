@@ -1,4 +1,4 @@
-import { Icon } from './Icon';
+import { IconButton } from './IconButton';
 import { t } from '../i18n';
 import './TopBar.css';
 
@@ -19,9 +19,7 @@ export function TopBar({ title, trailing, onBack }: TopBarProps) {
     <header className="top-bar">
       <div className="top-bar__side">
         {onBack && (
-          <button type="button" className="top-bar__back" aria-label={t('common.back')} onClick={onBack}>
-            <Icon name="arrow_back" size={24} className="top-bar__back-icon" />
-          </button>
+          <span className="top-bar__back"><IconButton icon="arrow_back" label={t('common.back')} onClick={onBack} /></span>
         )}
       </div>
       <h1 className="text-title-s text-primary text-center">{title}</h1>

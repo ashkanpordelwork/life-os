@@ -41,3 +41,4 @@ img { display: block; max-width: 100%; }
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+.page { min-block-size: 100dvh; }

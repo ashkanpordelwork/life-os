@@ -1,0 +1,5 @@
+.auth { display: flex; flex: 1; flex-direction: column; gap: var(--space-16); inline-size: 100%; }
+.auth__fields { display: flex; flex-direction: column; gap: 14px; }
+.auth__switch { display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+.auth__error { color: var(--color-status-danger); text-align: center; }
+.hero { display: flex; justify-content: center; inline-size: 100%; }

@@ -1,0 +1,8 @@
+.today__header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.today__greeting { display: flex; flex-direction: column; gap: var(--space-4); min-inline-size: 0; }
+.today__stats { display: flex; gap: var(--space-12); }
+.today__section { display: flex; align-items: center; justify-content: space-between; }
+.today__progress { display: flex; align-items: center; gap: var(--space-8); }
+.today__card { inline-size: 100%; }
+.today__chip { display: flex; justify-content: center; }
+.app-nav { position: sticky; inset-block-end: calc(var(--space-16) + env(safe-area-inset-bottom)); z-index: 10; }

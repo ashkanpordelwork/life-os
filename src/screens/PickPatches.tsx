@@ -9,6 +9,7 @@ import type { Area } from '../data/types';
 import { areaScoresFromAnswers, recommend, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { PATCHES_PER_SPRINT, useOnboarding } from '../state/onboarding';
+import { useSession } from '../state/session';
 import { firstMissingQuestion, formatMinutes } from './flow';
 
 const SPRINT_NUMBER = 1;
@@ -17,6 +18,7 @@ const SPRINT_NUMBER = 1;
 export function PickPatches() {
   const navigate = useNavigate();
   const { state, setPicked, startSprint } = useOnboarding();
+  const session = useSession();
   const missing = firstMissingQuestion(state);
 
   const offers = useMemo(() => {
@@ -60,7 +62,11 @@ export function PickPatches() {
         block
         label={t('patches.cta', { n: SPRINT_NUMBER })}
         disabled={validPicked.length !== PATCHES_PER_SPRINT}
-        onClick={() => { startSprint(validPicked); navigate('/ready'); }}
+        onClick={async () => {
+          const sprint = startSprint(validPicked);
+          if (session.user) await session.saveSprint(sprint);
+          navigate('/ready');
+        }}
       />
     </Screen>
   );

@@ -1,0 +1,2 @@
+.text-button { display: inline-flex; align-items: center; min-block-size: var(--size-touch); color: var(--color-text-brand); }
+.text-button:active { opacity: 0.7; }

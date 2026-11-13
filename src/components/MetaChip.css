@@ -11,3 +11,9 @@
   white-space: nowrap;
 }
 .meta-chip__icon { display: flex; color: var(--color-text-secondary); }
+.meta-chip__label { color: var(--color-text-primary); }
+.meta-chip--button { position: relative; transition: border-color 0.2s ease; }
+/* 44px touch area around the 32px chip */
+.meta-chip--button::after { content: ''; position: absolute; inset: -6px 0; }
+.meta-chip--on { border-color: var(--color-border-focus); }
+.meta-chip--on .meta-chip__icon, .meta-chip--on .meta-chip__label { color: var(--color-text-brand); }

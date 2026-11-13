@@ -1,5 +1,13 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import { motion } from 'motion/react';
+import { AnimatedNumber } from '../components/AnimatedNumber';
 import { AnswerRow } from '../components/AnswerRow';
+import { IconButton } from '../components/IconButton';
+import { SprintStrip } from '../components/SprintStrip';
+import { TextButton } from '../components/TextButton';
+import { TextField } from '../components/TextField';
+import { WeekStrip } from '../components/WeekStrip';
+import { motionTokens } from '../styles/motion';
 import { Button } from '../components/Button';
 import { CheckCircle } from '../components/CheckCircle';
 import { Chip } from '../components/Chip';
@@ -126,6 +134,8 @@ export function Styleguide() {
   const [patchDone, setPatchDone] = useState(false);
   const [habitDone, setHabitDone] = useState(false);
   const [nav, setNav] = useState(0);
+  const [tinyChip, setTinyChip] = useState(false);
+  const [replay, setReplay] = useState(0);
 
   const areas: AreaVariant[] = ['Move', 'Nutrition', 'Sleep', 'Mind'];
   const levels: EvidenceLevel[] = ['Strong', 'Moderate', 'Low', 'Uncertain'];
@@ -280,7 +290,7 @@ export function Styleguide() {
         </Spec>
 
         <Spec name="ListRow" node="45:68" desc="Generic tappable row (library items, settings). Min height 64.">
-          <div className="sg-phone"><ListRow icon="bolt" title="Morning light, 10 min" subtitle="Sleep · first hour awake" /></div>
+          <div className="sg-phone"><ListRow icon="bolt" title="Morning light, 10 min" subtitle="Sleep · first hour awake" onClick={() => undefined} /></div>
         </Spec>
 
         <Spec name="StatTile" node="45:79" desc="Large stat block: a label and one value (e.g. score, days). Use on Progress and Score screens. For compact stats in the Today header use StatChip instead.">
@@ -363,8 +373,63 @@ export function Styleguide() {
             </GlassPanel>
           </div>
         </Spec>
+        <Spec name="TextField" desc="From Log in / Create account. Mono label, 52px input with icon, radius 14. Focus = border/focus with a soft ring. Error = status/danger border and message.">
+          <div className="sg-stack sg-phone">
+            <TextField label="Email" icon="mail" placeholder="you@work.com" />
+            <TextField label="Password" icon="lock" type="password" placeholder="At least 8 characters" error="Use at least 8 characters." />
+          </div>
+        </Spec>
+        <Spec name="TextButton" desc="Brand text link used in the Log in / Create account switch row. 44px touch height.">
+          <div className="sg-wrap"><span className="text-body-s text-secondary">New here?</span><TextButton label="Create account" /></div>
+        </Spec>
+        <Spec name="IconButton" desc="44px glass circle with a 24px icon (TopBar back, Today bell).">
+          <div className="sg-wrap sg-wrap--tinted"><IconButton icon="arrow_back" label="Back" /><IconButton icon="notifications" label="Reminders" /></div>
+        </Spec>
+        <Spec name="SprintStrip" desc="Today: Sprint label, day/14 and one 18x8 bar per day.">
+          <div className="sg-phone sg-wrap--tinted"><SprintStrip label="Sprint 01" day={5} length={14} /></div>
+        </Spec>
+        <Spec name="WeekStrip" desc="Done screen: this week as 7 HeatCells with day letters. Cells pop in one by one.">
+          <div className="sg-phone sg-wrap--tinted">
+            <WeekStrip title="This week" days={(['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const).map((l, i) => ({ letter: l, level: ([3, 4, 2, 3, 4, 0, 3] as const)[i], label: l }))} />
+          </div>
+        </Spec>
+        <Spec name="SegmentedProgress variants" desc="steps (4px, shared width), today (24x6, one per patch), sprint (18x8, one per day). New bars fill from the start side.">
+          <div className="sg-stack sg-phone">
+            <SegmentedProgress variant="steps" total={6} filled={3} />
+            <SegmentedProgress variant="today" total={3} filled={2} />
+            <SegmentedProgress variant="sprint" total={14} filled={5} />
+          </div>
+        </Spec>
+        <Spec name="MetaChip as a button" desc="Tiny mode on Today. Pressed = brand border and text.">
+          <div className="sg-wrap"><MetaChip icon="bolt" label="Tiny mode" onClick={() => setTinyChip(!tinyChip)} pressed={tinyChip} /></div>
+        </Spec>
         <Spec name="CheckCircle" desc="The 44x44 check target inside HabitCard and PatchCard.">
           <div className="sg-wrap"><Variant label="Todo"><CheckCircle done={false} /></Variant><Variant label="Done"><CheckCircle done /></Variant></div>
+        </Spec>
+      </Section>
+
+      <Section title={t('styleguide.motion')}>
+        <Spec name="Motion tokens" desc="All animation uses these presets (src/styles/motion.ts). People who turn on 'reduce motion' on their phone get no movement.">
+          <div className="sg-stack">
+            {[
+              ['press', 'Taps and small changes. Quick spring, tiny bounce. Controls shrink to 97% while held.'],
+              ['pop', 'Things that appear: check marks, radio dots, HeatCells. Springy.'],
+              ['page', 'Screen enter: fade + 14px slide up, 0.32 s, ease-out.'],
+              ['pageExit', 'Screen exit: fade, 0.16 s.'],
+              ['count', 'Numbers count up (streak, score), 0.9 s.'],
+              ['stagger', 'Lists appear one item after another, 0.06 s apart.'],
+            ].map(([k, d]) => (
+              <div key={k} className="sg-text"><code className="text-mono-caption text-primary">motionTokens.{k}</code><span className="text-body-s text-secondary">{d}</span></div>
+            ))}
+          </div>
+        </Spec>
+        <Spec name="Try it" desc="Tap the button to replay. Also: Chip, AnswerRow, PatchCard, VersionTab, Toggle and NavBar above all react to taps.">
+          <div className="sg-wrap sg-wrap--tinted">
+            <Variant label="pop"><motion.span key={replay} className="sg-effect glass-card" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={motionTokens.pop} /></Variant>
+            <Variant label="count"><span className="text-display text-primary"><AnimatedNumber key={replay} value={13} /></span></Variant>
+            <Variant label="mascot float"><Mascot name="core-welcome" size={96} animated key={replay} /></Variant>
+            <Button variant="Secondary" label="Replay" onClick={() => setReplay(replay + 1)} />
+          </div>
         </Spec>
       </Section>
 

@@ -18,3 +18,4 @@
 .version-tab--on { background: var(--glass-fill); border: 2px solid var(--color-border-focus); }
 .version-tab--on .version-tab__icon,
 .version-tab--on .version-tab__time { color: var(--color-text-brand); }
+.version-tab, .version-tab__icon, .version-tab__time { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }

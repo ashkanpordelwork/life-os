@@ -1,0 +1,2 @@
+.sprint-strip { display: flex; flex-direction: column; gap: var(--space-8); inline-size: 100%; padding-block: var(--space-12); padding-inline: var(--space-16); border-radius: var(--radius-lg); }
+.sprint-strip__row { display: flex; align-items: flex-start; justify-content: space-between; }

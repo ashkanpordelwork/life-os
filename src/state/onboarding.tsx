@@ -38,7 +38,8 @@ interface OnboardingApi {
   toggleSymptom: (tag: NeedTag) => void;
   setAnswer: (area: Area, answer: AnswerIndex) => void;
   setPicked: (ids: string[]) => void;
-  startSprint: (patchIds: string[]) => void;
+  /** Saves the new Sprint in the draft and returns it. */
+  startSprint: (patchIds: string[]) => Sprint;
 }
 
 const Ctx = createContext<OnboardingApi | null>(null);
@@ -63,11 +64,9 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const setPicked = useCallback((ids: string[]) => setState((s) => ({ ...s, picked: ids })), []);
 
   const startSprint = useCallback((patchIds: string[]) => {
-    setState((s) => ({
-      ...s,
-      picked: patchIds,
-      sprint: { number: 1, theme: null, length_days: 14, patch_ids: patchIds, started_at: new Date().toISOString() },
-    }));
+    const sprint: Sprint = { number: 1, theme: null, length_days: 14, patch_ids: patchIds, started_at: new Date().toISOString() };
+    setState((s) => ({ ...s, picked: patchIds, sprint }));
+    return sprint;
   }, []);
 
   const api = useMemo(() => ({ state, toggleSymptom, setAnswer, setPicked, startSprint }), [state, toggleSymptom, setAnswer, setPicked, startSprint]);
