@@ -37,3 +37,16 @@
 .errors__dot { position: absolute; inset-block-start: 50%; inline-size: 18px; block-size: 18px; margin-inline-start: -9px; translate: 0 -50%; border-radius: 50%; background: var(--color-action-primary); box-shadow: var(--shadow-button); }
 .errors__buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); }
 .library__group { display: flex; flex-direction: column; gap: var(--space-12); }
+/* Nutrition tools */
+.nutri__weight { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.nutri__value { font-variant-numeric: tabular-nums; }
+.nutri__step {
+  inline-size: var(--size-touch); block-size: var(--size-touch); border-radius: 50%;
+  border: 1px solid var(--color-border-default); background: var(--color-surface-card); color: var(--color-text-primary); cursor: pointer;
+}
+.nutri__units { justify-content: center; }
+.nutri__row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-12); }
+.nutri__cpc { display: flex; flex-direction: column; gap: var(--space-4); }
+.nutri__track { display: block; block-size: 8px; border-radius: var(--radius-pill); background: var(--color-bg-subtle); overflow: hidden; }
+.nutri__bar { display: block; block-size: 100%; border-radius: var(--radius-pill); background: var(--color-action-primary); }
+.nutri__row > :last-child { white-space: nowrap; flex-shrink: 0; }

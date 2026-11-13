@@ -390,7 +390,8 @@
     "open": "Library",
     "openSubtitle": "Tools and the science behind each patch",
     "calm": "Calm",
-    "focusGroup": "Focus"
+    "focusGroup": "Focus",
+    "nutritionGroup": "Nutrition"
   },
   "sigh": {
     "title": "Physiological sigh",
@@ -598,5 +599,32 @@
       "Recall everything you just learned, or run through the moves.",
       "Stuck? Note it and check after."
     ]
+  },
+  "nutrition": {
+    "title": "My nutrition",
+    "subtitle": "Your protein and water numbers",
+    "weight": "Your weight",
+    "less": "Less",
+    "more": "More",
+    "private": "Saved on this phone only.",
+    "proteinTitle": "Protein a day",
+    "proteinBody": "1.6–2.2 g per kg of body weight. Aim for 30–50 g at each full meal.",
+    "waterTitle": "Water",
+    "waterWake": "Right after waking",
+    "waterDay": "By {time} (first 10 h awake)",
+    "waterSport": "During exercise, every 15–20 min",
+    "waterNote": "Hot day or heavy sweat: add 50–100%. Later in the day, sip slowly.",
+    "cpcTitle": "Best protein for the calories",
+    "cpcBody": "Grams of complete protein per 150 kcal.",
+    "foods": {
+      "shellfish": "Shellfish, seafood",
+      "chicken": "Chicken breast",
+      "leanMeat": "Lean meat, turkey or fish",
+      "tofu": "Tofu",
+      "egg": "Whole eggs",
+      "bacon": "Low-sugar bacon",
+      "pbToast": "Peanut butter on toast",
+      "beansRice": "Beans and rice"
+    }
   }
 }

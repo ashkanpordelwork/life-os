@@ -31,6 +31,9 @@ const TOOL_GROUPS: { key: string; tools: { to: string; key: string; icon: IconNa
     { to: '/tool/errors', key: 'errors85', icon: 'insights' },
     { to: '/tool/self-test', key: 'selfTest', icon: 'timer' },
   ] },
+  { key: 'nutritionGroup', tools: [
+    { to: '/tool/nutrition', key: 'nutrition', icon: 'restaurant' },
+  ] },
 ];
 
 const BACK_KEY = 'lifeos.library.back';

@@ -17,7 +17,7 @@ const FEATURES: { key: string; icon: IconName; ready: boolean }[] = [
   { key: 'level2', icon: 'trending_up', ready: true },
   { key: 'level3', icon: 'local_fire_department', ready: true },
   { key: 'focus', icon: 'bolt', ready: true },
-  { key: 'nutrition', icon: 'restaurant', ready: false },
+  { key: 'nutrition', icon: 'restaurant', ready: true },
   { key: 'travel', icon: 'event', ready: false },
   { key: 'supplements', icon: 'science', ready: false },
 ];
