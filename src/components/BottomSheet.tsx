@@ -8,6 +8,8 @@ type BottomSheetProps = {
   open: boolean;
   onClose: () => void;
   title: string;
+  /** Small mono label above the title (Figma Day detail: "TUE · OCT 14"). */
+  eyebrow?: string;
   /** Optional art that sits on the top edge (Figma Busy day: mascot top right). */
   decoration?: ReactNode;
   children: ReactNode;
@@ -19,7 +21,7 @@ type BottomSheetProps = {
  * Scrim: text/primary at 45%. Close: tap the scrim, press Escape, or drag the sheet down.
  * Motion: slides up with a spring; scrim fades.
  */
-export function BottomSheet({ open, onClose, title, decoration, children }: BottomSheetProps) {
+export function BottomSheet({ open, onClose, title, eyebrow, decoration, children }: BottomSheetProps) {
   const titleId = useId();
 
   useEffect(() => {
@@ -58,6 +60,7 @@ export function BottomSheet({ open, onClose, title, decoration, children }: Bott
               </motion.div>
             )}
             <div className="sheet__handle"><span className="sheet__grabber" /></div>
+            {eyebrow && <p className="text-mono-label text-secondary">{eyebrow}</p>}
             <h2 id={titleId} className="text-title-m text-primary">{title}</h2>
             {children}
           </motion.section>

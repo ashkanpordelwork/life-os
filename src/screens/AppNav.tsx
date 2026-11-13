@@ -8,9 +8,9 @@ import { t } from '../i18n';
  * Bottom navigation, fixed to the bottom of the screen.
  * It is rendered outside the moving page (portal), because on iPhone Safari a glass (blurred)
  * bar inside an animated page can render blank. A spacer keeps page content above it.
- * Today and You work; Roadmap and Progress come in later flows.
+ * Today, Roadmap, Progress and You.
  */
-export function AppNav({ active }: { active: 'today' | 'you' }) {
+export function AppNav({ active }: { active: 'today' | 'progress' | 'roadmap' | 'you' }) {
   const navigate = useNavigate();
   return (
     <>
@@ -19,9 +19,8 @@ export function AppNav({ active }: { active: 'today' | 'you' }) {
         <div className="app-nav">
           <NavBar>
             <NavItem label={t('nav.today')} icon="home" active={active === 'today'} onClick={() => navigate('/today')} />
-            {/* TODO(Flows 3, 4): Roadmap, Progress */}
-            <NavItem label={t('nav.roadmap')} icon="route" />
-            <NavItem label={t('nav.progress')} icon="monitoring" />
+            <NavItem label={t('nav.roadmap')} icon="route" active={active === 'roadmap'} onClick={() => navigate('/roadmap')} />
+            <NavItem label={t('nav.progress')} icon="monitoring" active={active === 'progress'} onClick={() => navigate('/progress')} />
             <NavItem label={t('nav.you')} icon="person" active={active === 'you'} onClick={() => navigate('/you')} />
           </NavBar>
         </div>,

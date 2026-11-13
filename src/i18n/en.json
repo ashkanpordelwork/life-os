@@ -266,5 +266,27 @@
       "Sleep": "Sleep",
       "Mind": "Mind"
     }
+  },
+  "progress": {
+    "label": "Progress",
+    "title": "Last 14 weeks",
+    "dayDone": "{n} of {total} done",
+    "rest": "Rest day · streak safe",
+    "nothing": "Nothing logged this day.",
+    "scoreLabel": "Score",
+    "scoreSubtitle": "Your starting score.",
+    "cellLabel": "{day}: {n} done",
+    "openScore": "See score by area"
+  },
+  "roadmap": {
+    "label": "Roadmap",
+    "title": "Sprints",
+    "sprint": "Sprint {nn}",
+    "done": "Done",
+    "now": "Now · Day {n}",
+    "next": "Next",
+    "pastText": "Released",
+    "nextText": "You pick it at the end of this Sprint.",
+    "plan": "Plan Sprint {n}"
   }
 }

@@ -1,0 +1,9 @@
+.progress__top { display: flex; justify-content: flex-end; }
+.progress__grid { display: flex; justify-content: center; gap: 3px; padding: var(--space-12); border-radius: var(--radius-lg); }
+.progress__week { display: flex; flex-direction: column; gap: 3px; }
+.progress__stats { display: flex; gap: var(--space-8); }
+.progress__score { display: flex; flex: 1 0 0; min-inline-size: 0; text-align: start; }
+.progress__score .stat-chip { inline-size: 100%; }
+.progress__detail { display: flex; flex-direction: column; gap: var(--space-8); max-block-size: 50dvh; overflow-y: auto; }
+.score-card { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
+.score-card__mid { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-8); }

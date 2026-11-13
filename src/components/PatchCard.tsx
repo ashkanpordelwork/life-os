@@ -44,6 +44,16 @@ export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, 
     </>
   );
 
+  // Display only (e.g. Confirm Sprint, Day detail): no tap target.
+  if (!onOpen && !onToggle) {
+    return (
+      <div className="patch-card glass-card">
+        {body}
+        {!hideCheck && <CheckCircle done={done} />}
+      </div>
+    );
+  }
+
   if (!onOpen) {
     return (
       <motion.button
