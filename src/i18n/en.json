@@ -1,0 +1,103 @@
+{
+  "common": {
+    "back": "Back",
+    "continue": "Continue",
+    "step": "{n} / {total}"
+  },
+  "areas": {
+    "Move": "Movement",
+    "Movement": "Movement",
+    "Nutrition": "Nutrition",
+    "Sleep": "Sleep",
+    "Mind": "Mind"
+  },
+  "evidence": {
+    "Strong": "Evidence: Strong",
+    "Moderate": "Evidence: Moderate",
+    "Low": "Evidence: Low",
+    "Uncertain": "Evidence: Uncertain"
+  },
+  "symptoms": {
+    "msk": "Stiff neck or back",
+    "fog": "Foggy by afternoon",
+    "sleep": "Sleep is off",
+    "energy": "Always tired",
+    "meals": "Skipping meals",
+    "time": "No time to move",
+    "stress": "Can't switch off",
+    "eyes": "Tired eyes"
+  },
+  "time": {
+    "minutes": "{n} min",
+    "seconds": "{n} s",
+    "none": "No extra time"
+  },
+  "welcome": {
+    "brand": "Life OS",
+    "title": "Great at your job. Now be great at your life.",
+    "subtitle": "Small daily patches. No pressure.",
+    "start": "Get started",
+    "account": "I have an account"
+  },
+  "symptomsScreen": {
+    "topTitle": "About you",
+    "title": "What feels off?",
+    "subtitle": "Pick any. No wrong answers."
+  },
+  "questions": {
+    "Movement": {
+      "question": "Days you moved 20+ min last week?",
+      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+    },
+    "Nutrition": {
+      "question": "Days you ate a real breakfast?",
+      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+    },
+    "Sleep": {
+      "question": "Nights you slept 7+ hours?",
+      "answers": ["0 nights", "1–2 nights", "3–4 nights", "5 nights or more"]
+    },
+    "Mind": {
+      "question": "Days you took a real break?",
+      "answers": ["0 days", "1–2 days", "3–4 days", "5 days or more"]
+    }
+  },
+  "score": {
+    "topTitle": "Starting score",
+    "subtitle": "A fair place to start.",
+    "cta": "See my patches"
+  },
+  "patches": {
+    "topTitle": "Pick patches",
+    "trailing": "Pick 3",
+    "title": "Your first patches",
+    "subtitle": "Tiny, doable, backed by evidence.",
+    "cta": "Start Sprint {n}"
+  },
+  "ready": {
+    "label": "Sprint {nn} · {days} days",
+    "title": "You're set.",
+    "subtitle": "3 patches. About {minutes} minutes a day.",
+    "panelLabel": "Sprint {nn}",
+    "sprintDef": "Sprint: 14 days with the same 3 patches.",
+    "patchDef": "Patch: one small habit you tick off each day.",
+    "releaseDef": "Release: at the end, you keep, swap or drop each patch.",
+    "cta": "Go to Today"
+  },
+  "styleguide": {
+    "title": "Life OS design system",
+    "intro": "Tokens, text styles and components. This page replaces Figma as the source of truth.",
+    "colors": "Colours (semantic)",
+    "primitives": "Primitives (only used inside tokens.css)",
+    "spacing": "Spacing",
+    "radius": "Radius",
+    "sizes": "Sizes",
+    "effects": "Shadows and glass",
+    "paints": "Gradients",
+    "text": "Text styles",
+    "icons": "Icons",
+    "components": "Components",
+    "layout": "Layout components (added in code)",
+    "mascots": "Mascots"
+  }
+}

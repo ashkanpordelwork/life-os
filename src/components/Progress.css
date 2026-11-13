@@ -1,0 +1,9 @@
+.progress {
+  display: flex;
+  block-size: 8px;
+  inline-size: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-default);
+}
+.progress__fill { block-size: 8px; border-radius: var(--radius-pill); background: var(--color-action-primary); }

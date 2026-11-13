@@ -1,0 +1,11 @@
+.sprint-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: var(--radius-pill);
+}
+.sprint-dot--done { background: var(--color-action-primary); color: var(--color-surface-card); }
+.sprint-dot--current { background: var(--color-surface-card); border: 2.5px solid var(--color-action-primary); color: var(--color-text-brand); }
+.sprint-dot--upcoming { background: var(--color-bg-subtle); border: 1.5px solid var(--color-border-default); color: var(--color-text-secondary); }

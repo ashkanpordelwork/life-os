@@ -1,0 +1,11 @@
+.patch-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  inline-size: 100%;
+  padding-block: var(--space-12);
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-lg);
+  text-align: start;
+}
+.patch-card__content { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }

@@ -1,0 +1,6 @@
+.heat { display: inline-block; inline-size: 10px; block-size: 10px; border-radius: 2.5px; }
+.heat--0 { background: var(--color-heat-0); }
+.heat--1 { background: var(--color-heat-1); }
+.heat--2 { background: var(--color-heat-2); }
+.heat--3 { background: var(--color-heat-3); }
+.heat--4 { background: var(--color-heat-4); }

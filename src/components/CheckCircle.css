@@ -1,0 +1,18 @@
+.check-target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--size-touch);
+  block-size: var(--size-touch);
+}
+.check-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-text-secondary);
+}
+.check-circle--done { border: 0; background: var(--color-status-success); color: var(--color-surface-card); }

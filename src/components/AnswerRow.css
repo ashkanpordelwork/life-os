@@ -1,0 +1,26 @@
+.answer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  inline-size: 100%;
+  block-size: 56px;
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-primary);
+  text-align: start;
+}
+.answer-row--on { background: var(--color-brand-soft); border: 2px solid var(--color-border-focus); }
+.answer-row__label { flex: 1; min-inline-size: 0; }
+.answer-row__radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-text-secondary);
+}
+.answer-row--on .answer-row__radio { border: 0; background: var(--color-action-primary); color: var(--color-surface-card); }

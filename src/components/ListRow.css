@@ -1,0 +1,26 @@
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  inline-size: 100%;
+  min-block-size: 64px;
+  padding-block: var(--space-12);
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-default);
+  text-align: start;
+}
+.list-row__bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-soft);
+  color: var(--color-text-brand);
+}
+.list-row__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
+.list-row__chevron { display: flex; color: var(--color-text-secondary); }

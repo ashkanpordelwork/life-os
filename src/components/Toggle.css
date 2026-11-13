@@ -1,0 +1,26 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--size-touch);
+  min-block-size: var(--size-touch);
+}
+.toggle__track {
+  position: relative;
+  display: block;
+  inline-size: 52px;
+  block-size: 30px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-default);
+}
+.toggle--on .toggle__track { background: var(--color-action-primary); }
+.toggle__knob {
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-start: 3px;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-card);
+}
+.toggle--on .toggle__knob { inset-inline-start: 25px; }

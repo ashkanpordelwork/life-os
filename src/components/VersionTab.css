@@ -1,0 +1,20 @@
+.version-tab {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-inline-size: 0;
+  block-size: 84px;
+  padding-block: var(--space-12);
+  padding-inline: var(--space-8);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-default);
+}
+.version-tab__icon { display: flex; color: var(--color-text-secondary); }
+.version-tab__time { color: var(--color-text-secondary); }
+.version-tab--on { background: var(--glass-fill); border: 2px solid var(--color-border-focus); }
+.version-tab--on .version-tab__icon,
+.version-tab--on .version-tab__time { color: var(--color-text-brand); }

@@ -1,0 +1,17 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  inline-size: 100%;
+  max-inline-size: var(--size-screen-max);
+  min-block-size: 100dvh;
+  margin-inline: auto;
+  /* Figma top padding is 64 = 44 (phone status bar) + 20. The browser has its own bar. */
+  padding-block-start: calc(var(--space-20) + env(safe-area-inset-top));
+  padding-block-end: calc(var(--space-24) + env(safe-area-inset-bottom));
+  padding-inline: var(--space-16);
+  background: var(--gradient-screen);
+}
+.screen--start { align-items: stretch; }
+.screen--center { align-items: center; }
+.spacer { flex: 1 0 0; min-block-size: 1px; inline-size: 100%; }

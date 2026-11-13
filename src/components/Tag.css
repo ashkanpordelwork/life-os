@@ -1,0 +1,20 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  block-size: 28px;
+  padding-inline: var(--space-12);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.tag__dot { inline-size: 8px; block-size: 8px; border-radius: var(--radius-pill); }
+.tag--move { background: var(--color-area-move-bg); }
+.tag--move .tag__dot { background: var(--color-area-move); }
+.tag--nutrition { background: var(--color-area-nutrition-bg); }
+.tag--nutrition .tag__dot { background: var(--color-area-nutrition); }
+.tag--sleep { background: var(--color-area-sleep-bg); }
+.tag--sleep .tag__dot { background: var(--color-area-sleep); }
+.tag--mind { background: var(--color-area-mind-bg); }
+.tag--mind .tag__dot { background: var(--color-area-mind); }

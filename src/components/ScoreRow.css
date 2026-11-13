@@ -1,0 +1,2 @@
+.score-row { display: flex; flex-direction: column; gap: 6px; inline-size: 100%; }
+.score-row__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-8); }

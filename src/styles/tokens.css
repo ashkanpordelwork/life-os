@@ -1,0 +1,141 @@
+/*
+ * Life OS design tokens — imported from Figma (file EI4fGzmwkiRz6SwDlHk2XX), Light mode only.
+ * Naming rule: Figma `Color/bg/app` -> --color-bg-app, `Layout/space/16` -> --space-16,
+ * `radius/md` -> --radius-md, primitives `orange/500` -> --orange-500.
+ *
+ * Primitives are only used inside this file. Components use the semantic tokens.
+ * This file is now the source of truth (Figma is frozen as a reference).
+ */
+
+:root {
+  /* ---------- Primitives (Figma collection: Primitives) ---------- */
+  --orange-50: #fff4ec;
+  --orange-100: #ffe6d4;
+  --orange-200: #ffcba6;
+  --orange-300: #ffa977;
+  --orange-400: #ff8446;
+  --orange-500: #f2601f;
+  --orange-600: #d4440f;
+  --orange-700: #b03a0d;
+  --orange-800: #7f2a0a;
+
+  --neutral-0: #ffffff;
+  --neutral-50: #fffaf6;
+  --neutral-100: #f7f0ea;
+  --neutral-200: #ede3dc;
+  --neutral-300: #d9ccc4;
+  --neutral-400: #b8a89e;
+  --neutral-500: #7a6a60;
+  --neutral-700: #4a3b33;
+  --neutral-900: #1f1612;
+
+  --green-100: #ddf3e8;
+  --green-600: #1b7f53;
+
+  --indigo-50: #eceaf5;
+  --indigo-100: #e6e6fb;
+  --indigo-600: #4c4cc2;
+  --indigo-800: #403771;
+
+  --teal-100: #d8f0f5;
+  --teal-700: #12708a;
+
+  --red-100: #fde3e1;
+  --red-600: #c4302b;
+
+  --yellow-100: #fff1cc;
+  --yellow-700: #8a5a00;
+
+  --white-a30: rgb(255 255 255 / 0.3);
+  --white-a60: rgb(255 255 255 / 0.6);
+  --white-a70: rgb(255 255 255 / 0.7);
+
+  /* ---------- Semantic (Figma collection: Color) ---------- */
+  --color-bg-app: var(--neutral-50);
+  --color-bg-subtle: var(--neutral-100);
+  --color-surface-card: var(--neutral-0);
+  --color-surface-glass: var(--white-a60);
+
+  --color-text-primary: var(--neutral-900);
+  --color-text-secondary: var(--neutral-500);
+  --color-text-on-action: var(--neutral-0);
+  --color-text-brand: var(--orange-700);
+  --color-text-disabled: var(--neutral-500);
+
+  --color-border-default: var(--neutral-200);
+  --color-border-glass: var(--white-a70);
+  --color-border-focus: var(--orange-600);
+
+  --color-action-primary: var(--orange-600);
+  --color-action-primary-pressed: var(--orange-700);
+  --color-action-secondary: var(--neutral-0);
+  --color-action-disabled: var(--neutral-200);
+
+  --color-status-success: var(--green-600);
+  --color-status-success-bg: var(--green-100);
+  --color-status-danger: var(--red-600);
+  --color-status-danger-bg: var(--red-100);
+  --color-status-gold: var(--yellow-700);
+  --color-status-gold-bg: var(--yellow-100);
+
+  --color-area-move: var(--teal-700);
+  --color-area-move-bg: var(--teal-100);
+  --color-area-nutrition: var(--green-600);
+  --color-area-nutrition-bg: var(--green-100);
+  --color-area-sleep: var(--indigo-600);
+  --color-area-sleep-bg: var(--indigo-100);
+  --color-area-mind: var(--indigo-800);
+  --color-area-mind-bg: var(--indigo-50);
+
+  --color-heat-0: var(--neutral-200);
+  --color-heat-1: var(--orange-200);
+  --color-heat-2: var(--orange-300);
+  --color-heat-3: var(--orange-500);
+  --color-heat-4: var(--orange-700);
+
+  --color-brand-soft: var(--orange-100);
+  --color-brand-main: var(--orange-500);
+  --color-progress-track: var(--neutral-400);
+
+  /* ---------- Layout (Figma collection: Layout) ---------- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  --size-touch: 44px;
+  --size-icon: 24px;
+
+  /* Screen frame from Figma: 390 x 844, content padding 16. Works from 375 to 430. */
+  --size-screen-max: 430px;
+
+  /* ---------- Fonts ---------- */
+  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* ---------- Effects (Figma effect styles) ---------- */
+  --shadow-card: 0 8px 24px 0 rgb(127 42 10 / 0.1); /* Shadow/Card  #7F2A0A1A */
+  --shadow-button: 0 4px 12px 0 rgb(127 42 10 / 0.25); /* Shadow/Button #7F2A0A40 */
+  --shadow-floating: 0 12px 32px 0 rgb(127 42 10 / 0.16); /* Shadow/Floating #7F2A0A29 */
+  --glass-blur: blur(12px); /* Glass/* BACKGROUND_BLUR radius 24 */
+  /* Glass/Card = --glass-blur + --shadow-card; Glass/Floating = --glass-blur + --shadow-floating */
+
+  /* ---------- Paints (Figma paint styles) ---------- */
+  --gradient-hero: linear-gradient(180deg, #ffcba6 0%, #ffdcc4 15%, #fffaf6 38%, #fffaf6 100%);
+  --gradient-soft: linear-gradient(180deg, #ffe6d4 0%, #fff4ec 100%);
+  --glass-fill: var(--white-a60);
+
+  /* Screen background. Every onboarding screen in Figma uses this gradient as a raw fill
+     (not linked to a paint style). Kept as its own token. */
+  --gradient-screen: linear-gradient(180deg, #ffe9db 0%, #fff3eb 15%, #fffaf6 38%, #fffaf6 100%);
+}

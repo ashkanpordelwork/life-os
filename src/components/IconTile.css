@@ -1,0 +1,7 @@
+.icon-tile { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.icon-tile--m { inline-size: 48px; block-size: 48px; border-radius: var(--radius-md); }
+.icon-tile--l { inline-size: 72px; block-size: 72px; border-radius: var(--radius-lg); }
+.icon-tile--move { background: var(--color-area-move-bg); color: var(--color-area-move); }
+.icon-tile--nutrition { background: var(--color-area-nutrition-bg); color: var(--color-area-nutrition); }
+.icon-tile--sleep { background: var(--color-area-sleep-bg); color: var(--color-area-sleep); }
+.icon-tile--mind { background: var(--color-area-mind-bg); color: var(--color-area-mind); }

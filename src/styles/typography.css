@@ -1,0 +1,24 @@
+/*
+ * Text styles from Figma. One class per style.
+ * Letter spacing: Figma percent -> em (e.g. -1% -> -0.01em).
+ */
+.text-display-xl { font-family: var(--font-sans); font-weight: 800; font-size: 64px; line-height: 68px; letter-spacing: -0.02em; }
+.text-display    { font-family: var(--font-sans); font-weight: 800; font-size: 32px; line-height: 40px; letter-spacing: -0.01em; }
+.text-title-l    { font-family: var(--font-sans); font-weight: 700; font-size: 24px; line-height: 30px; letter-spacing: -0.005em; }
+.text-title-m    { font-family: var(--font-sans); font-weight: 700; font-size: 20px; line-height: 26px; }
+.text-title-s    { font-family: var(--font-sans); font-weight: 600; font-size: 16px; line-height: 22px; }
+.text-body-m     { font-family: var(--font-sans); font-weight: 400; font-size: 16px; line-height: 24px; }
+.text-body-m-strong { font-family: var(--font-sans); font-weight: 600; font-size: 16px; line-height: 24px; }
+.text-body-s     { font-family: var(--font-sans); font-weight: 400; font-size: 14px; line-height: 20px; }
+.text-caption    { font-family: var(--font-sans); font-weight: 500; font-size: 12px; line-height: 16px; }
+.text-label      { font-family: var(--font-sans); font-weight: 600; font-size: 12px; line-height: 16px; letter-spacing: 0.04em; text-transform: uppercase; }
+.text-number     { font-family: var(--font-sans); font-weight: 800; font-size: 28px; line-height: 32px; letter-spacing: -0.005em; }
+.text-mono-label { font-family: var(--font-mono); font-weight: 500; font-size: 12px; line-height: 16px; letter-spacing: 0.04em; text-transform: uppercase; }
+.text-mono-caption { font-family: var(--font-mono); font-weight: 500; font-size: 12px; line-height: 16px; }
+.text-mono-value { font-family: var(--font-mono); font-weight: 700; font-size: 24px; line-height: 28px; letter-spacing: -0.02em; }
+
+/* Text colours (semantic only) */
+.text-primary   { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-brand     { color: var(--color-text-brand); }
+.text-center    { text-align: center; }

@@ -1,0 +1,9 @@
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  inline-size: 100%;
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+}
