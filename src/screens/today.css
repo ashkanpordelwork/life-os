@@ -18,3 +18,7 @@
 }
 /* Same height as the NavBar (78) so the last card is never hidden behind it. */
 .app-nav-space { flex-shrink: 0; block-size: 78px; }
+
+.today__nudge { display: flex; align-items: center; gap: var(--space-12); padding-block: var(--space-8); padding-inline: var(--space-16); border-radius: var(--radius-lg); }
+.today__nudge-icon { display: flex; color: var(--color-text-brand); }
+.today__nudge-text { flex: 1; min-inline-size: 0; }

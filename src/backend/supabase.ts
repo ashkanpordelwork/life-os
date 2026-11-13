@@ -95,5 +95,18 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       if (done) check(await sb.from('checkins').upsert({ user_id: userId, ...c }, { onConflict: 'user_id,day,item_id' }));
       else check(await sb.from('checkins').delete().match({ user_id: userId, day: c.day, item_id: c.item_id }));
     },
+    async loadReminders(userId) {
+      const row = check(await sb.from('reminders').select('push_enabled, inapp_enabled, remind_at, tz').eq('user_id', userId).maybeSingle());
+      return row ?? null;
+    },
+    async saveReminders(userId, prefs) {
+      check(await sb.from('reminders').upsert({ user_id: userId, ...prefs }));
+    },
+    async savePushSubscription(userId, sub) {
+      check(await sb.from('push_subscriptions').upsert({ user_id: userId, ...sub }));
+    },
+    async deletePushSubscription(_userId, endpoint) {
+      check(await sb.from('push_subscriptions').delete().eq('endpoint', endpoint));
+    },
   };
 }

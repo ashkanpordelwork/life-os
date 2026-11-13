@@ -1,5 +1,5 @@
 import type { Sprint } from '../data/types';
-import { AuthError, type Backend, type Checkin, type Profile, type UserInfo } from './types';
+import { AuthError, type Backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo } from './types';
 
 /**
  * Local backend: everything stays in this browser's localStorage.
@@ -10,7 +10,7 @@ const SESSION = 'lifeos.local.session';
 const dataKey = (id: string) => `lifeos.local.data.${id}`;
 
 interface StoredUser { id: string; email: string; name: string; hash: string }
-interface StoredData { profile: Profile | null; sprint: Sprint | null; checkins: Checkin[] }
+interface StoredData { profile: Profile | null; sprint: Sprint | null; checkins: Checkin[]; reminders?: ReminderPrefs | null }
 
 function read<T>(key: string, fallback: T): T {
   try {
@@ -83,4 +83,9 @@ export const localBackend: Backend = {
     const rest = d.checkins.filter((x) => !(x.day === c.day && x.item_id === c.item_id));
     write(dataKey(id), { ...d, checkins: done ? [...rest, c] : rest });
   },
+  async loadReminders(id) { return data(id).reminders ?? null; },
+  async saveReminders(id, reminders) { write(dataKey(id), { ...data(id), reminders }); },
+  // Push needs the server (Supabase). Local test mode cannot send pushes.
+  async savePushSubscription() {},
+  async deletePushSubscription() {},
 };

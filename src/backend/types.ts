@@ -20,6 +20,21 @@ export interface Checkin {
   version: VersionKey;
 }
 
+export interface ReminderPrefs {
+  push_enabled: boolean;
+  inapp_enabled: boolean;
+  /** Local time HH:MM */
+  remind_at: string;
+  /** IANA time zone, e.g. Europe/London */
+  tz: string;
+}
+
+export interface PushSub {
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+}
+
 /** Error codes shown to the user via src/i18n/en.json -> auth.errors */
 export type AuthErrorCode = 'invalid' | 'exists' | 'weak' | 'email' | 'confirm' | 'network' | 'unknown';
 
@@ -49,4 +64,8 @@ export interface Backend {
   saveSprint(userId: string, sprint: Sprint): Promise<void>;
   loadCheckins(userId: string): Promise<Checkin[]>;
   setCheckin(userId: string, checkin: Checkin, done: boolean): Promise<void>;
+  loadReminders(userId: string): Promise<ReminderPrefs | null>;
+  saveReminders(userId: string, prefs: ReminderPrefs): Promise<void>;
+  savePushSubscription(userId: string, sub: PushSub): Promise<void>;
+  deletePushSubscription(userId: string, endpoint: string): Promise<void>;
 }

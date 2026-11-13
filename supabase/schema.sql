@@ -44,3 +44,32 @@ create policy "own sprints" on public.sprints
 drop policy if exists "own checkins" on public.checkins;
 create policy "own checkins" on public.checkins
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- ---------- Reminders (push + in-app) ----------
+create table if not exists public.reminders (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  push_enabled boolean not null default false,
+  inapp_enabled boolean not null default true,
+  remind_at text not null default '09:00',
+  tz text not null default 'UTC',
+  last_sent_on date
+);
+
+create table if not exists public.push_subscriptions (
+  endpoint text primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  p256dh text not null,
+  auth text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.reminders enable row level security;
+alter table public.push_subscriptions enable row level security;
+
+drop policy if exists "own reminders" on public.reminders;
+create policy "own reminders" on public.reminders
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+drop policy if exists "own push subscriptions" on public.push_subscriptions;
+create policy "own push subscriptions" on public.push_subscriptions
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

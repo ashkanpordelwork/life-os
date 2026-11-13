@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import { Button } from '../components/Button';
+import { ListRow } from '../components/ListRow';
 import { Screen, Spacer } from '../components/Screen';
 import { StatChip } from '../components/StatChip';
 import type { Area } from '../data/types';
@@ -14,11 +15,11 @@ import './today.css';
 
 /**
  * You (Figma 2032:2654), first version: name, stats and Sign out.
- * The settings list (Reminders, Hours, My patches, Data, Help) comes with Flows 5 and 7.
+ * Reminders row opens /reminders. Other settings (Hours, My patches, Data, Help) come later.
  */
 export function You() {
   const navigate = useNavigate();
-  const { user, profile, sprint, checkins, today, signOut } = useSession();
+  const { user, profile, sprint, checkins, today, signOut, reminders } = useSession();
   const [busy, setBusy] = useState(false);
 
   const stats = useMemo(() => {
@@ -50,6 +51,12 @@ export function You() {
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={stats.days} />} label={t('today.days')} />
         <StatChip fill icon="insights" value={<AnimatedNumber value={stats.score} decimals={1} />} label={t('today.score')} />
       </div>
+      <ListRow
+        icon="notifications"
+        title={t('you.reminders')}
+        subtitle={reminders.push_enabled ? t('reminders.rowSubtitleOn', { time: reminders.remind_at }) : reminders.inapp_enabled ? t('reminders.rowSubtitleInapp', { time: reminders.remind_at }) : t('reminders.rowSubtitleOff')}
+        onClick={() => navigate('/reminders')}
+      />
       <p className="text-body-s text-secondary text-center">{t('you.email')} {user?.email}</p>
       <Button block variant="Ghost" label={t('you.signOut')} busy={busy} onClick={out} />
       <Spacer />

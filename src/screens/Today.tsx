@@ -1,4 +1,6 @@
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Icon } from '../components/Icon';
+import { TextButton } from '../components/TextButton';
 import { useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
@@ -24,6 +26,7 @@ import { formatMinutes, pad2 } from './flow';
 import './today.css';
 
 const TINY_KEY = 'lifeos.tinyMode';
+const NUDGE_KEY = 'lifeos.nudge.dismissed';
 
 function greeting(name: string, firstDay: boolean): string {
   const n = name.trim().split(' ')[0];
@@ -36,7 +39,8 @@ function greeting(name: string, firstDay: boolean): string {
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone, setRest } = useSession();
+  const { profile, sprint, checkins, today, setDone, setRest, reminders } = useSession();
+  const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
   const [tiny, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
 
@@ -66,6 +70,14 @@ export function Today() {
     setTiny(on);
     try { localStorage.setItem(TINY_KEY, on ? '1' : '0'); } catch { /* ignore */ }
   };
+  // In-app reminder: after the reminder time, if patches are left and today is not a rest day.
+  const [rh, rm] = reminders.remind_at.split(':').map(Number);
+  const now = new Date();
+  const left = items.filter((i) => !doneToday.has(i.id));
+  const leftMin = Math.max(1, Math.round(left.reduce((sum, i) => sum + (tiny ? 0.3 : i.duration_min), 0)));
+  const showNudge = reminders.inapp_enabled && !nudgeHidden && !resting && left.length > 0 && now.getHours() * 60 + now.getMinutes() >= rh * 60 + rm;
+  const hideNudge = () => { setNudgeHidden(true); try { localStorage.setItem(NUDGE_KEY, today); } catch { /* ignore */ } };
+
   // Tiny mode off -> ask first (Busy day sheet). On -> one tap turns it off.
   const onTinyChip = () => (tiny ? saveTiny(false) : setSheet('busy'));
 
@@ -83,8 +95,7 @@ export function Today() {
           <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
           <h1 className="text-title-l text-primary">{greeting(profile?.name ?? '', firstDay)}</h1>
         </div>
-        {/* TODO(Flow 5): reminders screen */}
-        <IconButton icon="notifications" label={t('today.notifications')} />
+        <IconButton icon="notifications" label={t('today.notifications')} onClick={() => navigate('/reminders')} />
       </header>
 
       <div className="today__stats">
@@ -92,6 +103,20 @@ export function Today() {
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={stats.days} />} label={t('today.days')} />
         <StatChip fill icon="insights" value={<AnimatedNumber value={stats.score} decimals={1} />} label={t('today.score')} />
       </div>
+
+      <AnimatePresence initial={false}>
+        {showNudge && (
+          <motion.div key="nudge" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={motionTokens.page} style={{ overflow: 'hidden' }}>
+            <div className="today__nudge glass-card" role="status">
+              <span className="today__nudge-icon"><Icon name="notifications" size={20} /></span>
+              <span className="text-body-s text-primary today__nudge-text">
+                {left.length === 1 ? t('nudge.one', { m: leftMin }) : t('nudge.text', { n: left.length, m: leftMin })}
+              </span>
+              <TextButton label={t('nudge.later')} onClick={hideNudge} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="today__section">
         <h2 className="text-title-m text-primary">{t('today.section')}</h2>

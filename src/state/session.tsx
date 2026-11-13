@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { backend, type Checkin, type Profile, type UserInfo } from '../backend';
+import { backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo } from '../backend';
+import { localTimeZone } from './push';
 import type { Sprint, VersionKey } from '../data/types';
 import { REST_ID, dayKey } from '../engine';
 import { useOnboarding } from './onboarding';
@@ -11,7 +12,10 @@ interface SessionState {
   profile: Profile | null;
   sprint: Sprint | null;
   checkins: Checkin[];
+  reminders: ReminderPrefs;
 }
+
+const DEFAULT_REMINDERS: ReminderPrefs = { push_enabled: false, inapp_enabled: true, remind_at: '09:00', tz: 'UTC' };
 
 interface SessionApi extends SessionState {
   mode: 'local' | 'supabase';
@@ -26,10 +30,11 @@ interface SessionApi extends SessionState {
   setDone: (itemId: string, done: boolean, version?: VersionKey) => Promise<void>;
   /** Log (or remove) today's rest day. */
   setRest: (on: boolean) => Promise<void>;
+  saveReminders: (prefs: Partial<ReminderPrefs>) => Promise<void>;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
-const EMPTY: SessionState = { ready: false, user: null, profile: null, sprint: null, checkins: [] };
+const EMPTY: SessionState = { ready: false, user: null, profile: null, sprint: null, checkins: [], reminders: DEFAULT_REMINDERS };
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { state: draft } = useOnboarding();
@@ -45,6 +50,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     let [profile, sprint, checkins] = await Promise.all([
       backend.loadProfile(user.id), backend.loadSprint(user.id), backend.loadCheckins(user.id),
     ]);
+    const reminders = (await backend.loadReminders(user.id).catch(() => null)) ?? { ...DEFAULT_REMINDERS, tz: localTimeZone() };
     const d = draftRef.current;
     if (!profile || (!sprint && d.sprint)) {
       profile = { name: user.name || profile?.name || '', symptoms: d.symptoms, answers: d.answers };
@@ -54,7 +60,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       sprint = d.sprint;
       await backend.saveSprint(user.id, sprint);
     }
-    setS({ ready: true, user, profile, sprint, checkins });
+    setS({ ready: true, user, profile, sprint, checkins, reminders });
   }, []);
 
   useEffect(() => {
@@ -110,6 +116,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       } catch {
         setS((p) => ({ ...p, checkins: before }));
       }
+    },
+    async saveReminders(prefs) {
+      if (!s.user) return;
+      const next = { ...s.reminders, ...prefs, tz: localTimeZone() };
+      setS((p) => ({ ...p, reminders: next }));
+      await backend.saveReminders(s.user.id, next);
     },
     async setRest(on) {
       if (!s.user) return;

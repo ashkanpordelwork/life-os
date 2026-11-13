@@ -1,0 +1,4 @@
+.setting-row { display: flex; align-items: center; gap: var(--space-12); min-block-size: var(--size-touch); }
+.setting-row__icon { display: flex; color: var(--color-text-brand); }
+.setting-row__label { flex: 1; min-inline-size: 0; }
+.setting-row--disabled { opacity: 0.5; }

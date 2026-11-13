@@ -235,7 +235,8 @@
   "you": {
     "label": "Sprint {nn}",
     "email": "Signed in as",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "reminders": "Reminders"
   },
   "review": {
     "cta": "Review Sprint {nn}",
@@ -288,5 +289,36 @@
     "pastText": "Released",
     "nextText": "You pick it at the end of this Sprint.",
     "plan": "Plan Sprint {n}"
+  },
+  "reminders": {
+    "topTitle": "Reminders",
+    "push": "Push notifications",
+    "inapp": "In-app reminder",
+    "time": "Daily reminder at",
+    "hint": "One gentle nudge a day. Skipped if you're done or resting.",
+    "offTitle": "Notifications off.",
+    "deniedSteps": [
+      "Tap the lock icon",
+      "Open Site settings",
+      "Allow notifications"
+    ],
+    "installTitle": "Add Life OS to your Home Screen.",
+    "installSteps": [
+      "Tap the Share button",
+      "Tap “Add to Home Screen”",
+      "Open Life OS from there"
+    ],
+    "unsupported": "This browser can't show notifications.",
+    "notConfigured": "Push isn't switched on for this app yet.",
+    "localMode": "Push works in the live app only (not in test mode).",
+    "failed": "Couldn't turn on push. Try again.",
+    "rowSubtitleOn": "Push · {time}",
+    "rowSubtitleInapp": "In-app · {time}",
+    "rowSubtitleOff": "Off"
+  },
+  "nudge": {
+    "text": "{n} patches left today. About {m} min.",
+    "one": "1 patch left today. About {m} min.",
+    "later": "Later"
   }
 }

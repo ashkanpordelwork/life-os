@@ -19,6 +19,7 @@ import { Review } from './screens/Review';
 import { Progress } from './screens/Progress';
 import { ScoreByArea } from './screens/ScoreByArea';
 import { Roadmap } from './screens/Roadmap';
+import { Reminders } from './screens/Reminders';
 const Styleguide = lazy(() => import('./screens/Styleguide').then((m) => ({ default: m.Styleguide })));
 
 /** Screens that need a logged-in user. */
@@ -70,6 +71,7 @@ function AnimatedRoutes() {
         <Route path="/roadmap" element={page(<RequireUser><Roadmap /></RequireUser>)} />
         <Route path="/progress" element={page(<RequireUser><Progress /></RequireUser>)} />
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
+        <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
         <Route path="/you" element={page(<RequireUser><You /></RequireUser>)} />
         <Route path="/styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
         <Route path="*" element={<Navigate to="/" replace />} />
