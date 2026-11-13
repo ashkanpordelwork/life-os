@@ -21,6 +21,7 @@ import {
 } from '../engine';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
+import { MAX_PATCHES, MIN_PATCHES } from '../state/onboarding';
 import { motionTokens } from '../styles/motion';
 import { itemAmount, pad2 } from './flow';
 import './onboarding.css';
@@ -60,6 +61,10 @@ export function Review() {
 
   const kept = current.filter((i) => (decisions[i.id] ?? 'keep') === 'keep').map((i) => i.id);
   const freed = current.length - kept.length;
+  // Owner decision: a Sprint has 3 to 5 patches. Swap/Drop free slots; there may be room to add more.
+  const minPick = Math.max(0, MIN_PATCHES - kept.length);
+  const maxPick = Math.max(0, MAX_PATCHES - kept.length);
+  const pickOk = picked.length >= minPick && picked.length <= maxPick && (freed > 0 || picked.length > 0);
   const excluded = new Set(current.map((i) => i.id));
 
   const completion = sprint ? sprintCompletion(sprint, checkins, today) : 0;
@@ -86,7 +91,7 @@ export function Review() {
   const suggestions = useMemo(() => {
     const scores = nowScores ?? startScores;
     if (!scores) return pool.slice(0, 3);
-    return recommend({ items: pool, symptoms: profile?.symptoms ?? [], scores, sprintNumber: nextNumber, levels: levelCtx, flags: flagsFromHealth(profile?.health) }).map((o) => o.item).slice(0, 3);
+    return recommend({ items: pool, symptoms: profile?.symptoms ?? [], scores, sprintNumber: nextNumber, levels: levelCtx, flags: flagsFromHealth(profile?.health), count: 6 }).map((o) => o.item).slice(0, 5);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, profile, nextNumber, answers]);
 
@@ -98,7 +103,7 @@ export function Review() {
 
   const togglePick = (id: string) => {
     if (picked.includes(id)) setPicked(picked.filter((x) => x !== id));
-    else if (picked.length < freed) setPicked([...picked, id]);
+    else if (picked.length < maxPick) setPicked([...picked, id]);
   };
 
   const confirm = async () => {
@@ -122,12 +127,12 @@ export function Review() {
     else if (step === 'review') setStep('scores');
     else if (step === 'suggest') setStep('review');
     else if (step === 'browse') setStep('suggest');
-    else setStep(freed > 0 ? 'suggest' : 'review');
+    else setStep(freed > 0 || picked.length > 0 ? 'suggest' : 'review');
   };
 
-  const pickTrailing = t('review.pickCount', { n: picked.length, total: freed });
+  const pickTrailing = t('review.pickCount', { n: picked.length, total: maxPick });
   const card = (item: ChecklistItem) => (
-    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= freed} />
+    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= maxPick} />
   );
 
   return (
@@ -204,6 +209,9 @@ export function Review() {
               })}
               <Spacer />
               <Button block label={t(freed > 0 ? 'review.seeSuggestions' : 'review.continue')} onClick={() => setStep(freed > 0 ? 'suggest' : 'confirm')} />
+              {freed === 0 && kept.length < MAX_PATCHES && (
+                <Button block variant="Ghost" label={t('review.addPatch')} onClick={() => setStep('suggest')} />
+              )}
             </>
           )}
 
@@ -224,7 +232,7 @@ export function Review() {
               )}
               {suggestions.length ? suggestions.map(card) : <p className="text-body-s text-secondary">{t('review.empty')}</p>}
               <Spacer />
-              <Button block label={t('review.confirmPick')} disabled={picked.length !== freed} onClick={() => setStep('confirm')} />
+              <Button block label={t('review.confirmPick')} disabled={!pickOk} onClick={() => setStep('confirm')} />
               <Button block variant="Ghost" label={t('review.browse')} onClick={() => setStep('browse')} />
             </>
           )}
@@ -239,7 +247,7 @@ export function Review() {
               </div>
               {pool.filter((i) => filter === 'All' || i.area === filter).map(card)}
               <Spacer />
-              <Button block label={t('review.confirmPick')} disabled={picked.length !== freed} onClick={() => setStep('confirm')} />
+              <Button block label={t('review.confirmPick')} disabled={!pickOk} onClick={() => setStep('confirm')} />
             </>
           )}
 

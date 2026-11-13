@@ -16,3 +16,6 @@
 .intro__top { display: flex; align-items: center; justify-content: space-between; min-block-size: var(--size-touch); }
 .intro__slide { display: flex; flex-direction: column; gap: var(--space-12); touch-action: pan-y; cursor: grab; }
 .intro__dots { padding-inline: var(--space-40); }
+
+/* Pick patches: hint when more than 3 are picked */
+.pick__hint { display: flex; align-items: center; gap: var(--space-8); }

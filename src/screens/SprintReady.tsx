@@ -31,7 +31,7 @@ export function SprintReady() {
       <Mascot name="core-pointing" size={238} animated />
       <p className="text-mono-label text-brand text-center">{t('ready.label', { nn, days: sprint.length_days })}</p>
       <h1 className="text-title-l text-primary text-center">{t('ready.title')}</h1>
-      <p className="text-body-m text-secondary text-center">{t('ready.subtitle', { minutes })}</p>
+      <p className="text-body-m text-secondary text-center">{t('ready.subtitle', { minutes, count: sprint.patch_ids.length })}</p>
       <GlassPanel gap={8}>
         <p className="text-mono-label text-secondary">{sprintTheme(sprint) ? `${t('ready.panelLabel', { nn })} · ${sprintTheme(sprint)}` : t('ready.panelLabel', { nn })}</p>
         <SegmentedProgress total={sprint.length_days} filled={0} />

@@ -22,7 +22,11 @@ export const DEFAULT_WAKE = '07:00';
 export const DEFAULT_BED = '23:00';
 
 export const MAX_SYMPTOMS = 3;
+/** Default patches per Sprint (Figma). */
 export const PATCHES_PER_SPRINT = 3;
+/** Owner decision: the user may pick 3 to 5 patches. */
+export const MIN_PATCHES = 3;
+export const MAX_PATCHES = 5;
 
 const STORAGE_KEY = 'lifeos.onboarding.v1';
 const EMPTY: OnboardingState = { symptoms: [], answers: {}, picked: [], sprint: null, wake_time: DEFAULT_WAKE, bed_time: DEFAULT_BED, health: {}, safetyOk: false };

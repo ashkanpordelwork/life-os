@@ -93,15 +93,17 @@
     "topTitle": "Pick patches",
     "trailing": "Pick 3",
     "title": "Your first patches",
-    "subtitle": "Tiny, doable, backed by evidence.",
-    "cta": "Start Sprint {n}"
+    "subtitle": "Pick 3 to 5. Tiny, doable, backed by evidence.",
+    "cta": "Start Sprint {n}",
+    "trailingRange": "{n} / {max}",
+    "moreHint": "Fewer patches stick better. 3 is a great start."
   },
   "ready": {
     "label": "Sprint {nn} · {days} days",
     "title": "You're set.",
-    "subtitle": "3 patches. About {minutes} minutes a day.",
+    "subtitle": "{count} patches. About {minutes} minutes a day.",
     "panelLabel": "Sprint {nn}",
-    "sprintDef": "Sprint: 14 days with the same 3 patches.",
+    "sprintDef": "Sprint: 14 days with the same patches.",
     "patchDef": "Patch: one small habit you tick off each day.",
     "releaseDef": "Release: at the end, you keep, swap or drop each patch.",
     "cta": "Go to Today",
@@ -241,13 +243,15 @@
     "signOut": "Sign out",
     "reminders": "Reminders",
     "sleepTimes": "Sleep times",
-    "library": "Library"
+    "library": "Library",
+    "pro": "Life OS Pro",
+    "proSubtitle": "See what Pro adds · free in beta"
   },
   "review": {
     "cta": "Review Sprint {nn}",
     "topTitle": "Sprint {n} review",
     "title": "How did it go?",
-    "subtitle": "Keep, swap or drop each patch.",
+    "subtitle": "Keep, swap or drop each patch. A Sprint has 3 to 5.",
     "daysDone": "{n} / {total} days",
     "keep": "Keep",
     "swap": "Swap",
@@ -280,7 +284,8 @@
     "levelUp": "Level 2 unlocked",
     "levelUpBody": "You did {p}% of days. New, bigger patches are in.",
     "levelLocked": "Level 2 locked",
-    "levelLockedBody": "You did {p}% of days. Reach {need}% to unlock bigger patches."
+    "levelLockedBody": "You did {p}% of days. Reach {need}% to unlock bigger patches.",
+    "addPatch": "Add a patch"
   },
   "progress": {
     "label": "Progress",
@@ -464,6 +469,41 @@
       "label": "Levels",
       "title": "Bigger patches unlock.",
       "body": "Do a patch on 70% of a Sprint's days, and Level 2 opens from Sprint 3."
+    }
+  },
+  "pro": {
+    "topTitle": "Pro",
+    "label": "Life OS Pro",
+    "title": "Go further.",
+    "subtitle": "Free covers the basics. Pro adds bigger patches and deeper tools.",
+    "soon": "Soon",
+    "beta": "Beta: all of Pro is free for now",
+    "cta": "Got it",
+    "features": {
+      "level2": {
+        "title": "{n} Level 2 patches",
+        "body": "Afternoon sun, screens off, mobility, fiber, gratitude and more."
+      },
+      "level3": {
+        "title": "Level 3 patches",
+        "body": "Cold exposure and hard cardio, behind a health check."
+      },
+      "focus": {
+        "title": "Focus tools",
+        "body": "Tools for deep work, goal setting and learning."
+      },
+      "nutrition": {
+        "title": "Nutrition tools",
+        "body": "Protein quality and a personal water plan."
+      },
+      "travel": {
+        "title": "Jet-lag plan",
+        "body": "Light and sleep timing for trips."
+      },
+      "supplements": {
+        "title": "Supplement guides",
+        "body": "Reference cards with clear safety notes."
+      }
     }
   }
 }

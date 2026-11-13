@@ -9,7 +9,10 @@ import { flagsFromHealth } from '../data/safetyRules';
 import type { Area } from '../data/types';
 import { areaScoresFromAnswers, recommend, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
-import { PATCHES_PER_SPRINT, useOnboarding } from '../state/onboarding';
+import { MAX_PATCHES, MIN_PATCHES, PATCHES_PER_SPRINT, useOnboarding } from '../state/onboarding';
+import { AnimatePresence, motion } from 'motion/react';
+import { Icon } from '../components/Icon';
+import { motionTokens } from '../styles/motion';
 import { useSession } from '../state/session';
 import { firstMissingQuestion, itemAmount } from './flow';
 
@@ -17,7 +20,7 @@ import { firstMissingQuestion, itemAmount } from './flow';
 const OFFERS = 6;
 const SPRINT_NUMBER = 1;
 
-/** Pick patches (Figma 55:390). 4 offers from the engine, the user picks 3. */
+/** Pick patches (Figma 55:390). Offers from the engine; the user picks 3 (default) to 5 (owner decision). */
 export function PickPatches() {
   const navigate = useNavigate();
   const { state, setPicked, startSprint } = useOnboarding();
@@ -42,12 +45,12 @@ export function PickPatches() {
 
   const toggle = (id: string) => {
     if (validPicked.includes(id)) setPicked(validPicked.filter((x) => x !== id));
-    else if (validPicked.length < PATCHES_PER_SPRINT) setPicked([...validPicked, id]);
+    else if (validPicked.length < MAX_PATCHES) setPicked([...validPicked, id]);
   };
 
   return (
     <Screen>
-      <TopBar title={t('patches.topTitle')} trailing={t('patches.trailing')} onBack={() => navigate('/score')} />
+      <TopBar title={t('patches.topTitle')} trailing={t('patches.trailingRange', { n: validPicked.length, max: MAX_PATCHES })} onBack={() => navigate('/score')} />
       <h2 className="text-title-l text-primary">{t('patches.title')}</h2>
       <p className="text-body-s text-secondary">{t('patches.subtitle')}</p>
       {offers.map(({ item }) => (
@@ -60,11 +63,24 @@ export function PickPatches() {
           onToggle={() => toggle(item.id)}
         />
       ))}
+      <AnimatePresence initial={false}>
+        {validPicked.length > PATCHES_PER_SPRINT && (
+          <motion.p
+            key="more"
+            className="text-body-s text-secondary pick__hint"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0, transition: motionTokens.page }}
+            exit={{ opacity: 0, transition: motionTokens.pageExit }}
+          >
+            <Icon name="info" size={16} /> {t('patches.moreHint')}
+          </motion.p>
+        )}
+      </AnimatePresence>
       <Spacer />
       <Button
         block
         label={t('patches.cta', { n: SPRINT_NUMBER })}
-        disabled={validPicked.length !== PATCHES_PER_SPRINT}
+        disabled={validPicked.length < MIN_PATCHES || validPicked.length > MAX_PATCHES}
         onClick={async () => {
           const sprint = startSprint(validPicked);
           if (session.user) await session.saveSprint(sprint);
