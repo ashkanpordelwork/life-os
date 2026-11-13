@@ -4,7 +4,17 @@ import { AuthError, type AuthErrorCode, type Backend, type UserInfo } from './ty
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
-  const sb = createClient(url, anonKey, { auth: { persistSession: true, autoRefreshToken: true } });
+  // PKCE: the email link comes back as ?code=... (not #access_token=...), so it does not clash with the
+// app's #/ routes. supabase-js exchanges the code for a session on load.
+  const sb = createClient(url, anonKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' },
+  });
+  // After the code is used, remove it from the address bar.
+  sb.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+    }
+  });
 
   const toInfo = (u: User): UserInfo => ({
     id: u.id,
