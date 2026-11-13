@@ -10,6 +10,7 @@ import { areaScoresFromAnswers, currentStreak, overallScore, totalActiveDays, ty
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { AppNav } from './AppNav';
+import { openLibrary } from './Library';
 import { pad2 } from './flow';
 import './today.css';
 
@@ -57,6 +58,7 @@ export function You() {
         subtitle={reminders.push_enabled ? t('reminders.rowSubtitleOn', { time: reminders.remind_at }) : reminders.inapp_enabled ? t('reminders.rowSubtitleInapp', { time: reminders.remind_at }) : t('reminders.rowSubtitleOff')}
         onClick={() => navigate('/reminders')}
       />
+      <ListRow icon="science" title={t('you.library')} subtitle={t('library.openSubtitle')} onClick={() => openLibrary(navigate, '/you')} />
       <ListRow icon="bedtime" title={t('you.sleepTimes')} subtitle={`${wake} – ${bed}`} onClick={() => navigate('/sleep-times')} />
       <p className="text-body-s text-secondary text-center">{t('you.email')} {user?.email}</p>
       <Button block variant="Ghost" label={t('you.signOut')} busy={busy} onClick={out} />

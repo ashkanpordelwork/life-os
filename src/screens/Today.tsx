@@ -21,6 +21,7 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
+import { openLibrary } from './Library';
 import { reviewDue, reviewLabel } from './Review';
 import { pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
@@ -97,7 +98,10 @@ export function Today() {
           <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
           <h1 className="text-title-l text-primary">{greeting(profile?.name ?? '', firstDay)}</h1>
         </div>
-        <IconButton icon="notifications" label={t('today.notifications')} onClick={() => navigate('/reminders')} />
+        <div className="today__actions">
+          <IconButton icon="air" label={t('today.tools')} onClick={() => openLibrary(navigate, '/today')} />
+          <IconButton icon="notifications" label={t('today.notifications')} onClick={() => navigate('/reminders')} />
+        </div>
       </header>
 
       <div className="today__stats">

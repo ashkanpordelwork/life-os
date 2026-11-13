@@ -21,6 +21,9 @@ import { Review } from './screens/Review';
 import { Progress } from './screens/Progress';
 import { ScoreByArea } from './screens/ScoreByArea';
 import { Insights } from './screens/Insights';
+import { Library } from './screens/Library';
+import { Sigh } from './screens/Sigh';
+import { Nsdr } from './screens/Nsdr';
 import { Roadmap } from './screens/Roadmap';
 import { Reminders } from './screens/Reminders';
 const Styleguide = lazy(() => import('./screens/Styleguide').then((m) => ({ default: m.Styleguide })));
@@ -78,6 +81,9 @@ function AnimatedRoutes() {
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
         <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
         <Route path="/sleep-times" element={page(<RequireUser><SleepTimesEdit /></RequireUser>)} />
+        <Route path="/library" element={page(<RequireUser><Library /></RequireUser>)} />
+        <Route path="/tool/sigh" element={page(<RequireUser><Sigh /></RequireUser>)} />
+        <Route path="/tool/nsdr" element={page(<RequireUser><Nsdr /></RequireUser>)} />
         <Route path="/you" element={page(<RequireUser><You /></RequireUser>)} />
         <Route path="/styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
         <Route path="*" element={<Navigate to="/" replace />} />

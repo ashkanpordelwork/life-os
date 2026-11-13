@@ -1,0 +1,23 @@
+/* Library and tools (designed in code) */
+.library__sheet { display: flex; flex-direction: column; gap: var(--space-16); max-block-size: 60dvh; overflow-y: auto; }
+.library__version { display: flex; flex-direction: column; gap: var(--space-4); }
+.tool__reps { justify-content: center; }
+.tool__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: min(100%, 280px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.tool__stage > * { grid-area: 1 / 1; }
+.tool__halo, .tool__orb, .tool__breath { inline-size: 78%; aspect-ratio: 1; border-radius: 50%; }
+.tool__halo { background: var(--color-brand-soft); }
+.tool__orb { background: var(--gradient-soft); border: 1px solid var(--color-border-glass); box-shadow: var(--shadow-floating); }
+.tool__breath { inline-size: 70%; background: var(--color-brand-soft); }
+.tool__phase { position: relative; text-align: center; padding-inline: var(--space-16); }
+.tool__time { position: relative; font-variant-numeric: tabular-nums; }
+.tool__hint { min-block-size: 40px; }
+.tool__ring { inline-size: 100%; block-size: 100%; rotate: -90deg; }
+.tool__ring-track { fill: none; stroke: var(--color-border-default); stroke-width: 6; }
+.tool__ring-fill { fill: none; stroke: var(--color-action-primary); stroke-width: 6; stroke-linecap: round; }

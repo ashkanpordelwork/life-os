@@ -187,7 +187,8 @@
     "restLog": "Log a rest day",
     "restCancel": "Never mind",
     "resting": "Resting",
-    "restOn": "Rest day · streak safe"
+    "restOn": "Rest day · streak safe",
+    "tools": "Tools"
   },
   "nav": {
     "today": "Today",
@@ -238,7 +239,8 @@
     "email": "Signed in as",
     "signOut": "Sign out",
     "reminders": "Reminders",
-    "sleepTimes": "Sleep times"
+    "sleepTimes": "Sleep times",
+    "library": "Library"
   },
   "review": {
     "cta": "Review Sprint {nn}",
@@ -369,5 +371,57 @@
     "noteDown": "Your score is down {x} since you started. Small steps still count.",
     "daysTap": "Tap a day to see it.",
     "levelLater": "Level 2 opens from Sprint 3 at {need}%"
+  },
+  "library": {
+    "title": "Library",
+    "tools": "Tools",
+    "learn": "Learn",
+    "toolsIntro": "Quick help for the moment you need it.",
+    "learnIntro": "Every patch, why it works, and where it comes from.",
+    "level": "Level {n}",
+    "source": "Book: {ids}",
+    "unlocks": "Unlocks in a later Sprint",
+    "open": "Library",
+    "openSubtitle": "Tools and the science behind each patch"
+  },
+  "sigh": {
+    "title": "Physiological sigh",
+    "subtitle": "Calm down fast · under 1 min",
+    "reps": "How many sighs",
+    "repsN": "{n}×",
+    "start": "Start",
+    "stop": "Stop",
+    "again": "Again",
+    "close": "Close",
+    "phase": {
+      "ready": "Ready?",
+      "inhale": "Breathe in",
+      "top": "In again",
+      "exhale": "Breathe out slowly",
+      "done": "Done."
+    },
+    "hint": {
+      "ready": "Two inhales through the nose, then one long exhale through the mouth.",
+      "inhale": "Deep, through the nose. Let your belly expand.",
+      "top": "A short second inhale. Fill your lungs.",
+      "exhale": "Through the mouth, all the way out.",
+      "done": "Notice your heartbeat slowing down."
+    },
+    "safety": "Never in water or while driving."
+  },
+  "nsdr": {
+    "title": "NSDR",
+    "subtitle": "Non-sleep deep rest · 10–30 min",
+    "length": "Length",
+    "start": "Start",
+    "stop": "Stop",
+    "again": "Again",
+    "done": "Done. Take a moment before you get up.",
+    "steps": [
+      "Lie down and close your eyes.",
+      "Breathe with long, slow exhales.",
+      "Move your attention through your body, one spot at a time.",
+      "Just feel. No need to stop your thoughts."
+    ]
   }
 }
