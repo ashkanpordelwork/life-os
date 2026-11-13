@@ -391,7 +391,8 @@
     "openSubtitle": "Tools and the science behind each patch",
     "calm": "Calm",
     "focusGroup": "Focus",
-    "nutritionGroup": "Nutrition"
+    "nutritionGroup": "Nutrition",
+    "travelGroup": "Travel"
   },
   "sigh": {
     "title": "Physiological sigh",
@@ -626,5 +627,35 @@
       "pbToast": "Peanut butter on toast",
       "beansRice": "Beans and rice"
     }
+  },
+  "jetlag": {
+    "title": "Jet-lag plan",
+    "subtitle": "Light and sleep timing for trips",
+    "diffLabel": "Destination clock vs home",
+    "earlier": "Earlier",
+    "later": "Later",
+    "east": "{h} h ahead · flying east (harder)",
+    "west": "{h} h behind · flying west (easier)",
+    "same": "Same time zone",
+    "trip": "Trip length",
+    "short": "Under {n} days",
+    "long": "{n} days or more",
+    "stayHome": "Short trip: stay on home time. Eat, sleep and get light as you would at home.",
+    "noShift": "No time change, no jet lag to fix.",
+    "tmin": "Your body's low point is about 2 h before your usual wake ({wake}). At the destination that's {time} local time.",
+    "before": "2 days before you fly",
+    "eastBefore": "Wake 30–45 min earlier. Get bright light right away, have caffeine, and exercise within an hour.",
+    "westBefore": "Wake, have caffeine and exercise 30–45 min later. See bright light for 1–2 h after sunset.",
+    "lightAt": "Bright light {from}–{to}",
+    "darkAt": "Dark sunglasses {from}–{to}",
+    "eastLight": "Sun or a bright light, local time. This pulls your clock forward.",
+    "eastDark": "Avoid bright light now so your clock doesn't slip back.",
+    "westLight": "Bright light, local time. This keeps you up later.",
+    "bothTitle": "Either way",
+    "both": [
+      "Eat on local time from day one. You can fast 14–16 h before the first local breakfast.",
+      "Exercise in the local morning.",
+      "Wear blue/green-blocking glasses at night."
+    ]
   }
 }

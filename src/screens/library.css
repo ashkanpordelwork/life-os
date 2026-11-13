@@ -50,3 +50,6 @@
 .nutri__track { display: block; block-size: 8px; border-radius: var(--radius-pill); background: var(--color-bg-subtle); overflow: hidden; }
 .nutri__bar { display: block; block-size: 100%; border-radius: var(--radius-pill); background: var(--color-action-primary); }
 .nutri__row > :last-child { white-space: nowrap; flex-shrink: 0; }
+/* Jet-lag */
+.jet__row { display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
+.jet__list { display: flex; flex-direction: column; gap: var(--space-8); margin: 0; padding-inline-start: var(--space-20); }

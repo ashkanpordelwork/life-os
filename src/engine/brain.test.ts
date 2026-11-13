@@ -115,3 +115,16 @@ describe('level 3 and weekly patches', () => {
     expect(it_('EX02').per_week).toBe(3);
   });
 });
+
+describe('jetLagPlan (book SL15)', () => {
+  it('east: light 1–2 h after home T-min, dark 2–3 h before, in local time', async () => {
+    const { jetLagPlan } = await import('./jetlag');
+    // wake 07:00 → T-min 05:00 home; 6 h ahead → 11:00 local
+    expect(jetLagPlan('07:00', 6)).toEqual({ direction: 'east', tminLocal: '11:00', light: ['12:00', '13:00'], dark: ['08:00', '09:00'] });
+  });
+  it('west: light 1–2 h before home T-min', async () => {
+    const { jetLagPlan } = await import('./jetlag');
+    // T-min 05:00 home; 8 h behind → 21:00 local
+    expect(jetLagPlan('07:00', -8)).toEqual({ direction: 'west', tminLocal: '21:00', light: ['19:00', '20:00'] });
+  });
+});
