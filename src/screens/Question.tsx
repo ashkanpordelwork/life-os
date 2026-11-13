@@ -9,7 +9,7 @@ import { AREAS, type Area } from '../data/types';
 import type { AnswerIndex } from '../engine';
 import { t, tList } from '../i18n';
 import { useOnboarding } from '../state/onboarding';
-import { QUESTION_ROUTES, TOTAL_STEPS, areaFromSlug } from './flow';
+import { QUESTION_ROUTES, TIMES_ROUTE, TOTAL_STEPS, areaFromSlug } from './flow';
 import './onboarding.css';
 
 const GLYPH: Record<Area, Glyph> = { Movement: 'Move', Nutrition: 'Nutrition', Sleep: 'Sleep', Mind: 'Mind' };
@@ -23,10 +23,11 @@ export function Question() {
   if (!area) return <Navigate to="/question/movement" replace />;
 
   const index = AREAS.indexOf(area);
-  const step = index + 2; // Symptoms is step 1
+  // Symptoms is step 1; sleep times sit between Sleep and Mind.
+  const step = index + 2 + (index > AREAS.indexOf('Sleep') ? 1 : 0);
   const selected = state.answers[area];
-  const back = index === 0 ? '/symptoms' : QUESTION_ROUTES[AREAS[index - 1]];
-  const next = index === AREAS.length - 1 ? '/score' : QUESTION_ROUTES[AREAS[index + 1]];
+  const back = index === 0 ? '/symptoms' : AREAS[index - 1] === 'Sleep' ? TIMES_ROUTE : QUESTION_ROUTES[AREAS[index - 1]];
+  const next = area === 'Sleep' ? TIMES_ROUTE : index === AREAS.length - 1 ? '/score' : QUESTION_ROUTES[AREAS[index + 1]];
 
   return (
     <Screen>

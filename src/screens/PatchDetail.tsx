@@ -15,7 +15,7 @@ import type { VersionKey } from '../data/types';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic } from '../styles/motion';
-import { formatMinutes } from './flow';
+import { formatMinutes, whenLabel } from './flow';
 import './patch.css';
 
 const VERSIONS: { key: VersionKey; icon: IconName }[] = [
@@ -28,7 +28,7 @@ const VERSIONS: { key: VersionKey; icon: IconName }[] = [
 export function PatchDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { checkins, today, sprint, setDone } = useSession();
+  const { checkins, today, sprint, setDone, wake, bed } = useSession();
   const item = id ? getItem(id) : undefined;
   const [version, setVersion] = useState<VersionKey>(() => {
     try { return localStorage.getItem('lifeos.tinyMode') === '1' ? 'tiny' : 'standard'; } catch { return 'standard'; }
@@ -58,7 +58,7 @@ export function PatchDetail() {
       </div>
       <div className="patch__facts">
         <MetaChip icon="timer" label={formatMinutes(item.duration_min, t)} />
-        <MetaChip icon="event" label={t(`slots.${item.slot}`)} />
+        <MetaChip icon="event" label={whenLabel(item, wake, bed, t)} />
         <MetaChip icon="science" label={t('patch.evidencePending')} />
       </div>
       <div className="patch__versions" role="tablist">

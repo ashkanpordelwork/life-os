@@ -1,2 +1,12 @@
 .score-row { display: flex; flex-direction: column; gap: 6px; inline-size: 100%; }
 .score-row__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-8); }
+
+.score-row__values { display: inline-flex; align-items: center; gap: var(--space-8); }
+.score-delta {
+  padding-block: 2px;
+  padding-inline: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+}
+.score-delta--up { background: var(--color-status-success-bg); color: var(--color-status-success); }

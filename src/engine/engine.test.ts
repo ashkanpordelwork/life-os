@@ -96,9 +96,15 @@ describe('levelFilter', () => {
     expect(levelFilter([l1, l2, l3], 2)).toEqual([l1]);
   });
 
-  it('Sprint 3–4 add level 2, Sprint 5+ adds level 3', () => {
-    expect(levelFilter([l1, l2, l3], 3)).toEqual([l1, l2]);
-    expect(levelFilter([l1, l2, l3], 5)).toEqual([l1, l2, l3]);
+  it('Sprint 3–4 add level 2 when 70% was earned, Sprint 5+ adds level 3', () => {
+    expect(levelFilter([l1, l2, l3], 3, { prevCompletion: 0.7 })).toEqual([l1, l2]);
+    expect(levelFilter([l1, l2, l3], 5, { prevCompletion: 0.9 })).toEqual([l1, l2, l3]);
+  });
+
+  it('below 70% stays on level 1, unless level 2 was already open', () => {
+    expect(levelFilter([l1, l2, l3], 3, { prevCompletion: 0.69 })).toEqual([l1]);
+    expect(levelFilter([l1, l2, l3], 3)).toEqual([l1]);
+    expect(levelFilter([l1, l2, l3], 4, { prevCompletion: 0.2, l2Open: true })).toEqual([l1, l2]);
   });
 });
 
@@ -146,11 +152,10 @@ describe('area scores', () => {
 
 describe('data', () => {
   it('has the 14 level-1 starter items with three versions each', () => {
-    expect(ITEMS.map((i) => i.id)).toEqual([
+    expect(ITEMS.filter((i) => i.level === 1).map((i) => i.id)).toEqual([
       'SL01', 'SL04', 'SL11a', 'SL11b', 'EX01a', 'EX01b', 'EX01c', 'EX01d', 'NU02a', 'NU02b', 'NU03a', 'ST01a', 'ST04', 'FM05',
     ]);
     for (const i of ITEMS) {
-      expect(i.level).toBe(1);
       expect(Object.keys(i.versions)).toEqual(['tiny', 'standard', 'stretch']);
       expect(i.tiny_version.length).toBeGreaterThan(0);
     }

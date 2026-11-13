@@ -1,0 +1,41 @@
+.sleep-times { display: flex; flex-direction: column; gap: var(--space-12); }
+.sleep-times__item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.sleep-times__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  inline-size: 100%;
+  min-block-size: 60px;
+  padding-inline: var(--space-16);
+  background: none;
+  border: 0;
+  text-align: start;
+  cursor: pointer;
+}
+.sleep-times__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-soft);
+  color: var(--color-text-brand);
+}
+.sleep-times__label { flex: 1; }
+.sleep-times__value {
+  padding-block: var(--space-4);
+  padding-inline: var(--space-12);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.sleep-times__value--on { background: var(--color-brand-soft); color: var(--color-text-brand); }
+.sleep-times__wheel { overflow: hidden; }
+.sleep-times__wheel-inner { padding-inline: var(--space-12); padding-block-end: var(--space-12); }
+.sleep-times__wheel .wheel { box-shadow: none; }
+.sleep-times__total { text-align: center; }

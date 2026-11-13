@@ -10,7 +10,13 @@ export interface UserInfo {
 export interface Profile {
   name: string;
   symptoms: NeedTag[];
+  /** Latest answers to the 4 questions (asked again at each Release). */
   answers: Partial<Record<Area, AnswerIndex>>;
+  /** Answers from onboarding, kept to show "Up X since you started". */
+  start_answers?: Partial<Record<Area, AnswerIndex>>;
+  /** "HH:MM", 24-hour. */
+  wake_time?: string;
+  bed_time?: string;
 }
 
 export interface Checkin {

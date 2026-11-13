@@ -9,6 +9,11 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now()
 );
 
+-- Added for the "brain" update: sleep times and the starting answers (for "Up X since you started").
+alter table public.profiles add column if not exists start_answers jsonb;
+alter table public.profiles add column if not exists wake_time text;
+alter table public.profiles add column if not exists bed_time text;
+
 create table if not exists public.sprints (
   user_id uuid not null references auth.users (id) on delete cascade,
   number int not null,

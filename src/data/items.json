@@ -51,7 +51,12 @@
     "tiny_version": "Morning light · 1 min",
     "todo": [
       "Tiny '1 min' comes from the Figma Busy day sheet, not from the book."
-    ]
+    ],
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0,
+      "offset_max": 60
+    }
   },
   {
     "id": "SL04",
@@ -92,7 +97,11 @@
     "tiny_version": "Set your usual wake alarm",
     "todo": [
       "SL04b (1-week chronotype test) is a task, not included here."
-    ]
+    ],
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0
+    }
   },
   {
     "id": "SL11a",
@@ -143,7 +152,12 @@
     "todo": [
       "Needs are [sleep] only, from the symptom map in engine-spec section 1. Table 2-A lists 'sleep energy' for SL11 as a whole.",
       "Default cutoff bed−10h is an open decision in engine-spec (#1)."
-    ]
+    ],
+    "trigger": {
+      "anchor": "bed",
+      "offset_min": -600,
+      "cutoff": true
+    }
   },
   {
     "id": "SL11b",
@@ -191,7 +205,12 @@
     "todo": [
       "Needs are [fog, energy], from the symptom map in engine-spec section 1 (SL11b is listed under Foggy and Always tired).",
       "Skip this patch on mornings with a hard workout right after waking (book note)."
-    ]
+    ],
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 60,
+      "offset_max": 90
+    }
   },
   {
     "id": "EX01a",
@@ -287,7 +306,12 @@
         "text": "Walk 10–30 min after a meal."
       }
     },
-    "tiny_version": "A few steps after eating"
+    "tiny_version": "A few steps after eating",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0,
+      "offset_max": 30
+    }
   },
   {
     "id": "EX01c",
@@ -327,7 +351,11 @@
         "text": "10 air squats every 45 min of sitting."
       }
     },
-    "tiny_version": "Stand up once, slowly"
+    "tiny_version": "Stand up once, slowly",
+    "trigger": {
+      "anchor": "sit_timer",
+      "offset_min": 45
+    }
   },
   {
     "id": "EX01d",
@@ -371,7 +399,11 @@
     "tiny_version": "Heel lifts at your desk",
     "todo": [
       "Exact Soleus pushup description should be copied from the book file (engine-spec open item)."
-    ]
+    ],
+    "trigger": {
+      "anchor": "sit_timer",
+      "offset_min": 30
+    }
   },
   {
     "id": "NU02a",
@@ -414,7 +446,11 @@
         "text": "Drink 700 ml of water after waking, before coffee or breakfast."
       }
     },
-    "tiny_version": "One glass of water"
+    "tiny_version": "One glass of water",
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0
+    }
   },
   {
     "id": "NU02b",
@@ -455,7 +491,12 @@
         "text": "2.4 L in 10 hours, spread out: a glass every hour."
       }
     },
-    "tiny_version": "Water bottle on your desk"
+    "tiny_version": "Water bottle on your desk",
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0,
+      "offset_max": 600
+    }
   },
   {
     "id": "NU03a",
@@ -506,7 +547,11 @@
     "tiny_version": "Protein · 1 yogurt",
     "todo": [
       "duration_min = 5 comes from Figma (Pick patches: 'Protein breakfast · 5 min'), not engine-spec."
-    ]
+    ],
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    }
   },
   {
     "id": "ST01a",
@@ -590,7 +635,11 @@
         "text": "5 min, and stay put even if you feel the urge to grab your phone."
       }
     },
-    "tiny_version": "One slow breath in bed"
+    "tiny_version": "One slow breath in bed",
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0
+    }
   },
   {
     "id": "FM05",
@@ -636,5 +685,608 @@
       }
     },
     "tiny_version": "10 s eyes-closed pause"
+  },
+  {
+    "id": "SL02",
+    "title": "Afternoon sun",
+    "kind": "patch",
+    "area": "Sleep",
+    "needs": [
+      "sleep",
+      "fog"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 360,
+      "offset_max": 600
+    },
+    "duration_min": 10,
+    "params": {
+      "outdoor_min": [
+        10,
+        15
+      ],
+      "window_after_wake_h": [
+        6,
+        10
+      ],
+      "sunglasses": false,
+      "through_window": false
+    },
+    "safety_rules": [],
+    "sources": [
+      "SL02",
+      "LI02"
+    ],
+    "evidence_level": null,
+    "science_note": "Late-day sun gives your body clock a second anchor and makes it less sensitive to light at night.",
+    "glyph": "Light",
+    "versions": {
+      "tiny": {
+        "time": "1 min",
+        "text": "Step outside before sunset and look west."
+      },
+      "standard": {
+        "time": "10 min",
+        "text": "Late afternoon, before sunset: 10 min outside, facing the sun’s side of the sky. No sunglasses, not through a window."
+      },
+      "stretch": {
+        "time": "15 min",
+        "text": "Stay 15 min outside before sunset."
+      }
+    },
+    "tiny_version": "Afternoon sun · 1 min",
+    "todo": [
+      "Tiny '1 min' mirrors SL01's tiny version; it is not in the book."
+    ]
+  },
+  {
+    "id": "SL03",
+    "title": "Dim the lights",
+    "kind": "patch",
+    "area": "Sleep",
+    "needs": [
+      "sleep",
+      "eyes"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "BEDTIME",
+    "trigger": {
+      "anchor": "bed",
+      "offset_min": -60
+    },
+    "duration_min": 0,
+    "params": {
+      "before_bed_h": 1,
+      "options": [
+        "dim",
+        "red_amber",
+        "blue_green_blockers",
+        "candle"
+      ]
+    },
+    "safety_rules": [],
+    "sources": [
+      "SL03",
+      "LI03"
+    ],
+    "evidence_level": null,
+    "science_note": "Even short bright light at night holds back melatonin and shifts your body clock.",
+    "glyph": "Sleep",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Turn off the ceiling light. Use one low lamp."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "In your last hour before bed, keep lights dim and low: lamps, not ceiling lights."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Dim lights from sunset. Use red or amber bulbs at night, e.g. on the way to the bathroom."
+      }
+    },
+    "tiny_version": "Ceiling light off"
+  },
+  {
+    "id": "SL12",
+    "title": "Alcohol cutoff",
+    "kind": "patch",
+    "area": "Sleep",
+    "needs": [
+      "sleep"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "trigger": {
+      "anchor": "bed",
+      "offset_min": -480,
+      "cutoff": true
+    },
+    "duration_min": 0,
+    "params": {
+      "cutoff_before_bed_h": 8
+    },
+    "safety_rules": [
+      "R03"
+    ],
+    "sources": [
+      "SL12"
+    ],
+    "evidence_level": null,
+    "science_note": "Alcohol makes you drowsy but breaks up sleep and cuts deep, restoring sleep.",
+    "glyph": "Sleep",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Pick a non-alcoholic drink tonight."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "No alcohol in the 8 hours before bed."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "No alcohol today. Don’t use it to fall asleep."
+      }
+    },
+    "tiny_version": "Alcohol-free drink tonight"
+  },
+  {
+    "id": "SL14",
+    "title": "Screens off",
+    "kind": "patch",
+    "area": "Sleep",
+    "needs": [
+      "sleep",
+      "eyes"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "BEDTIME",
+    "trigger": {
+      "anchor": "bed",
+      "offset_min": -60
+    },
+    "duration_min": 0,
+    "params": {
+      "before_bed_h": 1,
+      "phone_out_of_bedroom": true
+    },
+    "safety_rules": [],
+    "sources": [
+      "SL14"
+    ],
+    "evidence_level": null,
+    "science_note": "Screen light and busy content keep your brain alert and push sleep later.",
+    "glyph": "Sleep",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Turn on Night Shift and lower screen brightness."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "No screens in the last hour before bed."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "No screens for the last hour, and charge your phone outside the bedroom."
+      }
+    },
+    "tiny_version": "Night Shift on"
+  },
+  {
+    "id": "EX04",
+    "title": "Mobility",
+    "kind": "patch",
+    "area": "Movement",
+    "needs": [
+      "msk",
+      "time"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 10,
+    "params": {
+      "minutes": 10,
+      "times_per_week": [
+        2,
+        4
+      ],
+      "moves": [
+        "deep_sumo_squat_twist",
+        "knees_behind_glutes",
+        "reverse_tabletop",
+        "founder"
+      ]
+    },
+    "safety_rules": [],
+    "sources": [
+      "EX04"
+    ],
+    "evidence_level": null,
+    "science_note": "Short mobility work keeps your wrists, back, knees, hips and shoulders moving well.",
+    "glyph": "Move",
+    "versions": {
+      "tiny": {
+        "time": "1 min",
+        "text": "Deep sumo squat, palms together. Reach one arm up and follow it with your eyes, 3 times each side."
+      },
+      "standard": {
+        "time": "10 min",
+        "text": "4 moves: deep sumo squat with twist, kneeling hip-flexor stretch, reverse tabletop, Founder pose."
+      },
+      "stretch": {
+        "time": "10 min",
+        "text": "Do the 4 moves on 2–4 days this week."
+      }
+    },
+    "tiny_version": "Sumo squat twist · 3 each side",
+    "todo": [
+      "The book says 2–4 times a week. The app ticks it like a daily patch until weekly targets exist.",
+      "Tiny time (1 min) is an estimate, not from the book."
+    ]
+  },
+  {
+    "id": "NU01a",
+    "title": "Real food",
+    "kind": "patch",
+    "area": "Nutrition",
+    "needs": [
+      "meals",
+      "energy"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "LUNCH",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    },
+    "duration_min": 0,
+    "params": {
+      "unprocessed_share": 0.9
+    },
+    "safety_rules": [],
+    "sources": [
+      "NU01"
+    ],
+    "evidence_level": null,
+    "science_note": "Whole foods fill you up; ultra-processed mixes of starch, fat, sugar and salt drive overeating.",
+    "glyph": "Nutrition",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Swap one packaged snack for fruit or plain yogurt."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Make this meal from whole, single-ingredient foods."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "About 90% of today’s food unprocessed or minimally processed."
+      }
+    },
+    "tiny_version": "Fruit instead of a snack"
+  },
+  {
+    "id": "NU04",
+    "title": "Fiber first",
+    "kind": "patch",
+    "area": "Nutrition",
+    "needs": [
+      "fog",
+      "meals"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "LUNCH",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    },
+    "duration_min": 0,
+    "params": {
+      "plate_share_veg": 0.33,
+      "fruit_per_day": [
+        2,
+        3
+      ],
+      "fiber_g_men": 35,
+      "fiber_g_women": 25,
+      "magnesium_mg_men": 420,
+      "magnesium_mg_women": 320
+    },
+    "safety_rules": [],
+    "sources": [
+      "NU04"
+    ],
+    "evidence_level": null,
+    "science_note": "Fiber slows sugar spikes after meals and feeds your gut bacteria.",
+    "glyph": "Nutrition",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Add one handful of vegetables to this meal."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Fill a third of your plate with fibrous vegetables."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Vegetables at every meal plus 2–3 whole fruits. Aim for 25–35 g fiber a day."
+      }
+    },
+    "tiny_version": "One handful of veg"
+  },
+  {
+    "id": "NU06",
+    "title": "Fermented foods",
+    "kind": "patch",
+    "area": "Nutrition",
+    "needs": [
+      "meals"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "LUNCH",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    },
+    "duration_min": 0,
+    "params": {
+      "servings_per_day": [
+        2,
+        4
+      ],
+      "refrigerated_only": true,
+      "no_added_sugar": true
+    },
+    "safety_rules": [],
+    "sources": [
+      "NU06"
+    ],
+    "evidence_level": null,
+    "science_note": "Daily fermented foods raise gut-microbe variety and lower markers of inflammation.",
+    "glyph": "Nutrition",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Eat one spoon of plain yogurt, kimchi or sauerkraut."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Have 2 servings of low-sugar fermented food today."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Have 2–4 servings today. Buy them from the fridge shelf, no added sugar."
+      }
+    },
+    "tiny_version": "One spoon of yogurt"
+  },
+  {
+    "id": "PG01a",
+    "title": "Back to now",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "stress"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "DESK",
+    "duration_min": 1,
+    "params": {
+      "checks_per_day": "several"
+    },
+    "safety_rules": [],
+    "sources": [
+      "PG01"
+    ],
+    "evidence_level": null,
+    "science_note": "A wandering mind is an unhappy one. Pulling attention back to the present lifts mood.",
+    "glyph": "Mind",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Ask: “Is my mind on what I’m doing right now?”"
+      },
+      "standard": {
+        "time": "1 min",
+        "text": "If not, ask one present-only question: what’s the room temperature? What do I smell?"
+      },
+      "stretch": {
+        "time": "1 min",
+        "text": "Check in like this a few times through the day."
+      }
+    },
+    "tiny_version": "“Am I here right now?”",
+    "todo": [
+      "Standard time (1 min) is an estimate, not from the book."
+    ]
+  },
+  {
+    "id": "PG01b",
+    "title": "Two-column page",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "stress"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 5,
+    "params": {
+      "columns": 2
+    },
+    "safety_rules": [],
+    "sources": [
+      "PG01"
+    ],
+    "evidence_level": null,
+    "science_note": "Splitting worries from what you can act on today stops the loop of rumination.",
+    "glyph": "Mind",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Write one worry, then one thing you can do about it today."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Draw a line down a page. Left: your worries. Right: only what you can act on today."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "Then work only on the right column."
+      }
+    },
+    "tiny_version": "One worry, one action",
+    "todo": [
+      "Time (5 min) is an estimate, not from the book."
+    ]
+  },
+  {
+    "id": "PG02a",
+    "title": "Gratitude",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "stress"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "MORNING",
+    "trigger": {
+      "anchor": "wake",
+      "offset_min": 0
+    },
+    "duration_min": 1,
+    "params": {
+      "minutes": [
+        1,
+        5
+      ]
+    },
+    "safety_rules": [],
+    "sources": [
+      "PG02"
+    ],
+    "evidence_level": null,
+    "science_note": "A short daily gratitude practice is linked to lower blood pressure and better sleep.",
+    "glyph": "Mind",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Recall one moment someone thanked you."
+      },
+      "standard": {
+        "time": "1 min",
+        "text": "Swap one complaint for 1 min of gratitude. Best: recall a time someone truly thanked you."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "Stay with it for 5 min."
+      }
+    },
+    "tiny_version": "One thank-you moment"
+  },
+  {
+    "id": "PG02b",
+    "title": "Switch ritual",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "stress"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "DESK",
+    "duration_min": 0,
+    "params": {
+      "options": [
+        "3_long_exhales",
+        "5_fast_blinks",
+        "lay_out_clothes"
+      ],
+      "no_phone_between": true
+    },
+    "safety_rules": [],
+    "sources": [
+      "PG02"
+    ],
+    "evidence_level": null,
+    "science_note": "A short fixed ritual between roles clears the leftovers of the last task.",
+    "glyph": "Breathe",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Before switching tasks, take 3 breaths with long exhales."
+      },
+      "standard": {
+        "time": "20 s",
+        "text": "Each time you switch roles (work to home, home to gym), do the same short ritual."
+      },
+      "stretch": {
+        "time": "20 s",
+        "text": "Do your ritual at every switch today, and skip the phone in between."
+      }
+    },
+    "tiny_version": "3 long exhales"
+  },
+  {
+    "id": "PG02c",
+    "title": "Alone time",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "stress"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 5,
+    "params": {
+      "minutes_daily": [
+        5,
+        10
+      ],
+      "hobby_hours_weekly": 1,
+      "no_phone": true
+    },
+    "safety_rules": [],
+    "sources": [
+      "PG02"
+    ],
+    "evidence_level": null,
+    "science_note": "Time alone without input lets your own thoughts and wants surface.",
+    "glyph": "Mind",
+    "versions": {
+      "tiny": {
+        "time": "1 min",
+        "text": "Sit alone, no phone, eyes closed, for one minute."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "5 min fully alone: no phone, no people. Close your eyes and notice what comes up."
+      },
+      "stretch": {
+        "time": "10 min",
+        "text": "10 min alone today, plus 1 hour for a hobby this week."
+      }
+    },
+    "tiny_version": "1 min alone, no phone"
   }
 ]

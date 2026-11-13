@@ -8,7 +8,7 @@ import { SegmentedProgress } from '../components/SegmentedProgress';
 import { getItem } from '../data';
 import { t } from '../i18n';
 import { useOnboarding } from '../state/onboarding';
-import { pad2 } from './flow';
+import { pad2, sprintTheme } from './flow';
 import './onboarding.css';
 
 /** Sprint ready (Figma 55:450). Also defines Sprint, Patch and Release once. */
@@ -30,7 +30,7 @@ export function SprintReady() {
       <h1 className="text-title-l text-primary text-center">{t('ready.title')}</h1>
       <p className="text-body-m text-secondary text-center">{t('ready.subtitle', { minutes })}</p>
       <GlassPanel gap={8}>
-        <p className="text-mono-label text-secondary">{t('ready.panelLabel', { nn })}</p>
+        <p className="text-mono-label text-secondary">{sprintTheme(sprint) ? `${t('ready.panelLabel', { nn })} · ${sprintTheme(sprint)}` : t('ready.panelLabel', { nn })}</p>
         <SegmentedProgress total={sprint.length_days} filled={0} />
       </GlassPanel>
       <ul className="definitions">

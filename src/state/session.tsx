@@ -3,7 +3,7 @@ import { backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo 
 import { localTimeZone } from './push';
 import type { Sprint, VersionKey } from '../data/types';
 import { REST_ID, dayKey } from '../engine';
-import { useOnboarding } from './onboarding';
+import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 
 interface SessionState {
   /** false until we know whether someone is logged in */
@@ -31,6 +31,11 @@ interface SessionApi extends SessionState {
   /** Log (or remove) today's rest day. */
   setRest: (on: boolean) => Promise<void>;
   saveReminders: (prefs: Partial<ReminderPrefs>) => Promise<void>;
+  /** Change part of the profile (e.g. sleep times, new answers at Release). */
+  updateProfile: (patch: Partial<Profile>) => Promise<void>;
+  /** The user's wake and bed time, with safe defaults. */
+  wake: string;
+  bed: string;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -53,7 +58,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const reminders = (await backend.loadReminders(user.id).catch(() => null)) ?? { ...DEFAULT_REMINDERS, tz: localTimeZone() };
     const d = draftRef.current;
     if (!profile || (!sprint && d.sprint)) {
-      profile = { name: user.name || profile?.name || '', symptoms: d.symptoms, answers: d.answers };
+      profile = {
+        name: user.name || profile?.name || '', symptoms: d.symptoms, answers: d.answers,
+        start_answers: d.answers, wake_time: d.wake_time, bed_time: d.bed_time,
+      };
       await backend.saveProfile(user.id, profile);
     }
     if (!sprint && d.sprint) {
@@ -78,6 +86,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     ...s,
     mode: backend.mode,
     today: dayKey(new Date()),
+    wake: s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE,
+    bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
+    async updateProfile(patch) {
+      if (!s.user || !s.profile) return;
+      const next = { ...s.profile, ...patch };
+      setS((p) => ({ ...p, profile: next }));
+      await backend.saveProfile(s.user.id, next);
+    },
     async signUp(email, password, name) {
       const user = await backend.signUp(email, password, name);
       if (!user) return 'confirm';
@@ -134,7 +150,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load]);
+  }), [s, load, draft.wake_time, draft.bed_time]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

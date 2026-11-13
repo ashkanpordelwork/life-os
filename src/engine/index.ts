@@ -5,3 +5,5 @@ export * from './scoreItem';
 export * from './compose4';
 export * from './recommend';
 export * from './streak';
+export * from './theme';
+export * from './timeHint';

@@ -30,7 +30,8 @@
   "time": {
     "minutes": "{n} min",
     "seconds": "{n} s",
-    "none": "No extra time"
+    "none": "No extra time",
+    "until": "Until {time}"
   },
   "welcome": {
     "brand": "Life OS",
@@ -236,7 +237,8 @@
     "label": "Sprint {nn}",
     "email": "Signed in as",
     "signOut": "Sign out",
-    "reminders": "Reminders"
+    "reminders": "Reminders",
+    "sleepTimes": "Sleep times"
   },
   "review": {
     "cta": "Review Sprint {nn}",
@@ -266,7 +268,16 @@
       "Nutrition": "Nutrition",
       "Sleep": "Sleep",
       "Mind": "Mind"
-    }
+    },
+    "checkTitle": "Quick check-in",
+    "scoreTitle": "Your score now",
+    "scoreUp": "Up {x} since you started",
+    "scoreDown": "Down {x} since you started. That's OK.",
+    "scoreSame": "Same as when you started.",
+    "levelUp": "Level 2 unlocked",
+    "levelUpBody": "You did {p}% of days. New, bigger patches are in.",
+    "levelLocked": "Level 2 locked",
+    "levelLockedBody": "You did {p}% of days. Reach {need}% to unlock bigger patches."
   },
   "progress": {
     "label": "Progress",
@@ -277,7 +288,10 @@
     "scoreLabel": "Score",
     "scoreSubtitle": "Your starting score.",
     "cellLabel": "{day}: {n} done",
-    "openScore": "See score by area"
+    "openScore": "See score by area",
+    "scoreSubtitleNow": "Up {x} since you started",
+    "scoreSubtitleDown": "Down {x} since you started",
+    "scoreSubtitleSame": "Same as when you started"
   },
   "roadmap": {
     "label": "Roadmap",
@@ -320,5 +334,15 @@
     "text": "{n} patches left today. About {m} min.",
     "one": "1 patch left today. About {m} min.",
     "later": "Later"
+  },
+  "sleepTimes": {
+    "topTitle": "Sleep times",
+    "title": "When's your usual day?",
+    "subtitle": "We'll time your patches around it.",
+    "wake": "Wake up",
+    "bed": "Bedtime",
+    "total": "About {h} h of sleep",
+    "editTitle": "Sleep times",
+    "save": "Save"
   }
 }

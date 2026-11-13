@@ -7,3 +7,7 @@
 .progress__detail { display: flex; flex-direction: column; gap: var(--space-8); max-block-size: 50dvh; overflow-y: auto; }
 .score-card { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
 .score-card__mid { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-8); }
+
+/* Change since the start (added in code) */
+.score-up { color: var(--color-status-success); }
+.score-card__value { display: inline-flex; align-items: center; gap: var(--space-8); }

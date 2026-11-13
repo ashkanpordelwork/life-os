@@ -29,6 +29,16 @@ export interface PatchVersion {
   text: string;
 }
 
+/** When an item happens in the day (docs/engine-spec.md section 4, `trigger`).
+ *  Offsets are minutes from the anchor; negative means before bed. */
+export interface Trigger {
+  anchor: 'wake' | 'bed' | 'meal' | 'sit_timer';
+  offset_min: number;
+  offset_max?: number;
+  /** The time is a last moment ("until"), not when to do it. E.g. caffeine cutoff. */
+  cutoff?: boolean;
+}
+
 export interface ChecklistItem {
   id: string;
   title: string;
@@ -38,6 +48,7 @@ export interface ChecklistItem {
   level: Level;
   tier: Tier;
   slot: Slot;
+  trigger?: Trigger;
   /** Minutes of the Standard version. Used for Q (<= 5 min) and the ~12 min/day cap. */
   duration_min: number;
   /** Raw numbers from docs/engine-spec.md. Display text is built from these. */
@@ -60,7 +71,7 @@ export type SprintTheme = 'Morning basics' | 'Move more' | 'Eat on time' | 'Slee
 
 export interface Sprint {
   number: number;
-  /** Theme selection logic is not built yet (phase 1–2). */
+  /** Picked from the patches by engine/theme.ts. */
   theme: SprintTheme | null;
   length_days: 14;
   patch_ids: string[];

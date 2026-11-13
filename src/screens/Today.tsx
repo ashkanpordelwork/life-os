@@ -16,13 +16,13 @@ import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { Area } from '../data/types';
-import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, type AnswerIndex } from '../engine';
+import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
 import { reviewDue, reviewLabel } from './Review';
-import { formatMinutes, pad2 } from './flow';
+import { pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 
 const TINY_KEY = 'lifeos.tinyMode';
@@ -39,7 +39,7 @@ function greeting(name: string, firstDay: boolean): string {
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone, setRest, reminders } = useSession();
+  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed } = useSession();
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
   const [tiny, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
@@ -59,7 +59,9 @@ export function Today() {
   const startDay = dayKey(new Date(sprint.started_at));
   const day = sprintDay(startDay, today, sprint.length_days);
   const doneToday = new Set(checkins.filter((c) => c.day === today).map((c) => c.item_id));
-  const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined);
+  // In the order of the user's day (wake and bed time).
+  const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined).sort((a, b) => dayOrder(a, wake, bed) - dayOrder(b, wake, bed));
+  const theme = sprintTheme(sprint);
   const doneCount = items.filter((i) => doneToday.has(i.id)).length;
   const allDone = items.length > 0 && doneCount === items.length;
   const firstDay = day === 1 && !checkins.some((c) => c.item_id !== REST_ID);
@@ -131,7 +133,7 @@ export function Today() {
           <PatchCard
             glyph={item.glyph}
             title={item.title}
-            meta={tiny ? item.versions.tiny.time : formatMinutes(item.duration_min, t)}
+            meta={patchMeta(item, wake, bed, tiny, t)}
             done={doneToday.has(item.id)}
             dimmed={resting}
             onOpen={() => navigate(`/patch/${item.id}`)}
@@ -141,7 +143,7 @@ export function Today() {
         </motion.div>
       ))}
 
-      <SprintStrip label={`Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
+      <SprintStrip label={theme ? `Sprint ${pad2(sprint.number)} · ${theme}` : `Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
       <div className="today__chip">

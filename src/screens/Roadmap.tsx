@@ -10,23 +10,24 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
-import { pad2 } from './flow';
+import { pad2, sprintTheme } from './flow';
 import { reviewDue } from './Review';
 import './progress.css';
 import './roadmap.css';
 
 /**
  * Roadmap (Figma 48:109). Past Sprints are Done, the current one shows its day, then Next.
- * Themes (Morning basics, Move more, ...) show when a Sprint has one; theme choice is not built yet,
- * so the current Sprint lists its patches instead.
+ * The current Sprint shows its theme (picked from its patches, engine/theme.ts) and its patches.
  */
 export function Roadmap() {
   const navigate = useNavigate();
   const { sprint, today } = useSession();
+
   if (!sprint) return <Navigate to="/today" replace />;
 
   const day = sprintDay(dayKey(new Date(sprint.started_at)), today, sprint.length_days);
-  const currentText = sprint.theme ?? sprint.patch_ids.map((id) => getItem(id)?.title).filter(Boolean).join(' · ');
+  const patchTitles = sprint.patch_ids.map((id) => getItem(id)?.title).filter(Boolean).join(' · ');
+  const currentText = sprintTheme(sprint) ?? patchTitles;
   const rows = [
     ...Array.from({ length: sprint.number - 1 }, (_, i) => ({ n: i + 1, state: 'done' as const })),
     { n: sprint.number, state: 'now' as const },
@@ -49,6 +50,7 @@ export function Roadmap() {
             <p className="text-body-m-strong text-primary">
               {r.state === 'now' ? currentText : r.state === 'done' ? t('roadmap.pastText') : t('roadmap.nextText')}
             </p>
+            {r.state === 'now' && currentText !== patchTitles && <p className="text-body-s text-secondary">{patchTitles}</p>}
             <SegmentedProgress total={14} filled={r.state === 'done' ? 14 : r.state === 'now' ? day : 0} />
           </motion.div>
         ))}

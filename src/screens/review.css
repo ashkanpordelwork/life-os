@@ -3,3 +3,6 @@
 .review__patch .patch-card { background: transparent; border-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 /* Figma "Patch review" and "Start" panels: padding 12, gap 10. */
 .review__step .glass-panel { padding: var(--space-12); gap: 10px; }
+/* Re-assessment (added in code) */
+.review__up { color: var(--color-status-success); }
+.review__level { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-8); }

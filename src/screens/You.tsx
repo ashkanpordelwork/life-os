@@ -15,11 +15,11 @@ import './today.css';
 
 /**
  * You (Figma 2032:2654), first version: name, stats and Sign out.
- * Reminders row opens /reminders. Other settings (Hours, My patches, Data, Help) come later.
+ * Reminders row opens /reminders, Sleep times opens /sleep-times. Other settings (Hours, My patches, Data, Help) come later.
  */
 export function You() {
   const navigate = useNavigate();
-  const { user, profile, sprint, checkins, today, signOut, reminders } = useSession();
+  const { user, profile, sprint, checkins, today, signOut, reminders, wake, bed } = useSession();
   const [busy, setBusy] = useState(false);
 
   const stats = useMemo(() => {
@@ -57,6 +57,7 @@ export function You() {
         subtitle={reminders.push_enabled ? t('reminders.rowSubtitleOn', { time: reminders.remind_at }) : reminders.inapp_enabled ? t('reminders.rowSubtitleInapp', { time: reminders.remind_at }) : t('reminders.rowSubtitleOff')}
         onClick={() => navigate('/reminders')}
       />
+      <ListRow icon="bedtime" title={t('you.sleepTimes')} subtitle={`${wake} – ${bed}`} onClick={() => navigate('/sleep-times')} />
       <p className="text-body-s text-secondary text-center">{t('you.email')} {user?.email}</p>
       <Button block variant="Ghost" label={t('you.signOut')} busy={busy} onClick={out} />
       <Spacer />

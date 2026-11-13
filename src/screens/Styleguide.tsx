@@ -27,6 +27,8 @@ import { PatchCard } from '../components/PatchCard';
 import { Progress } from '../components/Progress';
 import { ScoreRow } from '../components/ScoreRow';
 import { SegmentedProgress } from '../components/SegmentedProgress';
+import { SleepTimes } from '../components/SleepTimes';
+import { WheelPicker } from '../components/WheelPicker';
 import { SprintDot } from '../components/SprintDot';
 import { StatChip } from '../components/StatChip';
 import { StatTile } from '../components/StatTile';
@@ -138,6 +140,9 @@ export function Styleguide() {
   const [tinyChip, setTinyChip] = useState(false);
   const [replay, setReplay] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [wheel, setWheel] = useState('07:30');
+  const [wakeT, setWakeT] = useState('07:00');
+  const [bedT, setBedT] = useState('23:00');
 
   const areas: AreaVariant[] = ['Move', 'Nutrition', 'Sleep', 'Mind'];
   const levels: EvidenceLevel[] = ['Strong', 'Moderate', 'Low', 'Uncertain'];
@@ -360,7 +365,7 @@ export function Styleguide() {
             <Button block label="Main action" />
           </div>
         </Spec>
-        <Spec name="SegmentedProgress" desc="Row of 4px bars. Onboarding steps (6), area score (5), Sprint days (14).">
+        <Spec name="SegmentedProgress" desc="Row of 4px bars. Onboarding steps (7), area score (5), Sprint days (14).">
           <div className="sg-stack sg-phone">
             <SegmentedProgress total={6} filled={2} />
             <SegmentedProgress total={5} filled={3} />
@@ -394,6 +399,12 @@ export function Styleguide() {
           <div className="sg-phone sg-wrap--tinted">
             <WeekStrip title="This week" days={(['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const).map((l, i) => ({ letter: l, level: ([3, 4, 2, 3, 4, 0, 3] as const)[i], label: l }))} />
           </div>
+        </Spec>
+        <Spec name="WheelPicker" desc="iPhone-style time drums: scroll-snap, tilted rows, brand highlight band, arrow keys. Value HH:MM, 5-min steps.">
+          <WheelPicker value={wheel} onChange={setWheel} label="Time" />
+        </Spec>
+        <Spec name="SleepTimes" desc="Wake and bed rows like iPhone alarms. Tap a row to open its wheel. Onboarding step 5 and You.">
+          <SleepTimes wake={wakeT} bed={bedT} onWake={setWakeT} onBed={setBedT} />
         </Spec>
         <Spec name="SegmentedProgress variants" desc="steps (4px, shared width), today (24x6, one per patch), sprint (18x8, one per day). New bars fill from the start side.">
           <div className="sg-stack sg-phone">

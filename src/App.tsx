@@ -8,6 +8,8 @@ import { Welcome } from './screens/Welcome';
 import { Symptoms } from './screens/Symptoms';
 import { Question } from './screens/Question';
 import { StartingScore } from './screens/StartingScore';
+import { SleepTimesStep } from './screens/SleepTimesStep';
+import { SleepTimesEdit } from './screens/SleepTimesEdit';
 import { PickPatches } from './screens/PickPatches';
 import { SprintReady } from './screens/SprintReady';
 import { Login, Signup } from './screens/Auth';
@@ -59,6 +61,7 @@ function AnimatedRoutes() {
         <Route path="/" element={page(<Welcome />)} />
         <Route path="/symptoms" element={page(<Symptoms />)} />
         <Route path="/question/:area" element={page(<Question />)} />
+        <Route path="/times" element={page(<SleepTimesStep />)} />
         <Route path="/score" element={page(<StartingScore />)} />
         <Route path="/patches" element={page(<PickPatches />)} />
         <Route path="/ready" element={page(<SprintReady />)} />
@@ -72,6 +75,7 @@ function AnimatedRoutes() {
         <Route path="/progress" element={page(<RequireUser><Progress /></RequireUser>)} />
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
         <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
+        <Route path="/sleep-times" element={page(<RequireUser><SleepTimesEdit /></RequireUser>)} />
         <Route path="/you" element={page(<RequireUser><You /></RequireUser>)} />
         <Route path="/styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
         <Route path="*" element={<Navigate to="/" replace />} />
