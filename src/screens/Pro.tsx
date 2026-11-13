@@ -15,7 +15,7 @@ import './pro.css';
 /** Pro features from docs/engine-spec.md (tier column). `ready` = built in the app today. */
 const FEATURES: { key: string; icon: IconName; ready: boolean }[] = [
   { key: 'level2', icon: 'trending_up', ready: true },
-  { key: 'level3', icon: 'local_fire_department', ready: false },
+  { key: 'level3', icon: 'local_fire_department', ready: true },
   { key: 'focus', icon: 'bolt', ready: false },
   { key: 'nutrition', icon: 'restaurant', ready: false },
   { key: 'travel', icon: 'event', ready: false },
@@ -28,7 +28,8 @@ const FEATURES: { key: string; icon: IconName; ready: boolean }[] = [
  */
 export function Pro() {
   const navigate = useNavigate();
-  const level2 = ITEMS.filter((i) => i.kind === 'patch' && i.tier === 'pro').length;
+  const level2 = ITEMS.filter((i) => i.kind === 'patch' && i.level === 2).length;
+  const level3 = ITEMS.filter((i) => i.kind === 'patch' && i.level === 3).length;
   return (
     <Screen>
       <TopBar title={t('pro.topTitle')} onBack={() => navigate('/you')} />
@@ -41,7 +42,7 @@ export function Pro() {
           <motion.div key={f.key} className="pro__row" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.1 + i * motionTokens.stagger }}>
             <span className="pro__icon"><Icon name={f.icon} size={20} /></span>
             <span className="pro__text">
-              <span className="text-body-m-strong text-primary">{t(`pro.features.${f.key}.title`, { n: level2 })}</span>
+              <span className="text-body-m-strong text-primary">{t(`pro.features.${f.key}.title`, { n: f.key === 'level3' ? level3 : level2 })}</span>
               <span className="text-body-s text-secondary">{t(`pro.features.${f.key}.body`)}</span>
             </span>
             {!f.ready && <span className="pro__soon text-mono-caption text-secondary">{t('pro.soon')}</span>}

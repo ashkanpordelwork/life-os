@@ -41,8 +41,11 @@ export function PatchDetail() {
   const mark = async () => {
     if (!done) haptic();
     await setDone(item.id, !done, version);
-    const ids = sprint?.patch_ids ?? [];
-    const allDoneNow = !done && ids.length > 0 && ids.every((x) => x === item.id || doneToday.has(x));
+    // Weekly patches are optional on a given day, so only daily ones decide "all done".
+    const all = sprint?.patch_ids ?? [];
+    const dailyIds = all.filter((x) => !getItem(x)?.per_week);
+    const ids = dailyIds.length ? dailyIds : all;
+    const allDoneNow = !done && ids.includes(item.id) && ids.every((x) => x === item.id || doneToday.has(x));
     navigate(allDoneNow ? '/done' : '/today');
   };
 

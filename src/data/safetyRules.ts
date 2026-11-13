@@ -45,8 +45,8 @@ export const SAFETY_RULES: SafetyRule[] = [
   },
   {
     code: 'R06',
-    description: 'Viral illness, pregnancy or heart condition blocks cold exposure (ST02) and hard cardio (EX03, "health lock" in engine-spec 3-B).',
-    blocks: (item, ctx) => (item.id === 'ST02' || item.id.startsWith('EX03')) && !!ctx.flags?.healthRisk,
+    description: 'Viral illness, pregnancy or heart condition blocks cold exposure (ST02) and every item with the general "health lock" (EX02, EX03; engine-spec 3-B).',
+    blocks: (item, ctx) => (item.id === 'ST02' || item.safety_rules.includes('health_lock')) && !!ctx.flags?.healthRisk,
   },
   {
     code: 'R13',

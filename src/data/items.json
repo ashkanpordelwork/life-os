@@ -897,6 +897,7 @@
     "tier": "pro",
     "slot": "EVENING",
     "duration_min": 10,
+    "per_week": 2,
     "params": {
       "minutes": 10,
       "times_per_week": [
@@ -928,12 +929,11 @@
       },
       "stretch": {
         "time": "10 min",
-        "text": "Do the 4 moves on 2–4 days this week."
+        "text": "Do the 4 moves on 4 days this week."
       }
     },
     "tiny_version": "Sumo squat twist · 3 each side",
     "todo": [
-      "The book says 2–4 times a week. The app ticks it like a daily patch until weekly targets exist.",
       "Tiny time (1 min) is an estimate, not from the book."
     ]
   },
@@ -1290,5 +1290,453 @@
       }
     },
     "tiny_version": "1 min alone, no phone"
+  },
+  {
+    "id": "EX03a",
+    "title": "Zone 2 cardio",
+    "kind": "patch",
+    "area": "Movement",
+    "needs": [
+      "energy",
+      "msk"
+    ],
+    "level": 2,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 45,
+    "per_week": 1,
+    "params": {
+      "minutes": [
+        45,
+        75
+      ],
+      "max_hr_pct": [
+        60,
+        70
+      ],
+      "times_per_week": [
+        1,
+        3
+      ]
+    },
+    "safety_rules": [
+      "health_lock"
+    ],
+    "sources": [
+      "EX03"
+    ],
+    "evidence_level": null,
+    "science_note": "Long, easy cardio grows your heart’s pumping power and your stress tolerance.",
+    "glyph": "Move",
+    "versions": {
+      "tiny": {
+        "time": "10 min",
+        "text": "A brisk 10-min walk where you can still talk."
+      },
+      "standard": {
+        "time": "45 min",
+        "text": "45 min of steady cardio (run, bike, hike) at 60–70% of max heart rate. You can just about talk."
+      },
+      "stretch": {
+        "time": "75 min",
+        "text": "Go up to 75 min at the same easy pace."
+      }
+    },
+    "tiny_version": "Brisk walk · 10 min",
+    "todo": [
+      "Tiny (10 min walk) is an app choice, not from the book."
+    ]
+  },
+  {
+    "id": "EX03b",
+    "title": "Moderate cardio",
+    "kind": "patch",
+    "area": "Movement",
+    "needs": [
+      "energy"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 30,
+    "per_week": 1,
+    "params": {
+      "minutes": [
+        25,
+        30
+      ],
+      "warmup_min": 5,
+      "max_hr_pct": [
+        75,
+        85
+      ]
+    },
+    "safety_rules": [
+      "health_lock"
+    ],
+    "sources": [
+      "EX03"
+    ],
+    "evidence_level": null,
+    "science_note": "Harder cardio builds new blood vessels in muscle and more, better mitochondria.",
+    "glyph": "Move",
+    "versions": {
+      "tiny": {
+        "time": "10 min",
+        "text": "10 min at a pace that makes breathing heavy."
+      },
+      "standard": {
+        "time": "30 min",
+        "text": "5 min warm-up, then 25–30 min at 75–85% of max heart rate. Breathing heavy, not gasping."
+      },
+      "stretch": {
+        "time": "35 min",
+        "text": "Hold the full 30 min at the top of that range."
+      }
+    },
+    "tiny_version": "Hard pace · 10 min",
+    "todo": [
+      "Tiny (10 min) and stretch are app choices, not from the book."
+    ]
+  },
+  {
+    "id": "EX03c",
+    "title": "HIIT",
+    "kind": "patch",
+    "area": "Movement",
+    "needs": [
+      "energy",
+      "time"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 17,
+    "per_week": 1,
+    "params": {
+      "minutes": [
+        6,
+        17
+      ],
+      "warmup_min": [
+        5,
+        10
+      ],
+      "max_hr_pct": [
+        90,
+        95
+      ],
+      "interval": {
+        "work_s": 30,
+        "rest_s": 60,
+        "rounds": [
+          6,
+          12
+        ]
+      },
+      "norwegian_4x4": {
+        "work_min": 4,
+        "rest_min": 4,
+        "rounds": 4
+      }
+    },
+    "safety_rules": [
+      "health_lock"
+    ],
+    "sources": [
+      "EX03"
+    ],
+    "evidence_level": null,
+    "science_note": "Short all-out efforts are the fastest way to raise your VO₂ max.",
+    "glyph": "Move",
+    "versions": {
+      "tiny": {
+        "time": "6 min",
+        "text": "After a warm-up: 6 rounds of 30 s all-out, 60 s easy."
+      },
+      "standard": {
+        "time": "17 min",
+        "text": "5–10 min warm-up, then 30 s all-out + 60 s rest, 6–12 rounds, at 90–95% of max heart rate."
+      },
+      "stretch": {
+        "time": "32 min",
+        "text": "Norwegian 4×4: 4 min hard + 4 min easy, 4 rounds."
+      }
+    },
+    "tiny_version": "6 sprints of 30 s"
+  },
+  {
+    "id": "EX02",
+    "title": "Strength training",
+    "kind": "patch",
+    "area": "Movement",
+    "needs": [
+      "energy",
+      "msk"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "EVENING",
+    "duration_min": 60,
+    "per_week": 3,
+    "params": {
+      "minutes": 60,
+      "minutes_range": [
+        40,
+        80
+      ],
+      "warmup_min": 5,
+      "work_sets": [
+        2,
+        3
+      ],
+      "sets_per_muscle_week": [
+        4,
+        9
+      ],
+      "deload_every_weeks": [
+        10,
+        16
+      ]
+    },
+    "safety_rules": [
+      "health_lock"
+    ],
+    "sources": [
+      "EX02"
+    ],
+    "evidence_level": null,
+    "science_note": "Strength keeps your spine, joints and metabolism strong as you age.",
+    "glyph": "Move",
+    "versions": {
+      "tiny": {
+        "time": "5 min",
+        "text": "5 min warm-up, then one compound move (like squats) for 2 sets."
+      },
+      "standard": {
+        "time": "60 min",
+        "text": "5 min warm-up, then 2–3 moves per muscle group, 2–3 hard sets each, full range of motion."
+      },
+      "stretch": {
+        "time": "80 min",
+        "text": "Add Face Pulls and core work. Never go past 80 min."
+      }
+    },
+    "tiny_version": "Warm-up + 2 sets of squats",
+    "todo": [
+      "Tiny version is an app choice built from the book’s warm-up rules."
+    ]
+  },
+  {
+    "id": "ST02",
+    "title": "Cold exposure",
+    "kind": "patch",
+    "area": "Mind",
+    "needs": [
+      "energy",
+      "stress"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "MORNING",
+    "duration_min": 3,
+    "per_week": 3,
+    "params": {
+      "minutes": [
+        1,
+        3
+      ],
+      "times_per_week": [
+        3,
+        7
+      ],
+      "minutes_per_week": 11,
+      "water_c": [
+        4.5,
+        10
+      ],
+      "water_f": [
+        40,
+        50
+      ],
+      "walls": [
+        2,
+        5
+      ]
+    },
+    "safety_rules": [
+      "R04",
+      "R05",
+      "R06"
+    ],
+    "sources": [
+      "ST02"
+    ],
+    "evidence_level": null,
+    "science_note": "Staying calm in cold water trains your brain to keep control under stress.",
+    "glyph": "Water",
+    "versions": {
+      "tiny": {
+        "time": "30 s",
+        "text": "End your shower with 30 s of cold water. Breathe slowly."
+      },
+      "standard": {
+        "time": "3 min",
+        "text": "1–3 min in cold water (about 10°C or colder). Never breathe fast before or in the water."
+      },
+      "stretch": {
+        "time": "3 min",
+        "text": "Aim for about 11 min in total across the week. Not within 6–8 h after strength training."
+      }
+    },
+    "tiny_version": "30 s cold at the end of your shower",
+    "todo": [
+      "Tiny (30 s cold shower end) is an app choice, not from the book."
+    ]
+  },
+  {
+    "id": "NU05",
+    "title": "Healthy fats",
+    "kind": "patch",
+    "area": "Nutrition",
+    "needs": [
+      "meals"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "LUNCH",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    },
+    "duration_min": 0,
+    "params": {
+      "fat_pct_calories": [
+        30,
+        35
+      ],
+      "sat_fat_max_pct": 10
+    },
+    "safety_rules": [],
+    "sources": [
+      "NU05"
+    ],
+    "evidence_level": null,
+    "science_note": "Good fats build brain cells and hormones and help you feel full.",
+    "glyph": "Nutrition",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Add olive oil, avocado or a few raw nuts to this meal."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Include a healthy fat in most meals: olive oil, avocado, olives or raw nuts."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Cook with olive or avocado oil. Skip seed oils and trans fats today."
+      }
+    },
+    "tiny_version": "A drizzle of olive oil"
+  },
+  {
+    "id": "NU07a",
+    "title": "Fatty fish",
+    "kind": "patch",
+    "area": "Nutrition",
+    "needs": [
+      "meals"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "LUNCH",
+    "trigger": {
+      "anchor": "meal",
+      "offset_min": 0
+    },
+    "duration_min": 0,
+    "per_week": 2,
+    "params": {
+      "times_per_week": [
+        1,
+        2
+      ],
+      "fish": [
+        "salmon",
+        "sardines",
+        "mackerel",
+        "herring"
+      ]
+    },
+    "safety_rules": [],
+    "sources": [
+      "NU07"
+    ],
+    "evidence_level": null,
+    "science_note": "Your body can’t make omega-3; oily fish feeds your heart and brain.",
+    "glyph": "Nutrition",
+    "versions": {
+      "tiny": {
+        "time": "20 s",
+        "text": "Plan one fish meal for this week."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Eat salmon, sardines, mackerel or herring at this meal."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Two fatty fish meals this week. Pick low-mercury fish."
+      }
+    },
+    "tiny_version": "Plan one fish meal"
+  },
+  {
+    "id": "LI04",
+    "title": "Sun on your skin",
+    "kind": "patch",
+    "area": "Sleep",
+    "needs": [
+      "energy"
+    ],
+    "level": 3,
+    "tier": "pro",
+    "slot": "DESK",
+    "duration_min": 20,
+    "per_week": 3,
+    "params": {
+      "minutes": [
+        20,
+        30
+      ],
+      "times_per_week_min": 3,
+      "no_sunburn": true
+    },
+    "safety_rules": [],
+    "sources": [
+      "LI04"
+    ],
+    "evidence_level": null,
+    "science_note": "Sun on your skin lifts mood and eases pain. Never let it burn.",
+    "glyph": "Light",
+    "versions": {
+      "tiny": {
+        "time": "5 min",
+        "text": "Short sleeves, 5 min outside in daylight."
+      },
+      "standard": {
+        "time": "20 min",
+        "text": "20–30 min outside with arms and legs uncovered. Check the UV index; never burn."
+      },
+      "stretch": {
+        "time": "30 min",
+        "text": "Do it every day this week. Cover up or use mineral sunscreen at peak UV."
+      }
+    },
+    "tiny_version": "5 min of sun, short sleeves",
+    "todo": [
+      "Tiny (5 min) is an app choice, not from the book."
+    ]
   }
 ]

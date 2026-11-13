@@ -190,7 +190,8 @@
     "restCancel": "Never mind",
     "resting": "Resting",
     "restOn": "Rest day · streak safe",
-    "tools": "Tools"
+    "tools": "Tools",
+    "thisWeek": "{n}/{total} this week"
   },
   "nav": {
     "today": "Today",
@@ -482,11 +483,11 @@
     "features": {
       "level2": {
         "title": "{n} Level 2 patches",
-        "body": "Afternoon sun, screens off, mobility, fiber, gratitude and more."
+        "body": "Afternoon sun, screens off, mobility, zone 2 cardio, gratitude and more."
       },
       "level3": {
-        "title": "Level 3 patches",
-        "body": "Cold exposure and hard cardio, behind a health check."
+        "title": "{n} Level 3 patches",
+        "body": "Strength, cardio, HIIT, cold exposure and more, behind a health check."
       },
       "focus": {
         "title": "Focus tools",

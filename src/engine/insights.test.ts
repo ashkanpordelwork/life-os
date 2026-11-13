@@ -25,7 +25,8 @@ describe('patchRates', () => {
   it('done days per patch over started days', () => {
     const sprint: Sprint = { number: 1, theme: null, length_days: 14, patch_ids: ['SL01', 'NU02a'], started_at: new Date(2026, 2, 2, 9).toISOString() };
     const list = [c('2026-03-02'), c('2026-03-03'), c('2026-03-03', 'NU02a'), c('2026-02-20')];
-    expect(patchRates(sprint, list, '2026-03-04')).toEqual([{ id: 'SL01', done: 2, days: 3 }, { id: 'NU02a', done: 1, days: 3 }]);
+    expect(patchRates(sprint, list, '2026-03-04')).toEqual([{ id: 'SL01', done: 2, days: 3, target: 3 }, { id: 'NU02a', done: 1, days: 3, target: 3 }]);
+    expect(patchRates(sprint, list, '2026-03-11', (id) => (id === 'SL01' ? 3 : undefined))[0].target).toBe(6);
   });
 });
 

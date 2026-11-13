@@ -197,7 +197,7 @@ export function Review() {
                 return (
                   <GlassPanel key={item.id} gap={8}>
                     <div className="review__patch">
-                      <PatchCard glyph={item.glyph} title={item.title} meta={t('review.daysDone', { n: daysDone(item.id), total: sprint.length_days })} onOpen={() => navigate(`/patch/${item.id}`)} hideCheck />
+                      <PatchCard glyph={item.glyph} title={item.title} meta={t('review.daysDone', { n: daysDone(item.id), total: item.per_week ? Math.ceil(sprint.length_days / 7) * item.per_week : sprint.length_days })} onOpen={() => navigate(`/patch/${item.id}`)} hideCheck />
                     </div>
                     <div className="chip-wrap" role="radiogroup" aria-label={item.title}>
                       {(['keep', 'swap', 'drop'] as Decision[]).map((k) => (

@@ -6,6 +6,7 @@ import { Mascot } from '../components/Mascot';
 import { Screen, Spacer } from '../components/Screen';
 import { WeekStrip } from '../components/WeekStrip';
 import { currentStreak, doneByDay, heatLevel, weekDays } from '../engine';
+import { getItem } from '../data';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { motionTokens } from '../styles/motion';
@@ -14,7 +15,10 @@ import { motionTokens } from '../styles/motion';
 export function Done() {
   const navigate = useNavigate();
   const { checkins, today, sprint } = useSession();
-  const total = sprint?.patch_ids.length ?? 3;
+  // Weekly patches are optional on a given day; daily ones set the bar.
+  const ids = sprint?.patch_ids ?? [];
+  const daily = ids.filter((x) => !getItem(x)?.per_week);
+  const total = (daily.length || ids.length) || 3;
   const counts = doneByDay(checkins);
   const letters = tList('done.weekdays');
   const days = weekDays(today).map((d, i) => {

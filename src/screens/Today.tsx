@@ -16,14 +16,14 @@ import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { Area } from '../data/types';
-import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, type AnswerIndex } from '../engine';
+import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
 import { openLibrary } from './Library';
 import { reviewDue, reviewLabel } from './Review';
-import { pad2, patchMeta, sprintTheme } from './flow';
+import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 
 const TINY_KEY = 'lifeos.tinyMode';
@@ -63,8 +63,14 @@ export function Today() {
   // In the order of the user's day (wake and bed time).
   const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined).sort((a, b) => dayOrder(a, wake, bed) - dayOrder(b, wake, bed));
   const theme = sprintTheme(sprint);
-  const doneCount = items.filter((i) => doneToday.has(i.id)).length;
-  const allDone = items.length > 0 && doneCount === items.length;
+  // Weekly patches (e.g. strength 3× a week) are optional on any given day: they show their week count
+  // and only count toward today's progress on the days they are done.
+  const week = weekDays(today);
+  const weekCount = (id: string) => new Set(checkins.filter((c) => c.item_id === id && week.includes(c.day)).map((c) => c.day)).size;
+  const daily = items.filter((i) => !i.per_week);
+  const dailyList = daily.length ? daily : items;
+  const doneCount = dailyList.filter((i) => doneToday.has(i.id)).length;
+  const allDone = dailyList.length > 0 && doneCount === dailyList.length;
   const firstDay = day === 1 && !checkins.some((c) => c.item_id !== REST_ID);
   const resting = checkins.some((c) => c.day === today && c.item_id === REST_ID);
   const restAllowed = canRestToday(checkins, today) && doneCount === 0;
@@ -76,7 +82,7 @@ export function Today() {
   // In-app reminder: after the reminder time, if patches are left and today is not a rest day.
   const [rh, rm] = reminders.remind_at.split(':').map(Number);
   const now = new Date();
-  const left = items.filter((i) => !doneToday.has(i.id));
+  const left = dailyList.filter((i) => !doneToday.has(i.id));
   const leftMin = Math.max(1, Math.round(left.reduce((sum, i) => sum + (tiny ? 0.3 : capMinutes(i)), 0)));
   const showNudge = reminders.inapp_enabled && !nudgeHidden && !resting && left.length > 0 && now.getHours() * 60 + now.getMinutes() >= rh * 60 + rm;
   const hideNudge = () => { setNudgeHidden(true); try { localStorage.setItem(NUDGE_KEY, today); } catch { /* ignore */ } };
@@ -88,7 +94,7 @@ export function Today() {
     const done = !doneToday.has(id);
     if (done) haptic();
     await setDone(id, done, tiny ? 'tiny' : 'standard');
-    if (done && doneCount + 1 === items.length) setTimeout(() => navigate('/done'), 650);
+    if (done && dailyList.some((i) => i.id === id) && doneCount + 1 === dailyList.length) setTimeout(() => navigate('/done'), 650);
   };
 
   return (
@@ -127,8 +133,8 @@ export function Today() {
       <div className="today__section">
         <h2 className="text-title-m text-primary">{t('today.section')}</h2>
         <div className="today__progress">
-          <SegmentedProgress variant="today" total={items.length} filled={doneCount} />
-          <span className="text-mono-caption text-primary">{resting ? t('today.resting') : `${doneCount}/${items.length}`}</span>
+          <SegmentedProgress variant="today" total={dailyList.length} filled={doneCount} />
+          <span className="text-mono-caption text-primary">{resting ? t('today.resting') : `${doneCount}/${dailyList.length}`}</span>
         </div>
       </div>
 
@@ -137,7 +143,7 @@ export function Today() {
           <PatchCard
             glyph={item.glyph}
             title={item.title}
-            meta={patchMeta(item, wake, bed, tiny, t)}
+            meta={item.per_week ? `${t('today.thisWeek', { n: weekCount(item.id), total: item.per_week })} · ${tiny ? item.versions.tiny.time : itemAmount(item, t)}` : patchMeta(item, wake, bed, tiny, t)}
             done={doneToday.has(item.id)}
             dimmed={resting}
             onOpen={() => navigate(`/patch/${item.id}`)}

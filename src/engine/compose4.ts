@@ -18,9 +18,10 @@ export function byScore(a: ScoredItem, b: ScoredItem): number {
   return a.item.id.localeCompare(b.item.id);
 }
 
-/** Minutes an item adds to the daily cap. Items spread over the day (like steps) add none. */
+/** Minutes an item adds to the daily cap. Items spread over the day (steps) or done a few times
+ *  a week (strength, cardio) add none: they are not daily. */
 export function capMinutes(item: ChecklistItem): number {
-  return item.spread_over_day ? 0 : item.duration_min;
+  return item.spread_over_day || item.per_week ? 0 : item.duration_min;
 }
 
 function totalMinutes(list: ScoredItem[]): number {

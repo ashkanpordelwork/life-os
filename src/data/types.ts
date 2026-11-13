@@ -52,6 +52,8 @@ export interface ChecklistItem {
   trigger?: Trigger;
   /** Minutes of the Standard version. Used for Q (<= 5 min) and the ~12 min/day cap. */
   duration_min: number;
+  /** Weekly target (e.g. strength training 3× a week). Not expected every day. */
+  per_week?: number;
   /** Done in bits through the day (e.g. steps): left out of the ~12 min/day cap. Owner decision. */
   spread_over_day?: boolean;
   /** Shown instead of minutes on cards, e.g. "7,000 steps". */

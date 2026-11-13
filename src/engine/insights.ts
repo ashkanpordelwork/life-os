@@ -37,18 +37,24 @@ export interface PatchRate {
   done: number;
   /** Days of the Sprint that have started. */
   days: number;
+  /** What "all done" would be so far: every day, or weeks × weekly target for weekly patches. */
+  target: number;
 }
 
 /** How often each Sprint patch was done so far. */
-export function patchRates(sprint: Sprint, checkins: DayCheckin[], today: string): PatchRate[] {
+export function patchRates(sprint: Sprint, checkins: DayCheckin[], today: string, perWeek: (id: string) => number | undefined = () => undefined): PatchRate[] {
   const start = dayKey(new Date(sprint.started_at));
   const days = Math.max(1, Math.min(sprint.length_days, daysBetween(start, today) + 1));
   const end = addDays(start, days - 1);
-  return sprint.patch_ids.map((id) => ({
-    id,
-    done: new Set(checkins.filter((c) => c.item_id === id && c.day >= start && c.day <= end).map((c) => c.day)).size,
-    days,
-  }));
+  return sprint.patch_ids.map((id) => {
+    const pw = perWeek(id);
+    return {
+      id,
+      done: new Set(checkins.filter((c) => c.item_id === id && c.day >= start && c.day <= end).map((c) => c.day)).size,
+      days,
+      target: pw ? Math.min(days, Math.ceil(days / 7) * pw) : days,
+    };
+  });
 }
 
 /** Index of the single highest value. -1 when all are 0 or the top is shared (no clear winner). */

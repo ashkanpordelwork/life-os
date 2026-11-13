@@ -39,14 +39,14 @@ export function Insights() {
   const data = useMemo(() => {
     const items = (sprint?.patch_ids ?? []).map(getItem).filter((x): x is ChecklistItem => !!x);
     const completion = sprint ? sprintCompletion(sprint, checkins, today) : 0;
-    const rates = sprint ? patchRates(sprint, checkins, today) : [];
+    const rates = sprint ? patchRates(sprint, checkins, today, (id) => getItem(id)?.per_week) : [];
     const weekdays = weekdayCounts(checkins, today, WEEKS);
     const a = profile?.answers;
     const s = profile?.start_answers;
     const full = (x: typeof a): x is Record<Area, AnswerIndex> => !!x && AREAS.every((k) => x[k] !== undefined);
     const now = full(a) ? overallScore(areaScoresFromAnswers(a)) : null;
     const start = full(s) ? overallScore(areaScoresFromAnswers(s)) : null;
-    const steadiest = rates.length ? rates.reduce((b, r) => (r.done > b.done ? r : b)) : null;
+    const steadiest = rates.length ? rates.reduce((b, r) => (r.done / r.target > b.done / b.target ? r : b)) : null;
     return {
       items, completion, rates, weekdays, now, start,
       best: bestIndex(weekdays),
@@ -102,9 +102,9 @@ export function Insights() {
                 <div className="insights__patch-mid">
                   <div className="insights__patch-head">
                     <span className="text-body-m-strong text-primary">{item.title}</span>
-                    <span className="text-mono-caption text-secondary">{t('insights.daysOf', { n: r.done, total: r.days })}</span>
+                    <span className="text-mono-caption text-secondary">{t('insights.daysOf', { n: r.done, total: r.target })}</span>
                   </div>
-                  <Progress value={r.done / r.days} label={`${item.title}: ${t('insights.daysOf', { n: r.done, total: r.days })}`} />
+                  <Progress value={Math.min(1, r.done / r.target)} label={`${item.title}: ${t('insights.daysOf', { n: r.done, total: r.target })}`} />
                 </div>
               </div>
             );

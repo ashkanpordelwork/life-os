@@ -94,3 +94,24 @@ describe('more offers and spread-over-day items', () => {
     expect(capMinutes(it_('SL01'))).toBe(5);
   });
 });
+
+describe('level 3 and weekly patches', () => {
+  it('health risk blocks strength, cardio and cold', async () => {
+    const { safetyFilter } = await import('./safetyFilter');
+    const ids = ['EX02', 'EX03a', 'EX03b', 'EX03c', 'ST02', 'NU05'].map(it_);
+    const safe = safetyFilter(ids, { symptoms: [], flags: { healthRisk: true } }).map((i) => i.id);
+    expect(safe).toEqual(['NU05']);
+  });
+  it('level 3 only from Sprint 5 with level 2 open', async () => {
+    const { levelFilter } = await import('./levelFilter');
+    const l3 = ITEMS.filter((i) => i.level === 3);
+    expect(levelFilter(l3, 4, { l2Open: true })).toEqual([]);
+    expect(levelFilter(l3, 5, { l2Open: true }).length).toBe(l3.length);
+    expect(levelFilter(l3, 5, { prevCompletion: 0.5 })).toEqual([]);
+  });
+  it('weekly patches do not count toward the daily cap', async () => {
+    const { capMinutes } = await import('./compose4');
+    expect(capMinutes(it_('EX02'))).toBe(0);
+    expect(it_('EX02').per_week).toBe(3);
+  });
+});
