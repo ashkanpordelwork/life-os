@@ -30,6 +30,11 @@ export function firstMissingQuestion(state: OnboardingState): string | null {
   return missing ? QUESTION_ROUTES[missing] : null;
 }
 
+/** Card label for how much a patch takes: an amount like "7,000 steps", or minutes. */
+export function itemAmount(item: ChecklistItem, t: (k: string, v?: Record<string, number>) => string): string {
+  return item.amount ?? formatMinutes(item.duration_min, t);
+}
+
 /** Duration label for cards, e.g. "5 min", "30 s", "No extra time". */
 export function formatMinutes(min: number, t: (k: string, v?: Record<string, number>) => string): string {
   if (min <= 0) return t('time.none');
@@ -48,7 +53,7 @@ export function whenLabel(item: ChecklistItem, wake: string, bed: string, t: (k:
 
 /** Today card meta, e.g. "08:00–08:30 · No extra time" or "After a meal · 5 min". */
 export function patchMeta(item: ChecklistItem, wake: string, bed: string, tiny: boolean, t: (k: string, v?: Record<string, string | number>) => string): string {
-  return `${whenLabel(item, wake, bed, t)} · ${tiny ? item.versions.tiny.time : formatMinutes(item.duration_min, t)}`;
+  return `${whenLabel(item, wake, bed, t)} · ${tiny ? item.versions.tiny.time : itemAmount(item, t)}`;
 }
 
 /** The Sprint's theme; older Sprints without one get it from their patches. */

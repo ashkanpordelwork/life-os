@@ -15,7 +15,7 @@ import type { VersionKey } from '../data/types';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic } from '../styles/motion';
-import { formatMinutes, whenLabel } from './flow';
+import { itemAmount, whenLabel } from './flow';
 import './patch.css';
 
 const VERSIONS: { key: VersionKey; icon: IconName }[] = [
@@ -57,7 +57,7 @@ export function PatchDetail() {
         </div>
       </div>
       <div className="patch__facts">
-        <MetaChip icon="timer" label={formatMinutes(item.duration_min, t)} />
+        <MetaChip icon="timer" label={itemAmount(item, t)} />
         <MetaChip icon="event" label={whenLabel(item, wake, bed, t)} />
         <MetaChip icon="science" label={t('patch.evidencePending')} />
       </div>

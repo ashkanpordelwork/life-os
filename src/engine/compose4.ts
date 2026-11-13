@@ -18,8 +18,13 @@ export function byScore(a: ScoredItem, b: ScoredItem): number {
   return a.item.id.localeCompare(b.item.id);
 }
 
+/** Minutes an item adds to the daily cap. Items spread over the day (like steps) add none. */
+export function capMinutes(item: ChecklistItem): number {
+  return item.spread_over_day ? 0 : item.duration_min;
+}
+
 function totalMinutes(list: ScoredItem[]): number {
-  return list.reduce((s, x) => s + x.item.duration_min, 0);
+  return list.reduce((s, x) => s + capMinutes(x.item), 0);
 }
 
 /**
@@ -57,8 +62,8 @@ export function compose4(scored: ScoredItem[], scores: AreaScores, count = 4): S
   while (totalMinutes(picked) > DAILY_MINUTES_CAP + EPS && guard-- > 0) {
     const weakest = [...picked].sort(byScore).pop()!;
     const replacement =
-      sorted.find((x) => !used.has(x.item.id) && x.item.area === weakest.item.area && x.item.duration_min < weakest.item.duration_min) ??
-      sorted.find((x) => !used.has(x.item.id) && x.item.duration_min < weakest.item.duration_min);
+      sorted.find((x) => !used.has(x.item.id) && x.item.area === weakest.item.area && capMinutes(x.item) < capMinutes(weakest.item)) ??
+      sorted.find((x) => !used.has(x.item.id) && capMinutes(x.item) < capMinutes(weakest.item));
     if (!replacement) break;
     picked.splice(picked.indexOf(weakest), 1, replacement);
     used.add(replacement.item.id);

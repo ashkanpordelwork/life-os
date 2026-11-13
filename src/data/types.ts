@@ -52,6 +52,10 @@ export interface ChecklistItem {
   trigger?: Trigger;
   /** Minutes of the Standard version. Used for Q (<= 5 min) and the ~12 min/day cap. */
   duration_min: number;
+  /** Done in bits through the day (e.g. steps): left out of the ~12 min/day cap. Owner decision. */
+  spread_over_day?: boolean;
+  /** Shown instead of minutes on cards, e.g. "7,000 steps". */
+  amount?: string;
   /** Raw numbers from docs/engine-spec.md. Display text is built from these. */
   params: Record<string, unknown>;
   safety_rules: string[];

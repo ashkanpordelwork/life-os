@@ -16,7 +16,7 @@ import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { Area } from '../data/types';
-import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, type AnswerIndex } from '../engine';
+import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
@@ -77,7 +77,7 @@ export function Today() {
   const [rh, rm] = reminders.remind_at.split(':').map(Number);
   const now = new Date();
   const left = items.filter((i) => !doneToday.has(i.id));
-  const leftMin = Math.max(1, Math.round(left.reduce((sum, i) => sum + (tiny ? 0.3 : i.duration_min), 0)));
+  const leftMin = Math.max(1, Math.round(left.reduce((sum, i) => sum + (tiny ? 0.3 : capMinutes(i)), 0)));
   const showNudge = reminders.inapp_enabled && !nudgeHidden && !resting && left.length > 0 && now.getHours() * 60 + now.getMinutes() >= rh * 60 + rm;
   const hideNudge = () => { setNudgeHidden(true); try { localStorage.setItem(NUDGE_KEY, today); } catch { /* ignore */ } };
 

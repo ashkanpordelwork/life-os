@@ -22,7 +22,7 @@ import {
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { motionTokens } from '../styles/motion';
-import { formatMinutes, pad2 } from './flow';
+import { itemAmount, pad2 } from './flow';
 import './onboarding.css';
 import './review.css';
 
@@ -127,7 +127,7 @@ export function Review() {
 
   const pickTrailing = t('review.pickCount', { n: picked.length, total: freed });
   const card = (item: ChecklistItem) => (
-    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={formatMinutes(item.duration_min, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= freed} />
+    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= freed} />
   );
 
   return (
@@ -248,7 +248,7 @@ export function Review() {
               <TopBar title={t('review.nextTitle', { n: nextNumber })} onBack={back} />
               <h2 className="text-title-l text-primary">{t('review.readyTitle')}</h2>
               {[...kept, ...picked].map(getItem).filter((x): x is ChecklistItem => !!x).map((item) => (
-                <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={formatMinutes(item.duration_min, t)} done />
+                <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done />
               ))}
               <GlassPanel>
                 <div><MetaChip icon="calendar_today" label={t('review.startsToday')} /></div>

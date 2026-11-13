@@ -11,8 +11,10 @@ import { areaScoresFromAnswers, recommend, type AnswerIndex } from '../engine';
 import { t } from '../i18n';
 import { PATCHES_PER_SPRINT, useOnboarding } from '../state/onboarding';
 import { useSession } from '../state/session';
-import { firstMissingQuestion, formatMinutes } from './flow';
+import { firstMissingQuestion, itemAmount } from './flow';
 
+/** Owner decision: show 6 offers (Figma shows 4). The top 3 start picked. */
+const OFFERS = 6;
 const SPRINT_NUMBER = 1;
 
 /** Pick patches (Figma 55:390). 4 offers from the engine, the user picks 3. */
@@ -25,7 +27,7 @@ export function PickPatches() {
   const offers = useMemo(() => {
     if (missing) return [];
     const scores = areaScoresFromAnswers(state.answers as Record<Area, AnswerIndex>);
-    return recommend({ items: ITEMS, symptoms: state.symptoms, scores, sprintNumber: SPRINT_NUMBER, flags: flagsFromHealth(state.health) });
+    return recommend({ items: ITEMS, symptoms: state.symptoms, scores, sprintNumber: SPRINT_NUMBER, flags: flagsFromHealth(state.health), count: OFFERS });
   }, [missing, state.answers, state.symptoms, state.health]);
 
   // Start with the top 3 offers picked (as in Figma). Reset if the offers changed.
@@ -53,7 +55,7 @@ export function PickPatches() {
           key={item.id}
           glyph={item.glyph}
           title={item.title}
-          meta={formatMinutes(item.duration_min, t)}
+          meta={itemAmount(item, t)}
           done={validPicked.includes(item.id)}
           onToggle={() => toggle(item.id)}
         />

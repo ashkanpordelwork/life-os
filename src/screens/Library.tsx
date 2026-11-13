@@ -13,7 +13,7 @@ import { ITEMS } from '../data';
 import { AREAS, type Area, type ChecklistItem } from '../data/types';
 import { t } from '../i18n';
 import { motionTokens } from '../styles/motion';
-import { formatMinutes } from './flow';
+import { itemAmount } from './flow';
 import './onboarding.css';
 import './library.css';
 
@@ -71,7 +71,7 @@ export function Library() {
             ))}
           </div>
           {patches.map((item) => (
-            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={`${t('library.level', { n: item.level })} · ${formatMinutes(item.duration_min, t)}`} onOpen={() => setOpen(item)} hideCheck />
+            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={`${t('library.level', { n: item.level })} · ${itemAmount(item, t)}`} onOpen={() => setOpen(item)} hideCheck />
           ))}
         </>
       )}

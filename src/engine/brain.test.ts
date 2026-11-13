@@ -77,3 +77,20 @@ describe('cutoff times', () => {
     expect(timeHint(it_('SL03'), '07:00', '23:00')?.cutoff).toBe(false);
   });
 });
+
+describe('more offers and spread-over-day items', () => {
+  it('count 6 keeps the first 4 and adds the next best', async () => {
+    const { recommend } = await import('./recommend');
+    const scores = { Movement: 1.7, Nutrition: 1.7, Sleep: 0, Mind: 1.7 };
+    const four = recommend({ items: ITEMS, symptoms: ['fog', 'sleep', 'energy'], scores, sprintNumber: 1 });
+    const six = recommend({ items: ITEMS, symptoms: ['fog', 'sleep', 'energy'], scores, sprintNumber: 1, count: 6 });
+    expect(six).toHaveLength(6);
+    expect(six.slice(0, 4).map((x) => x.item.id)).toEqual(four.map((x) => x.item.id));
+    expect(new Set(six.map((x) => x.item.id)).size).toBe(6);
+  });
+  it('daily steps do not count toward the daily minutes cap', async () => {
+    const { capMinutes } = await import('./compose4');
+    expect(capMinutes(it_('EX01a'))).toBe(0);
+    expect(capMinutes(it_('SL01'))).toBe(5);
+  });
+});

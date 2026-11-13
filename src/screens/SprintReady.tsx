@@ -10,6 +10,7 @@ import { getItem } from '../data';
 import { t } from '../i18n';
 import { useOnboarding } from '../state/onboarding';
 import { pad2, sprintTheme } from './flow';
+import { capMinutes } from '../engine';
 import './onboarding.css';
 
 /** Sprint ready (Figma 55:450). Also defines Sprint, Patch and Release once. */
@@ -20,7 +21,7 @@ export function SprintReady() {
   const sprint = session.sprint ?? state.sprint;
   if (!sprint) return <Navigate to="/patches" replace />;
 
-  const minutes = Math.max(1, Math.round(sprint.patch_ids.reduce((s, id) => s + (getItem(id)?.duration_min ?? 0), 0)));
+  const minutes = Math.max(1, Math.round(sprint.patch_ids.reduce((s, id) => s + (getItem(id) ? capMinutes(getItem(id)!) : 0), 0)));
   const nn = pad2(sprint.number);
 
   return (
