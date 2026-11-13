@@ -5,6 +5,7 @@ import { BottomSheet } from '../components/BottomSheet';
 import { Chip } from '../components/Chip';
 import { GlassPanel } from '../components/GlassPanel';
 import { ListRow } from '../components/ListRow';
+import type { IconName } from '../components/Icon';
 import { MetaChip } from '../components/MetaChip';
 import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
@@ -19,6 +20,19 @@ import './library.css';
 
 type Tab = 'tools' | 'learn';
 
+const TOOL_GROUPS: { key: string; tools: { to: string; key: string; icon: IconName }[] }[] = [
+  { key: 'calm', tools: [
+    { to: '/tool/sigh', key: 'sigh', icon: 'air' },
+    { to: '/tool/nsdr', key: 'nsdr', icon: 'self_improvement' },
+  ] },
+  { key: 'focusGroup', tools: [
+    { to: '/tool/focus', key: 'focus', icon: 'bolt' },
+    { to: '/tool/woop', key: 'woop', icon: 'task_alt' },
+    { to: '/tool/errors', key: 'errors85', icon: 'insights' },
+    { to: '/tool/self-test', key: 'selfTest', icon: 'timer' },
+  ] },
+];
+
 const BACK_KEY = 'lifeos.library.back';
 /** Open the Library and remember where to go back to (tools inside it return to the Library). */
 export function openLibrary(navigate: (to: string) => void, from: string) {
@@ -31,7 +45,7 @@ function libraryBack(): string {
 
 /**
  * Library (designed in code, owner decision; no Figma screen).
- * Tools: in-the-moment helpers (Physiological sigh, NSDR). Learn: every patch with its science and book source.
+ * Tools: Calm (Physiological sigh, NSDR) and Focus (focus session, WOOP, 85% rule, self-test). Learn: every patch with its science and book source.
  */
 export function Library() {
   const navigate = useNavigate();
@@ -51,13 +65,15 @@ export function Library() {
       {tab === 'tools' && (
         <>
           <p className="text-body-s text-secondary">{t('library.toolsIntro')}</p>
-          {[
-            { to: '/tool/sigh', icon: 'air' as const, title: t('sigh.title'), sub: t('sigh.subtitle') },
-            { to: '/tool/nsdr', icon: 'self_improvement' as const, title: t('nsdr.title'), sub: t('nsdr.subtitle') },
-          ].map((r, i) => (
-            <motion.div key={r.to} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: i * motionTokens.stagger }}>
-              <ListRow icon={r.icon} title={r.title} subtitle={r.sub} onClick={() => navigate(r.to)} />
-            </motion.div>
+          {TOOL_GROUPS.map((g, gi) => (
+            <section key={g.key} className="library__group" aria-labelledby={`lib-${g.key}`}>
+              <h2 id={`lib-${g.key}`} className="text-title-m text-primary">{t(`library.${g.key}`)}</h2>
+              {g.tools.map((r, i) => (
+                <motion.div key={r.to} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: (gi * 2 + i) * motionTokens.stagger }}>
+                  <ListRow icon={r.icon} title={t(`${r.key}.title`)} subtitle={t(`${r.key}.subtitle`)} onClick={() => navigate(r.to)} />
+                </motion.div>
+              ))}
+            </section>
           ))}
         </>
       )}

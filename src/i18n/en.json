@@ -388,7 +388,9 @@
     "level": "Level {n}",
     "unlocks": "Unlocks in a later Sprint",
     "open": "Library",
-    "openSubtitle": "Tools and the science behind each patch"
+    "openSubtitle": "Tools and the science behind each patch",
+    "calm": "Calm",
+    "focusGroup": "Focus"
   },
   "sigh": {
     "title": "Physiological sigh",
@@ -506,5 +508,95 @@
         "body": "Reference cards with clear safety notes."
       }
     }
+  },
+  "focus": {
+    "title": "Focus session",
+    "subtitle": "Get ready, then work · micro-rests",
+    "intro": "Before deep work, set yourself up. Tick what you've done.",
+    "prep": [
+      "Phone in another room",
+      "Slept enough last night",
+      "Had water",
+      "No heavy, starchy meal before work (or work fasted)",
+      "Did NSDR if tired"
+    ],
+    "prepNoFast": [
+      "Phone in another room",
+      "Slept enough last night",
+      "Had water",
+      "No heavy, starchy meal before work",
+      "Did NSDR if tired"
+    ],
+    "beatsTitle": "40 Hz binaural beats",
+    "beatsBody": "Use headphones. About 5 min before or during work.",
+    "beatsOn": "Beats on",
+    "beatsOff": "Play beats",
+    "start": "Start working",
+    "working": "Deep work",
+    "resting": "Eyes closed. No phone.",
+    "restHint": "Now and then, take a 10 s pause with no input. Your brain replays what you just did.",
+    "microRest": "Micro-rest · 10 s",
+    "end": "End session"
+  },
+  "woop": {
+    "title": "WOOP",
+    "subtitle": "Turn a goal into a plan · 10 min",
+    "save": "Save",
+    "new": "New WOOP",
+    "savedIntro": "Saved on this phone only.",
+    "ifThen": "Plan:",
+    "seeSaved": "See saved ({n})",
+    "wish": {
+      "letter": "W · Wish",
+      "title": "What do you want?",
+      "hint": "Specific and measurable.",
+      "placeholder": "I want to hold a conversation in German."
+    },
+    "outcome": {
+      "letter": "O · Outcome",
+      "title": "How will it feel?",
+      "hint": "Picture the best result in detail.",
+      "placeholder": "Chatting freely on my trip next year."
+    },
+    "obstacle": {
+      "letter": "O · Obstacle",
+      "title": "What will get in the way?",
+      "hint": "Be honest: tiredness, excuses, feelings.",
+      "placeholder": "Too tired to practise after work."
+    },
+    "plan": {
+      "letter": "P · Plan",
+      "title": "If… then…",
+      "hint": "For each obstacle: if X happens, then I will do Y.",
+      "placeholder": "If I'm too tired after work, then I'll practise 30 min earlier next morning."
+    }
+  },
+  "errors85": {
+    "title": "85% rule",
+    "subtitle": "Find the right difficulty while learning",
+    "intro": "Tally each real attempt. The sweet spot is about 15% mistakes, up to 30% for movement skills.",
+    "kind": "Type of skill",
+    "think": "Thinking",
+    "move": "Movement",
+    "errors": "{n} mistakes out of {total}",
+    "hit": "Got it",
+    "miss": "Mistake",
+    "reset": "Reset",
+    "zone": {
+      "start": "Keep going. A few more tries first.",
+      "easy": "Too easy. Make it a bit harder.",
+      "right": "Sweet spot. Keep this difficulty.",
+      "hard": "Too hard. Aim for about {p}% mistakes."
+    }
+  },
+  "selfTest": {
+    "title": "Self-test",
+    "subtitle": "Recall without notes · 1–5 min",
+    "done": "Done. That effort is what makes it stick.",
+    "steps": [
+      "Close your eyes. No notes, no book.",
+      "Recall everything you just learned, or run through the moves.",
+      "Stuck? Note it and check after."
+    ]
   }
 }

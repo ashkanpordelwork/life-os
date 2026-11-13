@@ -28,6 +28,7 @@ import { Library } from './screens/Library';
 import { Pro } from './screens/Pro';
 import { Sigh } from './screens/Sigh';
 import { Nsdr } from './screens/Nsdr';
+import { ErrorZone, FocusSession, SelfTest, WoopTool } from './screens/FocusTools';
 import { Roadmap } from './screens/Roadmap';
 import { Reminders } from './screens/Reminders';
 import { TabBar, useScrollTopOnMount } from './screens/AppNav';
@@ -94,6 +95,10 @@ function AnimatedRoutes() {
         <Route path="/library" element={page(<RequireUser><Library /></RequireUser>)} />
         <Route path="/tool/sigh" element={page(<RequireUser><Sigh /></RequireUser>)} />
         <Route path="/tool/nsdr" element={page(<RequireUser><Nsdr /></RequireUser>)} />
+        <Route path="/tool/focus" element={page(<RequireUser><FocusSession /></RequireUser>)} />
+        <Route path="/tool/woop" element={page(<RequireUser><WoopTool /></RequireUser>)} />
+        <Route path="/tool/errors" element={page(<RequireUser><ErrorZone /></RequireUser>)} />
+        <Route path="/tool/self-test" element={page(<RequireUser><SelfTest /></RequireUser>)} />
         <Route path="/you" element={page(<RequireUser><You /></RequireUser>)} />
         <Route path="/styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
         <Route path="*" element={<Navigate to="/" replace />} />
