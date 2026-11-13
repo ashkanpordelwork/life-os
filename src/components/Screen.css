@@ -10,7 +10,7 @@
   padding-block-start: calc(var(--space-20) + env(safe-area-inset-top));
   padding-block-end: calc(var(--space-24) + env(safe-area-inset-bottom));
   padding-inline: var(--space-16);
-  background: var(--gradient-screen);
+  /* Background comes from the fixed layer in base.css (body::before). */
 }
 .screen--start { align-items: stretch; }
 .screen--center { align-items: center; }
