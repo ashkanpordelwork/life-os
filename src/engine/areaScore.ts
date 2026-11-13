@@ -3,10 +3,7 @@ import { AREAS, type Area } from '../data/types';
 /** Answer index on the question screens: 0 = "0", 1 = "1–2", 2 = "3–4", 3 = "5+". */
 export type AnswerIndex = 0 | 1 | 2 | 3;
 
-/**
- * TODO(owner): confirm. The owner has not given the answer -> score table yet.
- * Simple default: spread the 4 answers evenly over 0–5 (index × 5/3, one decimal).
- */
+/** The 4 answers spread evenly over 0–5 (index × 5/3, one decimal). Confirmed by the owner. */
 export const ANSWER_SCORES: Record<AnswerIndex, number> = { 0: 0, 1: 1.7, 2: 3.3, 3: 5 };
 
 export function answerToScore(answer: AnswerIndex): number {

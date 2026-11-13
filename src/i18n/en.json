@@ -42,7 +42,8 @@
   "symptomsScreen": {
     "topTitle": "About you",
     "title": "What feels off?",
-    "subtitle": "Pick any. No wrong answers."
+    "subtitle": "Pick any. No wrong answers.",
+    "limit": "Up to 3."
   },
   "questions": {
     "Movement": {

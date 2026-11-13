@@ -4,25 +4,52 @@
     "title": "Morning light",
     "kind": "patch",
     "area": "Sleep",
-    "needs": ["sleep", "energy", "eyes"],
+    "needs": [
+      "sleep",
+      "energy",
+      "eyes"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "MORNING",
-    "duration_min": 10,
-    "params": { "window_after_wake_h": [0, 1], "outdoor_min": [10, 30], "sunglasses": false },
+    "duration_min": 5,
+    "params": {
+      "window_after_wake_h": [
+        0,
+        1
+      ],
+      "outdoor_min_clear": [
+        5,
+        10
+      ],
+      "outdoor_min_partly_cloudy": 15,
+      "outdoor_min_overcast": 30,
+      "sunglasses": false
+    },
     "safety_rules": [],
-    "sources": ["SL01", "LI01"],
+    "sources": [
+      "SL01",
+      "LI01"
+    ],
     "evidence_level": null,
     "science_note": "Morning light sets your body clock and raises cortisol at the right time.",
     "glyph": "Light",
     "versions": {
-      "tiny": { "time": "1 min", "text": "Step outside and face the sky. No sunglasses." },
-      "standard": { "time": "10 min", "text": "Go outside in your first hour awake. Look toward the sky, not at the sun. No sunglasses." },
-      "stretch": { "time": "30 min", "text": "Stay outside 30 min. Cloudy days need the longer time." }
+      "tiny": {
+        "time": "1 min",
+        "text": "Step outside and face the sky. No sunglasses."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Go outside in your first hour awake: 5–10 min on a clear day. Look toward the sky, not at the sun. No sunglasses."
+      },
+      "stretch": {
+        "time": "10 min",
+        "text": "Stay 10 min. Partly cloudy: 15 min. Overcast: 30 min."
+      }
     },
     "tiny_version": "Morning light · 1 min",
     "todo": [
-      "Book file says 5–10 min on clear days, 15 min partly cloudy, 30 min overcast. engine-spec says 10–30 min. App uses engine-spec. Confirm.",
       "Tiny '1 min' comes from the Figma Busy day sheet, not from the book."
     ]
   },
@@ -31,45 +58,86 @@
     "title": "Same sleep times",
     "kind": "patch",
     "area": "Sleep",
-    "needs": ["sleep"],
+    "needs": [
+      "sleep"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "BEDTIME",
     "duration_min": 0,
-    "params": { "tolerance_min": 30 },
+    "params": {
+      "tolerance_min": 30
+    },
     "safety_rules": [],
-    "sources": ["SL04"],
+    "sources": [
+      "SL04"
+    ],
     "evidence_level": null,
     "science_note": "A steady sleep and wake time improves sleep quality.",
     "glyph": "Sleep",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Set tomorrow's wake alarm to your usual time." },
-      "standard": { "time": "0 min", "text": "Go to bed and wake up at the same time, within 30 min." },
-      "stretch": { "time": "0 min", "text": "Keep the same times on weekends too." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Set tomorrow's wake alarm to your usual time."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Go to bed and wake up at the same time, within 30 min."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Keep the same times on weekends too."
+      }
     },
     "tiny_version": "Set your usual wake alarm",
-    "todo": ["SL04b (1-week chronotype test) is a task, not included here."]
+    "todo": [
+      "SL04b (1-week chronotype test) is a task, not included here."
+    ]
   },
   {
     "id": "SL11a",
     "title": "Caffeine cutoff",
     "kind": "patch",
     "area": "Sleep",
-    "needs": ["sleep"],
+    "needs": [
+      "sleep"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 0,
-    "params": { "cutoff_before_bed_h": [8, 10], "cutoff_sensitive_h": 12, "default_cutoff_before_bed_h": 10, "prefer_none_after": "14:00", "max_mg_per_day": 400 },
-    "safety_rules": ["R02"],
-    "sources": ["SL11"],
+    "params": {
+      "cutoff_before_bed_h": [
+        8,
+        10
+      ],
+      "cutoff_sensitive_h": 12,
+      "default_cutoff_before_bed_h": 10,
+      "prefer_none_after": "14:00",
+      "max_mg_per_day": 400
+    },
+    "safety_rules": [
+      "R02"
+    ],
+    "sources": [
+      "SL11"
+    ],
     "evidence_level": null,
     "science_note": "Caffeine blocks the sleep signal (adenosine) and stays in your body for hours.",
     "glyph": "Coffee",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Pick a decaf drink for your afternoon cup." },
-      "standard": { "time": "0 min", "text": "No caffeine in the 10 hours before bed. Best: none after 14:00." },
-      "stretch": { "time": "0 min", "text": "No caffeine in the 12 hours before bed. Stay under 400 mg a day." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Pick a decaf drink for your afternoon cup."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "No caffeine in the 10 hours before bed. Best: none after 14:00."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "No caffeine in the 12 hours before bed. Stay under 400 mg a day."
+      }
     },
     "tiny_version": "Decaf for the afternoon cup",
     "todo": [
@@ -82,21 +150,42 @@
     "title": "Delay coffee",
     "kind": "patch",
     "area": "Sleep",
-    "needs": ["fog", "energy"],
+    "needs": [
+      "fog",
+      "energy"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "MORNING",
     "duration_min": 0,
-    "params": { "delay_after_wake_min": [60, 90] },
-    "safety_rules": ["R02"],
-    "sources": ["SL11"],
+    "params": {
+      "delay_after_wake_min": [
+        60,
+        90
+      ]
+    },
+    "safety_rules": [
+      "R02"
+    ],
+    "sources": [
+      "SL11"
+    ],
     "evidence_level": null,
     "science_note": "Waiting a bit for coffee can help prevent the afternoon energy crash.",
     "glyph": "Coffee",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Drink a glass of water first. Coffee can wait." },
-      "standard": { "time": "0 min", "text": "Have your first coffee 60 min after waking." },
-      "stretch": { "time": "0 min", "text": "Have your first coffee 90 min after waking." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Drink a glass of water first. Coffee can wait."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Have your first coffee 60 min after waking."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "Have your first coffee 90 min after waking."
+      }
     },
     "tiny_version": "Water first, coffee later",
     "todo": [
@@ -109,21 +198,46 @@
     "title": "Daily steps",
     "kind": "patch",
     "area": "Movement",
-    "needs": ["msk", "energy", "time", "eyes"],
+    "needs": [
+      "msk",
+      "energy",
+      "time",
+      "eyes"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 45,
-    "params": { "steps_per_day": [7000, 10000], "walk_min": [45, 60] },
+    "params": {
+      "steps_per_day": [
+        7000,
+        10000
+      ],
+      "walk_min": [
+        45,
+        60
+      ]
+    },
     "safety_rules": [],
-    "sources": ["EX01"],
+    "sources": [
+      "EX01"
+    ],
     "evidence_level": null,
     "science_note": "Daily walking is the base for heart and brain health.",
     "glyph": "Walk",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Stand up and walk to the nearest window." },
-      "standard": { "time": "45 min", "text": "Reach 7,000 steps today." },
-      "stretch": { "time": "60 min", "text": "Reach 10,000 steps today." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Stand up and walk to the nearest window."
+      },
+      "standard": {
+        "time": "45 min",
+        "text": "Reach 7,000 steps today."
+      },
+      "stretch": {
+        "time": "60 min",
+        "text": "Reach 10,000 steps today."
+      }
     },
     "tiny_version": "Walk to the window"
   },
@@ -132,21 +246,46 @@
     "title": "Walk after meals",
     "kind": "patch",
     "area": "Movement",
-    "needs": ["fog", "meals", "time"],
+    "needs": [
+      "fog",
+      "meals",
+      "time"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "LUNCH",
     "duration_min": 5,
-    "params": { "walk_min": [5, 10], "ideal_walk_min": [10, 30], "within_min_after_meal": 30 },
+    "params": {
+      "walk_min": [
+        5,
+        10
+      ],
+      "ideal_walk_min": [
+        10,
+        30
+      ],
+      "within_min_after_meal": 30
+    },
     "safety_rules": [],
-    "sources": ["EX01"],
+    "sources": [
+      "EX01"
+    ],
     "evidence_level": null,
     "science_note": "A short walk after eating keeps blood sugar lower and cuts the sleepy dip.",
     "glyph": "Walk",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Stand up and take a few steps after you eat." },
-      "standard": { "time": "5 min", "text": "Walk 5–10 min within 30 min after a meal." },
-      "stretch": { "time": "10 min", "text": "Walk 10–30 min after a meal." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Stand up and take a few steps after you eat."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Walk 5–10 min within 30 min after a meal."
+      },
+      "stretch": {
+        "time": "10 min",
+        "text": "Walk 10–30 min after a meal."
+      }
     },
     "tiny_version": "A few steps after eating"
   },
@@ -155,146 +294,264 @@
     "title": "Air squats",
     "kind": "patch",
     "area": "Movement",
-    "needs": ["msk", "time"],
+    "needs": [
+      "msk",
+      "time"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 1,
-    "params": { "reps": 10, "every_min_sitting": 45 },
+    "params": {
+      "reps": 10,
+      "every_min_sitting": 45
+    },
     "safety_rules": [],
-    "sources": ["EX01"],
+    "sources": [
+      "EX01"
+    ],
     "evidence_level": null,
     "science_note": "Squats wake up your leg muscles and get blood moving again.",
     "glyph": "Move",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Stand up from your chair once, slowly." },
-      "standard": { "time": "1 min", "text": "10 air squats (no weights)." },
-      "stretch": { "time": "1 min", "text": "10 air squats every 45 min of sitting." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Stand up from your chair once, slowly."
+      },
+      "standard": {
+        "time": "1 min",
+        "text": "10 air squats (no weights)."
+      },
+      "stretch": {
+        "time": "1 min",
+        "text": "10 air squats every 45 min of sitting."
+      }
     },
-    "tiny_version": "Stand up once, slowly",
-    "todo": ["duration_min = 1 is an estimate for 10 squats. Not in engine-spec. Confirm."]
+    "tiny_version": "Stand up once, slowly"
   },
   {
     "id": "EX01d",
     "title": "Sitting break",
     "kind": "patch",
     "area": "Movement",
-    "needs": ["msk", "time"],
+    "needs": [
+      "msk",
+      "time"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 5,
-    "params": { "move_min": 5, "every_min_sitting": 30, "light_option": "soleus_pushups" },
+    "params": {
+      "move_min": 5,
+      "every_min_sitting": 30,
+      "light_option": "soleus_pushups"
+    },
     "safety_rules": [],
-    "sources": ["EX01"],
+    "sources": [
+      "EX01"
+    ],
     "evidence_level": null,
     "science_note": "Long sitting switches off muscles and slows your metabolism.",
     "glyph": "Move",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Soleus pushups: while seated, lift and lower your heels." },
-      "standard": { "time": "5 min", "text": "Move for 5 min after 30 min of sitting." },
-      "stretch": { "time": "5 min", "text": "Move 5 min for every 30 min of sitting, all work day." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Soleus pushups: while seated, lift and lower your heels."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Move for 5 min after 30 min of sitting."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "Move 5 min for every 30 min of sitting, all work day."
+      }
     },
     "tiny_version": "Heel lifts at your desk",
-    "todo": ["Exact Soleus pushup description should be copied from the book file (engine-spec open item)."]
+    "todo": [
+      "Exact Soleus pushup description should be copied from the book file (engine-spec open item)."
+    ]
   },
   {
     "id": "NU02a",
     "title": "Water on waking",
     "kind": "patch",
     "area": "Nutrition",
-    "needs": ["fog", "energy", "meals"],
+    "needs": [
+      "fog",
+      "energy",
+      "meals"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "MORNING",
     "duration_min": 1,
-    "params": { "ml": [500, 700] },
+    "params": {
+      "ml": [
+        500,
+        700
+      ]
+    },
     "safety_rules": [],
-    "sources": ["NU02"],
+    "sources": [
+      "NU02"
+    ],
     "evidence_level": null,
     "science_note": "Your body is low on water after sleep.",
     "glyph": "Water",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Drink one glass of water." },
-      "standard": { "time": "1 min", "text": "Drink 500 ml of water after waking, before coffee or breakfast." },
-      "stretch": { "time": "1 min", "text": "Drink 700 ml of water after waking, before coffee or breakfast." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Drink one glass of water."
+      },
+      "standard": {
+        "time": "1 min",
+        "text": "Drink 500 ml of water after waking, before coffee or breakfast."
+      },
+      "stretch": {
+        "time": "1 min",
+        "text": "Drink 700 ml of water after waking, before coffee or breakfast."
+      }
     },
-    "tiny_version": "One glass of water",
-    "todo": ["duration_min = 1 is an estimate. Not in engine-spec. Confirm."]
+    "tiny_version": "One glass of water"
   },
   {
     "id": "NU02b",
     "title": "Daily water",
     "kind": "patch",
     "area": "Nutrition",
-    "needs": ["fog", "energy"],
+    "needs": [
+      "fog",
+      "energy"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 0,
-    "params": { "liters": 2.4, "oz": 80, "within_first_h": 10 },
+    "params": {
+      "liters": 2.4,
+      "oz": 80,
+      "within_first_h": 10
+    },
     "safety_rules": [],
-    "sources": ["NU02"],
+    "sources": [
+      "NU02"
+    ],
     "evidence_level": null,
     "science_note": "Low water lowers focus.",
     "glyph": "Water",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Fill a water bottle and put it on your desk." },
-      "standard": { "time": "0 min", "text": "Drink 2.4 L of water in your first 10 hours awake." },
-      "stretch": { "time": "0 min", "text": "2.4 L in 10 hours, spread out: a glass every hour." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Fill a water bottle and put it on your desk."
+      },
+      "standard": {
+        "time": "0 min",
+        "text": "Drink 2.4 L of water in your first 10 hours awake."
+      },
+      "stretch": {
+        "time": "0 min",
+        "text": "2.4 L in 10 hours, spread out: a glass every hour."
+      }
     },
-    "tiny_version": "Water bottle on your desk",
-    "todo": ["duration_min = 0 (spread over the day). Confirm how 'all day' patches count toward the ~12 min cap."]
+    "tiny_version": "Water bottle on your desk"
   },
   {
     "id": "NU03a",
     "title": "Protein at meals",
     "kind": "patch",
     "area": "Nutrition",
-    "needs": ["meals", "fog", "energy"],
+    "needs": [
+      "meals",
+      "fog",
+      "energy"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "LUNCH",
     "duration_min": 5,
-    "params": { "g_per_meal": [30, 50], "g_per_lb": 1, "g_per_kg": [1.6, 2.2] },
+    "params": {
+      "g_per_meal": [
+        30,
+        50
+      ],
+      "g_per_lb": 1,
+      "g_per_kg": [
+        1.6,
+        2.2
+      ]
+    },
     "safety_rules": [],
-    "sources": ["NU03"],
+    "sources": [
+      "NU03"
+    ],
     "evidence_level": null,
     "science_note": "Protein keeps you full and protects muscle.",
     "glyph": "Nutrition",
     "versions": {
-      "tiny": { "time": "20 s", "text": "Add one protein food, like a yogurt." },
-      "standard": { "time": "5 min", "text": "Eat 30–50 g of protein at this meal." },
-      "stretch": { "time": "5 min", "text": "30–50 g of protein at every full meal today." }
+      "tiny": {
+        "time": "20 s",
+        "text": "Add one protein food, like a yogurt."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Eat 30–50 g of protein at this meal."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "30–50 g of protein at every full meal today."
+      }
     },
     "tiny_version": "Protein · 1 yogurt",
-    "todo": ["duration_min = 5 comes from Figma (Pick patches: 'Protein breakfast · 5 min'), not engine-spec."]
+    "todo": [
+      "duration_min = 5 comes from Figma (Pick patches: 'Protein breakfast · 5 min'), not engine-spec."
+    ]
   },
   {
     "id": "ST01a",
     "title": "Physiological sigh",
     "kind": "tool",
     "area": "Mind",
-    "needs": ["stress"],
+    "needs": [
+      "stress"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 1,
-    "params": { "reps": [1, 3] },
-    "safety_rules": ["R04"],
-    "sources": ["ST01"],
+    "params": {
+      "reps": [
+        1,
+        3
+      ]
+    },
+    "safety_rules": [
+      "R04"
+    ],
+    "sources": [
+      "ST01"
+    ],
     "evidence_level": null,
     "science_note": "A double inhale and a long exhale slows your heart rate fast.",
     "glyph": "Breathe",
     "versions": {
-      "tiny": { "time": "20 s", "text": "One sigh: two inhales through the nose, then one long exhale through the mouth." },
-      "standard": { "time": "1 min", "text": "1–3 physiological sighs: inhale deep through the nose, add a short second inhale, then exhale slowly through the mouth." },
-      "stretch": { "time": "5 min", "text": "5 min of slow sighs, breathing in this pattern." }
+      "tiny": {
+        "time": "20 s",
+        "text": "One sigh: two inhales through the nose, then one long exhale through the mouth."
+      },
+      "standard": {
+        "time": "1 min",
+        "text": "1–3 physiological sighs: inhale deep through the nose, add a short second inhale, then exhale slowly through the mouth."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "5 min of slow sighs, breathing in this pattern."
+      }
     },
     "tiny_version": "One slow sigh",
     "todo": [
-      "kind = tool (engine-spec matrix 3-B), so the engine does not offer it as a Sprint patch.",
-      "duration_min = 1 is an estimate. Not in engine-spec. Confirm."
+      "kind = tool (engine-spec matrix 3-B), so the engine does not offer it as a Sprint patch."
     ]
   },
   {
@@ -302,21 +559,36 @@
     "title": "Morning meditation",
     "kind": "patch",
     "area": "Mind",
-    "needs": ["stress"],
+    "needs": [
+      "stress"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "MORNING",
     "duration_min": 5,
-    "params": { "minutes": 5 },
+    "params": {
+      "minutes": 5
+    },
     "safety_rules": [],
-    "sources": ["ST04"],
+    "sources": [
+      "ST04"
+    ],
     "evidence_level": null,
     "science_note": "Focusing on your breath calms the body step by step.",
     "glyph": "Mind",
     "versions": {
-      "tiny": { "time": "20 s", "text": "In bed, close your eyes and take one slow breath through your nose." },
-      "standard": { "time": "5 min", "text": "Right after waking, sit still for 5 min, eyes closed. Breathe slowly through your nose." },
-      "stretch": { "time": "5 min", "text": "5 min, and stay put even if you feel the urge to grab your phone." }
+      "tiny": {
+        "time": "20 s",
+        "text": "In bed, close your eyes and take one slow breath through your nose."
+      },
+      "standard": {
+        "time": "5 min",
+        "text": "Right after waking, sit still for 5 min, eyes closed. Breathe slowly through your nose."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "5 min, and stay put even if you feel the urge to grab your phone."
+      }
     },
     "tiny_version": "One slow breath in bed"
   },
@@ -325,23 +597,44 @@
     "title": "Micro-rests",
     "kind": "patch",
     "area": "Mind",
-    "needs": ["fog"],
+    "needs": [
+      "fog"
+    ],
     "level": 1,
     "tier": "free",
     "slot": "DESK",
     "duration_min": 0.5,
-    "params": { "motor_rest_s": [5, 30], "mental_rest_min": [5, 10] },
+    "params": {
+      "motor_rest_s": [
+        5,
+        30
+      ],
+      "mental_rest_min": [
+        5,
+        10
+      ]
+    },
     "safety_rules": [],
-    "sources": ["FM05"],
+    "sources": [
+      "FM05"
+    ],
     "evidence_level": null,
     "science_note": "Short pauses help your brain lock in what you just learned.",
     "glyph": "Mind",
     "versions": {
-      "tiny": { "time": "10 s", "text": "Pause 10 s with your eyes closed. No phone." },
-      "standard": { "time": "30 s", "text": "Between work blocks, pause 5–30 s. Close your eyes or look at nothing." },
-      "stretch": { "time": "5 min", "text": "Take a 5–10 min break with no new input: no phone, no talking." }
+      "tiny": {
+        "time": "10 s",
+        "text": "Pause 10 s with your eyes closed. No phone."
+      },
+      "standard": {
+        "time": "30 s",
+        "text": "Between work blocks, pause 5–30 s. Close your eyes or look at nothing."
+      },
+      "stretch": {
+        "time": "5 min",
+        "text": "Take a 5–10 min break with no new input: no phone, no talking."
+      }
     },
-    "tiny_version": "10 s eyes-closed pause",
-    "todo": ["duration_min = 0.5 (30 s, top of the 5–30 s range). Confirm."]
+    "tiny_version": "10 s eyes-closed pause"
   }
 ]

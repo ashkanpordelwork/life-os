@@ -7,6 +7,8 @@ import {
 } from '.';
 
 // Example from docs/engine-spec.md 3-A (Figma numbers).
+// Owner decision: Morning light uses the book (5–10 min, so Q = 1). It now ties Delay coffee (SL11b)
+// at 4.5 and wins the tie, so the Sleep offer is SL01 instead of the spec's SL11b.
 const figmaScores: AreaScores = { Movement: 2.0, Nutrition: 3.0, Sleep: 2.5, Mind: 2.1 };
 
 const item = (over: Partial<ChecklistItem>): ChecklistItem => ({
@@ -16,9 +18,9 @@ const item = (over: Partial<ChecklistItem>): ChecklistItem => ({
 });
 
 describe('worked example from engine-spec', () => {
-  it('fog + sleep + energy -> SL11b, NU02a, EX01b, FM05', () => {
+  it('fog + sleep + energy -> SL01, NU02a, EX01b, FM05', () => {
     const offers = recommend({ items: ITEMS, symptoms: ['fog', 'sleep', 'energy'], scores: figmaScores, sprintNumber: 1 });
-    expect(offers.map((o) => o.item.id)).toEqual(['SL11b', 'NU02a', 'EX01b', 'FM05']);
+    expect(offers.map((o) => o.item.id)).toEqual(['SL01', 'NU02a', 'EX01b', 'FM05']);
   });
 
   it('matches the scores in the spec table (4.5, 4.3, 3.7, 3.7)', () => {
@@ -133,7 +135,7 @@ describe('compose4', () => {
 });
 
 describe('area scores', () => {
-  it('maps the 4 answers onto 0–5 (default, TODO: owner to confirm)', () => {
+  it('maps the 4 answers onto 0–5 (confirmed by the owner)', () => {
     expect([0, 1, 2, 3].map((a) => answerToScore(a as 0 | 1 | 2 | 3))).toEqual([0, 1.7, 3.3, 5]);
   });
 
