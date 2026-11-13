@@ -14,8 +14,8 @@ import './library.css';
 const REPS = [1, 2, 3] as const;
 
 /**
- * Seconds per phase. TODO(owner): the book gives the pattern (deep inhale, short second inhale,
- * long full exhale) but no seconds. These are a placeholder pace until the owner picks one.
+ * Seconds per phase. Not from the book: it gives the pattern (deep inhale, short second inhale,
+ * long full exhale) but no seconds. The owner approved this pace.
  */
 export const SIGH_PACE = { inhale: 2.5, top: 0.8, exhale: 6 } as const;
 
