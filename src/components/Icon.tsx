@@ -4,7 +4,7 @@ import {
   Coffee02Icon, DropletIcon, Dumbbell01Icon, FastWindIcon, Fire02Icon, FlashIcon, Home01Icon,
   InformationCircleIcon, LockIcon, Mail01Icon, Moon02Icon, Notification01Icon, Restaurant01Icon, Route01Icon,
   SecurityCheckIcon, SlidersHorizontalIcon, Sun03Icon, TaskDone01Icon, TestTube01Icon, Tick02Icon, Timer02Icon,
-  TrendingUpIcon, UserIcon, WalkingIcon, Yoga02Icon,
+  TrendingUpIcon, UserIcon, WalkingIcon, Yoga02Icon, UserGroupIcon, Clapping01Icon, Share08Icon, Copy01Icon, Settings02Icon,
 } from '@hugeicons/core-free-icons';
 import './Icon.css';
 
@@ -44,6 +44,11 @@ const icons = {
   tune: SlidersHorizontalIcon,
   verified_user: SecurityCheckIcon,
   water_drop: DropletIcon,
+  group: UserGroupIcon,
+  high_five: Clapping01Icon,
+  share: Share08Icon,
+  copy: Copy01Icon,
+  settings: Settings02Icon,
 } as const;
 
 export type IconName = keyof typeof icons;

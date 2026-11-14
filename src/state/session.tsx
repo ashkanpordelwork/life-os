@@ -1,10 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo } from '../backend';
+import { backend, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type Sprint, type VersionKey } from '../data/types';
 import { REST_ID, dayKey } from '../engine';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 import { planState, type PlanState } from './plan';
+import { buildStatus, dailyPatches, type ShareSettings } from './tribeStatus';
 
 interface SessionState {
   /** false until we know whether someone is logged in */
@@ -39,6 +40,13 @@ interface SessionApi extends SessionState {
   bed: string;
   /** founder / pro / beta / free (src/state/plan.ts). */
   plan: PlanState;
+  /** Tribes (live app only). */
+  tribesEnabled: boolean;
+  tribeCount: number;
+  share: ShareSettings;
+  setShare: (s: Partial<ShareSettings>) => Promise<void>;
+  /** Re-read how many Tribes the user is in (after create, join or leave). */
+  refreshTribes: () => Promise<void>;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -47,6 +55,8 @@ const EMPTY: SessionState = { ready: false, user: null, profile: null, sprint: n
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { state: draft } = useOnboarding();
   const [s, setS] = useState<SessionState>(EMPTY);
+  const [tribeCount, setTribeCount] = useState(0);
+  const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
   const draftRef = useRef(draft);
   draftRef.current = draft;
   const userIdRef = useRef<string | null>(null);
@@ -74,6 +84,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     // Owner decision: every Sprint is 7 days now, also ones started as 14.
     if (sprint && sprint.length_days !== SPRINT_DAYS) sprint = { ...sprint, length_days: SPRINT_DAYS };
     setS({ ready: true, user, profile, sprint, checkins, reminders });
+    // Tribes: how many, and this user's sharing choices. Never blocks loading.
+    if (backend.tribes) {
+      backend.tribes.myTribes(user.id).then((t) => setTribeCount(t.length)).catch(() => {});
+      backend.tribes.myStatus(user.id).then((st) => { if (st) setShareState({ patches: st.share_patches, score: st.share_score }); }).catch(() => {});
+    }
   }, []);
 
   useEffect(() => {
@@ -87,6 +102,25 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => { alive = false; off(); };
   }, [load]);
 
+  // Keep this user's Tribe snapshot fresh (debounced) while they are in a Tribe.
+  useEffect(() => {
+    if (!backend.tribes || !s.user || tribeCount === 0) return;
+    const user = s.user;
+    const id = setTimeout(() => {
+      backend.tribes!.publishStatus(buildStatus(user.id, s.profile, s.sprint, s.checkins, dayKey(new Date()), share)).catch(() => {});
+    }, 800);
+    return () => clearTimeout(id);
+  }, [s.user, s.profile, s.sprint, s.checkins, tribeCount, share]);
+
+  /** Feed events for Tribes. Fire-and-forget. */
+  const logTribe = useCallback((kind: TribeEventKind, payload?: Record<string, unknown>) => {
+    const uid = userIdRef.current;
+    if (!backend.tribes || !uid || tribeCountRef.current === 0) return;
+    backend.tribes.logEvent(uid, kind, dayKey(new Date()), payload).catch(() => {});
+  }, []);
+  const tribeCountRef = useRef(0);
+  tribeCountRef.current = tribeCount;
+
   const api = useMemo<SessionApi>(() => ({
     ...s,
     mode: backend.mode,
@@ -94,6 +128,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     wake: s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE,
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
     plan: planState(s.profile),
+    tribesEnabled: !!backend.tribes,
+    tribeCount,
+    share,
+    async setShare(next) {
+      setShareState((p) => ({ ...p, ...next }));
+    },
+    async refreshTribes() {
+      if (!backend.tribes || !s.user) return;
+      setTribeCount((await backend.tribes.myTribes(s.user.id)).length);
+    },
     async updateProfile(patch) {
       if (!s.user || !s.profile) return;
       const next = { ...s.profile, ...patch };
@@ -117,6 +161,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     async saveSprint(sprint) {
       if (!s.user) return;
       await backend.saveSprint(s.user.id, sprint);
+      if (s.sprint && sprint.number > s.sprint.number) logTribe('release', { number: s.sprint.number, theme: s.sprint.theme ?? null });
       setS((p) => ({ ...p, sprint }));
     },
     async setDone(itemId, done, version = 'standard') {
@@ -132,6 +177,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       }));
       const wasResting = done && before.some((x) => x.day === c.day && x.item_id === REST_ID);
       if (wasResting) setS((p) => ({ ...p, checkins: p.checkins.filter((x) => !(x.day === c.day && x.item_id === REST_ID)) }));
+      if (done && itemId !== REST_ID) {
+        const daily = dailyPatches(s.sprint).map((i) => i.id);
+        const doneNow = new Set([...before.filter((x) => x.day === c.day && x.item_id !== REST_ID).map((x) => x.item_id), itemId]);
+        logTribe('active');
+        if (daily.length && daily.every((id) => doneNow.has(id))) logTribe('all_done');
+      }
       try {
         await backend.setCheckin(s.user.id, c, done);
         if (wasResting) await backend.setCheckin(s.user.id, { day: c.day, item_id: REST_ID, version: 'standard' }, false);
@@ -156,7 +207,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

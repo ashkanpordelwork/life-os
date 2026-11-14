@@ -198,7 +198,8 @@
     "roadmap": "Roadmap",
     "progress": "Progress",
     "you": "You",
-    "soon": "Coming soon"
+    "soon": "Coming soon",
+    "tribe": "Tribe"
   },
   "patch": {
     "topTitle": "Patch",
@@ -737,5 +738,58 @@
     "body": "Thanks for being here early. Every Sprint, all patches and every tool are yours.",
     "cta": "Nice",
     "more": "See what's in Pro"
+  },
+  "tribe": {
+    "label": "Tribe",
+    "emptyTitle": "Better together.",
+    "emptyBody": "Start a Tribe with your team or friends. See each other's days and cheer each other on.",
+    "localTitle": "Tribes need the live app.",
+    "localBody": "In test mode your data stays on this phone, so there's no one to share with.",
+    "createCta": "Create a Tribe",
+    "joinCta": "Join with a code",
+    "createTitle": "Create a Tribe",
+    "nameLabel": "Tribe name",
+    "namePlaceholder": "Design team",
+    "create": "Create",
+    "joinTitle": "Join a Tribe",
+    "codeLabel": "Invite code",
+    "join": "Join",
+    "wrongCode": "That code doesn't match a Tribe.",
+    "failed": "Something went wrong. Try again.",
+    "settingsTitle": "Tribe settings",
+    "sharePatches": "Show my patch names",
+    "shareScore": "Show my score",
+    "privacy": "Your Tribe never sees your health answers or symptoms.",
+    "another": "Join another Tribe",
+    "leave": "Leave this Tribe",
+    "streakLabel": "Tribe streak",
+    "streakBody": "day Tribe streak · {n} of {total} active today ({need} needed)",
+    "members": "{n} members",
+    "code": "Code",
+    "invite": "Invite",
+    "copied": "Link copied",
+    "inviteText": "Join my Tribe “{name}” on Life OS. Code: {code}",
+    "todayTitle": "Today",
+    "feedTitle": "Activity",
+    "feedEmpty": "Nothing yet. Tick a patch to start the feed.",
+    "you": "You",
+    "someone": "Member",
+    "noStatus": "Hasn't opened Life OS yet today.",
+    "doneOf": "{n} of {total} done",
+    "highFive": "High five",
+    "fivesForYou": "{n} high fives",
+    "ago": {
+      "now": "just now",
+      "m": "{n} min ago",
+      "h": "{n} h ago",
+      "d": "{n} d ago"
+    },
+    "ev": {
+      "active": "{name} started today",
+      "allDone": "{name} finished today",
+      "joined": "{name} joined the Tribe",
+      "release": "{name} shipped Sprint {n}",
+      "releaseTheme": "{name} shipped Sprint {n} · {theme}"
+    }
   }
 }

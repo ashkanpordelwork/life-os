@@ -9,3 +9,4 @@ export * from './theme';
 export * from './timeHint';
 export * from './insights';
 export * from './jetlag';
+export * from './tribe';

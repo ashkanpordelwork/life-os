@@ -46,6 +46,44 @@ export interface PushSub {
   auth: string;
 }
 
+export interface Tribe { id: string; name: string; code: string; created_by: string }
+
+/** What a member shows their Tribes (one row per user). */
+export interface TribeStatus {
+  user_id: string;
+  display_name: string;
+  day: string | null;
+  done: number;
+  total: number;
+  streak: number;
+  patch_titles: string[] | null;
+  sprint_number: number | null;
+  sprint_theme: string | null;
+  score: number | null;
+  share_patches: boolean;
+  share_score: boolean;
+  updated_at?: string;
+}
+
+export type TribeEventKind = 'active' | 'all_done' | 'release' | 'joined';
+export interface TribeEvent {
+  id: number;
+  user_id: string;
+  kind: TribeEventKind;
+  day: string;
+  payload: Record<string, unknown>;
+  created_at: string;
+}
+export interface HighFive { event_id: number; from_user: string }
+
+export interface TribeDetail {
+  tribe: Tribe;
+  members: string[];
+  statuses: TribeStatus[];
+  events: TribeEvent[];
+  highFives: HighFive[];
+}
+
 /** Error codes shown to the user via src/i18n/en.json -> auth.errors */
 export type AuthErrorCode = 'invalid' | 'exists' | 'weak' | 'email' | 'confirm' | 'network' | 'unknown';
 
@@ -78,5 +116,20 @@ export interface Backend {
   loadReminders(userId: string): Promise<ReminderPrefs | null>;
   saveReminders(userId: string, prefs: ReminderPrefs): Promise<void>;
   savePushSubscription(userId: string, sub: PushSub): Promise<void>;
+  /** Tribes need the live app (Supabase). The local backend has `tribes: null`. */
+  tribes: TribeApi | null;
   deletePushSubscription(userId: string, endpoint: string): Promise<void>;
+}
+
+export interface TribeApi {
+  myTribes(userId: string): Promise<Tribe[]>;
+  detail(tribeId: string, sinceDay: string): Promise<TribeDetail>;
+  create(name: string): Promise<Tribe>;
+  /** null when the code is wrong. */
+  join(code: string): Promise<Tribe | null>;
+  leave(userId: string, tribeId: string): Promise<void>;
+  myStatus(userId: string): Promise<TribeStatus | null>;
+  publishStatus(status: TribeStatus): Promise<void>;
+  logEvent(userId: string, kind: TribeEventKind, day: string, payload?: Record<string, unknown>): Promise<void>;
+  highFive(userId: string, eventId: number, on: boolean): Promise<void>;
 }

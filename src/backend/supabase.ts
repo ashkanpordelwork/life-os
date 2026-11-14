@@ -1,6 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
-import { AuthError, type AuthErrorCode, type Backend, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type HighFive, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -121,6 +121,52 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async deletePushSubscription(_userId, endpoint) {
       check(await sb.from('push_subscriptions').delete().eq('endpoint', endpoint));
+    },
+    tribes: {
+      async myTribes(userId) {
+        const rows = check(await sb.from('tribe_members').select('tribes(id, name, code, created_by)').eq('user_id', userId)) as unknown as { tribes: Tribe | null }[];
+        return rows.map((r) => r.tribes).filter((x): x is Tribe => !!x);
+      },
+      async detail(tribeId, sinceDay) {
+        const tribe = check(await sb.from('tribes').select('id, name, code, created_by').eq('id', tribeId).single()) as Tribe;
+        const members = (check(await sb.from('tribe_members').select('user_id').eq('tribe_id', tribeId)) as { user_id: string }[]).map((m) => m.user_id);
+        const [statuses, events] = await Promise.all([
+          sb.from('tribe_status').select('*').in('user_id', members),
+          sb.from('tribe_events').select('*').in('user_id', members).gte('day', sinceDay).order('created_at', { ascending: false }).limit(80),
+        ]);
+        const ev = check(events) as TribeEvent[];
+        const hf = ev.length ? (check(await sb.from('high_fives').select('event_id, from_user').in('event_id', ev.map((e) => e.id))) as HighFive[]) : [];
+        return { tribe, members, statuses: check(statuses) as TribeStatus[], events: ev, highFives: hf };
+      },
+      async create(name) {
+        return check(await sb.rpc('create_tribe', { p_name: name })) as Tribe;
+      },
+      async join(code) {
+        const t = check(await sb.rpc('join_tribe', { p_code: code })) as Tribe | null;
+        return t && t.id ? t : null;
+      },
+      async leave(userId, tribeId) {
+        check(await sb.from('tribe_members').delete().eq('tribe_id', tribeId).eq('user_id', userId));
+      },
+      async myStatus(userId) {
+        return check(await sb.from('tribe_status').select('*').eq('user_id', userId).maybeSingle()) as TribeStatus | null;
+      },
+      async publishStatus(status) {
+        check(await sb.from('tribe_status').upsert({ ...status, updated_at: new Date().toISOString() }));
+      },
+      async logEvent(userId, kind, day, payload = {}) {
+        // One of each kind per user per day; a repeat is ignored.
+        const res = await sb.from('tribe_events').insert({ user_id: userId, kind, day, payload });
+        if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
+      },
+      async highFive(userId, eventId, on) {
+        if (on) {
+          const res = await sb.from('high_fives').insert({ event_id: eventId, from_user: userId });
+          if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
+        } else {
+          check(await sb.from('high_fives').delete().eq('event_id', eventId).eq('from_user', userId));
+        }
+      },
     },
   };
 }

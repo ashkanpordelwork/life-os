@@ -5,10 +5,11 @@ import { NavBar } from '../components/NavBar';
 import { NavItem } from '../components/NavItem';
 import { t } from '../i18n';
 
-type Tab = 'today' | 'progress' | 'roadmap' | 'you';
-const TABS: { key: Tab; path: string; icon: 'home' | 'route' | 'monitoring' | 'person' }[] = [
+type Tab = 'today' | 'progress' | 'roadmap' | 'tribe' | 'you';
+const TABS: { key: Tab; path: string; icon: 'home' | 'route' | 'monitoring' | 'person' | 'group' }[] = [
   { key: 'today', path: '/today', icon: 'home' },
   { key: 'roadmap', path: '/roadmap', icon: 'route' },
+  { key: 'tribe', path: '/tribe', icon: 'group' },
   { key: 'progress', path: '/progress', icon: 'monitoring' },
   { key: 'you', path: '/you', icon: 'person' },
 ];
