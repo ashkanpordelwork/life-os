@@ -24,3 +24,21 @@
 }
 .text-field__input::placeholder { color: var(--color-text-secondary); opacity: 1; }
 .text-field__error { color: var(--color-status-danger); }
+
+/* Browser autofill (saved email and password) paints its own blue or yellow background.
+   Keep the field looking like our field: a huge inset shadow in the card colour covers it,
+   and a very long transition stops the browser from flashing its colour first. */
+.text-field__input:-webkit-autofill,
+.text-field__input:-webkit-autofill:hover,
+.text-field__input:-webkit-autofill:focus,
+.text-field__input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-text-primary);
+  caret-color: var(--color-text-primary);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface-card) inset;
+  box-shadow: 0 0 0 1000px var(--color-surface-card) inset;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+.text-field__input:autofill {
+  -webkit-text-fill-color: var(--color-text-primary);
+  box-shadow: 0 0 0 1000px var(--color-surface-card) inset;
+}
