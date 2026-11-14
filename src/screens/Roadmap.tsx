@@ -5,6 +5,9 @@ import { GlassPanel } from '../components/GlassPanel';
 import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
 import { getItem } from '../data';
+import { getProgram } from '../data/programs';
+import { ListRow } from '../components/ListRow';
+import { useActiveProgram } from '../state/program';
 import { dayKey, sprintDay } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
@@ -22,7 +25,9 @@ import './roadmap.css';
  */
 export function Roadmap() {
   const navigate = useNavigate();
-  const { sprint, today, plan } = useSession();
+  const { sprint, today, plan, user } = useSession();
+  const [program] = useActiveProgram(user?.id);
+  const prog = program ? getProgram(program.id) : undefined;
   const nextLocked = !canStartSprint(plan, (sprint?.number ?? 1) + 1);
 
   if (!sprint) return <Navigate to="/today" replace />;
@@ -40,6 +45,12 @@ export function Roadmap() {
     <Screen>
       <div className="progress__top"><span className="text-mono-label text-secondary">{t('roadmap.label')}</span></div>
       <h1 className="text-title-l text-primary">{t('roadmap.title')}</h1>
+      <ListRow
+        icon="route"
+        title={t('programs.title')}
+        subtitle={prog && program ? t('programs.rowActive', { program: t(`programs.list.${prog.id}.title`), n: program.week, total: prog.weeks.length }) : t('programs.rowSubtitle')}
+        onClick={() => navigate('/programs')}
+      />
       <GlassPanel gap={14}>
         {rows.map((r, i) => (
           <motion.div key={r.n} className="roadmap__row" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: i * motionTokens.stagger }}>

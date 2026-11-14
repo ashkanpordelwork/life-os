@@ -1,0 +1,23 @@
+/* Programs (designed in code) */
+.program-active {
+  display: flex; flex-direction: column; gap: var(--space-8);
+  padding: var(--space-20); border-radius: var(--radius-xl);
+  background: var(--gradient-pro); color: var(--color-text-on-action); box-shadow: var(--shadow-floating);
+}
+.program-active .progress { background: var(--color-on-pro-soft); }
+.program-active .progress__fill { background: var(--color-text-on-action); }
+.program-active .text-button { color: var(--color-text-on-action); }
+.program-active__sub { opacity: 0.92; }
+.program-card {
+  display: flex; align-items: center; gap: var(--space-12);
+  inline-size: 100%; padding: var(--space-16); border-radius: var(--radius-lg);
+  text-align: start; cursor: pointer; color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border-glass);
+}
+.program-card--on { border-color: var(--color-action-primary); }
+.program-card__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
+.program-card__badges { display: flex; align-items: center; gap: var(--space-8); }
+.program-badge { padding-block: 2px; padding-inline: var(--space-8); border-radius: var(--radius-pill); background: var(--color-status-success-bg); color: var(--color-status-success); }
+.program-badge--pro { background: var(--color-brand-soft); color: var(--color-text-brand); }
+.program-sheet { display: flex; flex-direction: column; gap: var(--space-12); max-block-size: 62dvh; overflow-y: auto; }
+.program-sheet__patch { display: flex; align-items: center; gap: var(--space-12); }

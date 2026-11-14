@@ -22,12 +22,17 @@ import {
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { canStartSprint, hasPro } from '../state/plan';
+import { useActiveProgram } from '../state/program';
+import { getProgram } from '../data/programs';
 import { Mascot } from '../components/Mascot';
 import { MAX_PATCHES, MIN_PATCHES } from '../state/onboarding';
 import { motionTokens } from '../styles/motion';
 import { itemAmount, pad2 } from './flow';
 import './onboarding.css';
 import './review.css';
+
+/** Week names are a list in en.json: programs.list.<id>.weeks[i]. */
+const weekName = (id: string, i: number) => tList(`programs.list.${id}.weeks`)[i] ?? '';
 
 type Decision = 'keep' | 'swap' | 'drop';
 type Step = 'assess' | 'scores' | 'locked' | 'review' | 'suggest' | 'browse' | 'confirm';
@@ -115,6 +120,20 @@ export function Review() {
     setBusy(true);
     if (profile && full(answers)) await updateProfile({ answers, start_answers: profile.start_answers ?? profile.answers });
     await saveSprint({ ...sprint!, length_days: SPRINT_DAYS, started_at: new Date().toISOString() });
+    navigate('/today', { replace: true });
+  };
+
+  // Programs: offer the next week as the next Sprint.
+  const [program, setProgram] = useActiveProgram(session.user?.id);
+  const prog = program ? getProgram(program.id) : undefined;
+  const progNextWeek = prog && program && program.week < prog.weeks.length ? program.week + 1 : null;
+  const startProgramWeek = async () => {
+    if (!prog || !progNextWeek || !sprint) return;
+    setBusy(true);
+    const ids = prog.weeks[progNextWeek - 1].patch_ids;
+    if (profile && full(answers)) await updateProfile({ answers, start_answers: profile.start_answers ?? profile.answers });
+    await saveSprint({ number: nextNumber, theme: themeFor(ids.map(getItem).filter((x): x is ChecklistItem => !!x)), length_days: SPRINT_DAYS, patch_ids: ids, started_at: new Date().toISOString() });
+    setProgram({ id: prog.id, week: progNextWeek, sprint: nextNumber });
     navigate('/today', { replace: true });
   };
 
@@ -215,6 +234,20 @@ export function Review() {
             <>
               <TopBar title={t('review.topTitle', { n: sprint.number })} onBack={back} />
               <h2 className="text-title-l text-primary">{t('review.title')}</h2>
+              {prog && progNextWeek && (
+                <section className="review__program">
+                  <span className="text-mono-label">{t('programs.nextTitle', { program: t(`programs.list.${prog.id}.title`) })}</span>
+                  <span className="text-body-m">{t('programs.nextBody', { n: progNextWeek, name: weekName(prog.id, progNextWeek - 1) })}</span>
+                  <span className="text-body-s review__program-patches">{prog.weeks[progNextWeek - 1].patch_ids.map((id) => getItem(id)?.title).join(' · ')}</span>
+                  <Button block variant="Secondary" label={t('programs.nextCta', { n: progNextWeek })} busy={busy} onClick={startProgramWeek} />
+                </section>
+              )}
+              {prog && program && !progNextWeek && (
+                <GlassPanel gap={8}>
+                  <span className="text-title-s text-primary">{t('programs.doneTitle')}</span>
+                  <span className="text-body-s text-secondary">{t('programs.doneBody', { program: t(`programs.list.${prog.id}.title`) })}</span>
+                </GlassPanel>
+              )}
               <p className="text-body-s text-secondary">{t('review.subtitle')}</p>
               {current.map((item) => {
                 const d = decisions[item.id] ?? 'keep';

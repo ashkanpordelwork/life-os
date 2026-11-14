@@ -992,5 +992,64 @@
         "active": "Everything is paused. Your streak is safe and reminders are off."
       }
     }
+  },
+  "programs": {
+    "title": "Programs",
+    "intro": "Three-week paths with a clear goal. Each week is one Sprint with three patches, picked for you.",
+    "following": "You're following",
+    "weekOf": "Week {n} of {total}",
+    "week": "Week {n}",
+    "weeks": "{n} weeks",
+    "free": "Free",
+    "pro": "Pro",
+    "leave": "Leave program",
+    "start": "Start this program",
+    "restart": "Start again from week 1",
+    "replaceNote": "Starting replaces this Sprint's patches with week 1 and starts a fresh 7 days. Your streak stays.",
+    "nextTitle": "Next in {program}",
+    "nextBody": "Week {n}: {name}.",
+    "nextCta": "Start week {n}",
+    "doneTitle": "Program complete",
+    "doneBody": "You finished {program}. Pick your next patches below.",
+    "rowSubtitle": "Three-week paths with a goal",
+    "rowActive": "{program} · week {n} of {total}",
+    "list": {
+      "sleep": {
+        "title": "Sleep reset",
+        "body": "Light, caffeine and a steady clock: the basics of better sleep.",
+        "weeks": [
+          "Morning light and water",
+          "Caffeine and a steady clock",
+          "Calm mornings"
+        ]
+      },
+      "desk": {
+        "title": "Desk reset",
+        "body": "Undo long sitting with small moves through the work day.",
+        "weeks": [
+          "Break up sitting",
+          "Move after meals",
+          "Steps and switching"
+        ]
+      },
+      "energy": {
+        "title": "Energy boost",
+        "body": "Steadier energy from light, water, protein and movement.",
+        "weeks": [
+          "A strong morning",
+          "Fuel and daylight",
+          "Real food, real rest"
+        ]
+      },
+      "calm": {
+        "title": "Calm & focus",
+        "body": "Less noise in your head, more focus at work.",
+        "weeks": [
+          "A quiet start",
+          "Stay present",
+          "Let go at night"
+        ]
+      }
+    }
   }
 }
