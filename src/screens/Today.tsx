@@ -26,6 +26,7 @@ import { reviewDue, reviewLabel } from './Review';
 import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
+import { Collapse } from '../components/Collapse';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
 
 const TOUR_STEPS: TourStep[] = [
@@ -151,7 +152,7 @@ export function Today() {
 
       <AnimatePresence initial={false}>
         {showNudge && (
-          <motion.div key="nudge" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={motionTokens.page} style={{ overflow: 'hidden' }}>
+          <Collapse key="nudge">
             <div className="today__nudge glass-card" role="status">
               <span className="today__nudge-icon"><Icon name="notifications" size={20} /></span>
               <span className="text-body-s text-primary today__nudge-text">
@@ -159,7 +160,7 @@ export function Today() {
               </span>
               <TextButton label={t('nudge.later')} onClick={hideNudge} />
             </div>
-          </motion.div>
+          </Collapse>
         )}
       </AnimatePresence>
 

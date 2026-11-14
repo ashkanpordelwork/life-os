@@ -105,7 +105,7 @@ export function Library() {
 
       <BottomSheet open={!!open} onClose={() => setOpen(null)} eyebrow={open ? `${t(`areas.${open.area}`).toUpperCase()} · ${t('library.level', { n: open.level }).toUpperCase()}` : undefined} title={open?.title ?? ''}>
         {open && (
-          <div className="library__sheet">
+          <div className="library__sheet shadow-room shadow-room--sheet">
             <p className="text-body-m text-primary">{open.science_note}</p>
             <GlassPanel gap={8}>
               {(['tiny', 'standard', 'stretch'] as const).map((v) => (

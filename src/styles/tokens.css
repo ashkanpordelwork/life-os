@@ -129,6 +129,11 @@
   --shadow-card: 0 8px 24px 0 rgb(127 42 10 / 0.1); /* Shadow/Card  #7F2A0A1A */
   --shadow-button: 0 4px 12px 0 rgb(127 42 10 / 0.25); /* Shadow/Button #7F2A0A40 */
   --shadow-floating: 0 12px 32px 0 rgb(127 42 10 / 0.16); /* Shadow/Floating #7F2A0A29 */
+  /* Room a --shadow-card needs around it (blur 24 + offset 8). A box that clips or scrolls
+     must give its children at least this much padding, or shadows get cut. */
+  --shadow-room-inline: 24px;
+  --shadow-room-start: 16px;
+  --shadow-room-end: 32px;
   --glass-blur: blur(12px); /* Glass/* BACKGROUND_BLUR radius 24 */
   /* Glass/Card = --glass-blur + --shadow-card; Glass/Floating = --glass-blur + --shadow-floating */
 

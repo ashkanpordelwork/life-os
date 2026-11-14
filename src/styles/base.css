@@ -58,3 +58,18 @@ img { display: block; max-width: 100%; }
   white-space: nowrap;
 }
 .page { min-block-size: 100dvh; }
+
+/* Scroll or clip boxes that hold cards: padding gives the shadows room, the negative margin
+   keeps the layout where it was. Rule: every overflow box with cards uses this (CLAUDE.md). */
+.shadow-room {
+  padding-inline: var(--shadow-room-inline);
+  padding-block: var(--shadow-room-start) var(--shadow-room-end);
+  margin-inline: calc(-1 * var(--shadow-room-inline));
+  margin-block: calc(-1 * var(--shadow-room-start)) calc(-1 * var(--shadow-room-end));
+}
+/* Inside a BottomSheet the box can only reach the sheet's own 16px padding (the sheet edge is the
+   screen edge, so the shadow fades off-screen instead of showing a cut line). */
+.shadow-room--sheet {
+  padding-inline: var(--space-16);
+  margin-inline: calc(-1 * var(--space-16));
+}

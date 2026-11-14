@@ -114,7 +114,7 @@ export function Progress() {
         title={openDay && rests.has(openDay) ? t('progress.rest') : t('progress.dayDone', { n: detailDone.size, total: Math.max(detailIds.length, 1) })}
       >
         {detailIds.length === 0 && <p className="text-body-s text-secondary">{t('progress.nothing')}</p>}
-        <div className="progress__detail">
+        <div className="progress__detail shadow-room shadow-room--sheet">
           {detailIds.map(getItem).filter((x): x is ChecklistItem => !!x).map((item) => (
             <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={detailDone.has(item.id)} />
           ))}
