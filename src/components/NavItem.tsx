@@ -9,6 +9,8 @@ type NavItemProps = {
   /** Figma property `Active` */
   active?: boolean;
   onClick?: () => void;
+  /** data-tour target for the guided tour. */
+  tour?: string;
 };
 
 /**
@@ -17,13 +19,14 @@ type NavItemProps = {
  * Glyph colour is text/brand when active, text/secondary when not.
  * Motion: the soft active background slides between items (shared layout).
  */
-export function NavItem({ label, icon, active = false, onClick }: NavItemProps) {
+export function NavItem({ label, icon, active = false, onClick, tour }: NavItemProps) {
   return (
     <motion.button
       type="button"
       className={`nav-item${active ? ' nav-item--active' : ''}`}
       aria-current={active ? 'page' : undefined}
       onClick={onClick}
+      data-tour={tour}
       whileTap={{ scale: 0.94 }}
       transition={motionTokens.press}
     >

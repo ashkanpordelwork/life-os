@@ -851,5 +851,40 @@
   },
   "message": {
     "ok": "Got it"
+  },
+  "tour": {
+    "label": "Quick tour",
+    "count": "Step {n} of {total}",
+    "next": "Next",
+    "done": "Got it",
+    "skip": "Skip",
+    "replayTitle": "Replay the tour",
+    "replaySubtitle": "A quick walk through the app",
+    "steps": {
+      "patches": {
+        "title": "Your patches for today",
+        "body": "Tap the circle when one is done. Each tick counts toward your streak."
+      },
+      "tiny": {
+        "title": "Busy day?",
+        "body": "Tiny mode gives you the 20-second version of each patch. It still counts."
+      },
+      "tools": {
+        "title": "Need a moment?",
+        "body": "Breathing, NSDR and focus tools live in Library, one tap away."
+      },
+      "roadmap": {
+        "title": "Your roadmap",
+        "body": "See this Sprint, the next one, and how far you've come."
+      },
+      "progress": {
+        "title": "Your progress",
+        "body": "Heatmap, streaks and Insights. Patterns show up after a few days."
+      },
+      "tribe": {
+        "title": "Better with a Tribe",
+        "body": "Join your team, see each other's days, and send a high five."
+      }
+    }
   }
 }

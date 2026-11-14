@@ -41,6 +41,7 @@ export function TabBar() {
             label={t(`nav.${x.key}`)}
             icon={x.icon}
             active={active === x.key}
+            tour={x.key === 'today' || x.key === 'you' ? undefined : x.key}
             onClick={() => (active === x.key ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate(x.path))}
           />
         ))}

@@ -1,0 +1,33 @@
+/* Guided tour (designed in code) */
+.tour { position: fixed; inset: 0; z-index: 90; pointer-events: auto; }
+.tour__spot {
+  position: fixed;
+  border-radius: var(--radius-lg);
+  /* Everything around the spotlight is dimmed with the text colour at 55%. */
+  box-shadow: 0 0 0 9999px color-mix(in srgb, var(--color-text-primary) 55%, transparent);
+  outline: 2px solid var(--color-action-primary);
+  outline-offset: 2px;
+  animation: tour-breathe 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes tour-breathe {
+  0%, 100% { outline-color: var(--color-action-primary); }
+  50% { outline-color: var(--color-brand-soft); }
+}
+.tour__card {
+  position: fixed;
+  inset-inline: var(--space-16);
+  max-inline-size: 360px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-16);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-floating);
+}
+.tour__head { display: flex; align-items: center; gap: var(--space-12); }
+.tour__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
+.tour__actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.tour__actions > :last-child { min-inline-size: 120px; }
+@media (prefers-reduced-motion: reduce) { .tour__spot { animation: none; } }

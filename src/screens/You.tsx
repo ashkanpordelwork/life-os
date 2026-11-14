@@ -59,6 +59,7 @@ export function You() {
         onClick={() => navigate('/reminders')}
       />
       <ListRow icon="verified_user" title={t('you.pro')} subtitle={t('you.proSubtitle')} onClick={() => navigate('/pro')} />
+      <ListRow icon="home" title={t('tour.replayTitle')} subtitle={t('tour.replaySubtitle')} onClick={() => navigate('/today', { state: { tour: true } })} />
       {isAdmin && <ListRow icon="settings" title={t('you.admin')} subtitle={t('admin.title')} onClick={() => navigate('/admin')} />}
       <ListRow icon="science" title={t('you.library')} subtitle={t('library.openSubtitle')} onClick={() => openLibrary(navigate, '/you')} />
       <ListRow icon="bedtime" title={t('you.sleepTimes')} subtitle={`${wake} – ${bed}`} onClick={() => navigate('/sleep-times')} />

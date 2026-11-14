@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { Icon } from '../components/Icon';
 import { TextButton } from '../components/TextButton';
-import { useMemo, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useCallback, useMemo, useState } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import { BottomSheet } from '../components/BottomSheet';
 import { Button } from '../components/Button';
@@ -26,6 +26,17 @@ import { reviewDue, reviewLabel } from './Review';
 import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
+import { GuidedTour, type TourStep } from '../components/GuidedTour';
+
+const TOUR_STEPS: TourStep[] = [
+  { target: 'patches', mascot: 'core-pointing' },
+  { target: 'tiny', mascot: 'rest-busy-day' },
+  { target: 'tools', mascot: 'morning-breathing' },
+  { target: 'roadmap', mascot: 'core-curious' },
+  { target: 'progress', mascot: 'milestone-small-win' },
+  { target: 'tribe', mascot: 'milestone-welcome-back' },
+];
+const tourKey = (uid: string) => `lifeos.tour.v1.${uid}`;
 
 const WELCOME_KEY = 'lifeos.founderWelcome.v1';
 
@@ -46,7 +57,17 @@ export function Today() {
   const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
-  const { message, dismissMessage } = useSession();
+  const { message, dismissMessage, user } = useSession();
+  // The tour: once per account on this device, or when replayed from You (location state).
+  const location = useLocation();
+  const replay = !!(location.state as { tour?: boolean } | null)?.tour;
+  const [tourOn, setTourOn] = useState(() => {
+    try { return replay || (!!user && localStorage.getItem(tourKey(user.id)) !== '1'); } catch { return replay; }
+  });
+  const endTour = useCallback(() => {
+    setTourOn(false);
+    try { if (user) localStorage.setItem(tourKey(user.id), '1'); } catch { /* ignore */ }
+  }, [user]);
   const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
@@ -106,13 +127,14 @@ export function Today() {
 
   return (
     <Screen>
+      {tourOn && <GuidedTour steps={TOUR_STEPS} onDone={endTour} />}
       <ProBanner plan={plan} onOpen={() => navigate('/pro')} />
       <header className="today__header">
         <div className="today__greeting">
           <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
           <h1 className="text-title-l text-primary">{greeting(profile?.name ?? '', firstDay)}</h1>
         </div>
-        <div className="today__actions">
+        <div className="today__actions" data-tour="tools">
           <IconButton icon="air" label={t('today.tools')} onClick={() => openLibrary(navigate, '/today')} />
           <IconButton icon="notifications" label={t('today.notifications')} onClick={() => navigate('/reminders')} />
         </div>
@@ -147,7 +169,7 @@ export function Today() {
       </div>
 
       {items.map((item, i) => (
-        <motion.div key={item.id} className="today__card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.08 + i * motionTokens.stagger }}>
+        <motion.div key={item.id} data-tour={i === 0 ? 'patches' : undefined} className="today__card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.08 + i * motionTokens.stagger }}>
           <PatchCard
             glyph={item.glyph}
             title={item.title}
@@ -164,7 +186,7 @@ export function Today() {
       <SprintStrip label={theme ? `Sprint ${pad2(sprint.number)} · ${theme}` : `Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
-      <div className="today__chip">
+      <div className="today__chip" data-tour="tiny">
         {allDone ? (
           <MetaChip icon="task_alt" label={t('today.allDone')} />
         ) : resting ? (
