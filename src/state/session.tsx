@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { backend, type Announcement, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
-import { REST_ID, dayKey, patchTimes, type DailyLog, type Experiment, type Metric } from '../engine';
+import { REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type DailyLog, type Experiment, type LifeMode, type Metric, type ModeKind } from '../engine';
 import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 
@@ -61,6 +61,10 @@ interface SessionApi extends SessionState {
   experiments: Experiment[];
   startExperiment: (itemId: string, metric: Metric, days: number) => Promise<void>;
   stopExperiment: (id: string) => Promise<void>;
+  /** Life mode running today, and controls. */
+  lifeMode: LifeMode | null;
+  startMode: (kind: ModeKind, days: number) => Promise<void>;
+  endMode: () => Promise<void>;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -74,6 +78,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [latest, setLatest] = useState<Announcement | null>(null);
   const [logs, setLogs] = useState<DailyLog[]>([]);
   const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [modes, setModes] = useState<LifeMode[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
   draftRef.current = draft;
@@ -105,6 +110,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     backend.latestMessage().then(setLatest).catch(() => setLatest(null));
     backend.loadLogs(user.id).then(setLogs).catch(() => setLogs([]));
     backend.loadExperiments(user.id).then(setExperiments).catch(() => setExperiments([]));
+    backend.loadModes(user.id).then(setModes).catch(() => setModes([]));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
       backend.tribes.myTribes(user.id).then((t) => setTribeCount(t.length)).catch(() => {});
@@ -155,8 +161,42 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const tribeCountRef = useRef(0);
   tribeCountRef.current = tribeCount;
 
+  // Sick and vacation days count like rest days, so every streak in the app stays safe.
+  const checkinsWithPauses = useMemo(() => {
+    const today = dayKey(new Date());
+    const paused = pausedDays(modes, today);
+    if (paused.size === 0) return s.checkins;
+    const has = new Set(s.checkins.map((c) => c.day));
+    const extra: Checkin[] = [...paused].filter((d) => !has.has(d)).map((day) => ({ day, item_id: REST_ID, version: 'standard' }));
+    return [...s.checkins, ...extra];
+  }, [s.checkins, modes]);
+
   const api = useMemo<SessionApi>(() => ({
     ...s,
+    checkins: checkinsWithPauses,
+    lifeMode: activeMode(modes, dayKey(new Date())),
+    async startMode(kind, days) {
+      if (!s.user) return;
+      const today = dayKey(new Date());
+      const current = activeMode(modes, today);
+      const updates: LifeMode[] = [];
+      // A new mode replaces the running one (which ends yesterday, or is dropped if it began today).
+      if (current) updates.push({ ...current, end_day: addDays(today, -1) });
+      const next: LifeMode = { id: crypto.randomUUID(), mode: kind, start_day: today, end_day: addDays(today, days - 1) };
+      updates.push(next);
+      setModes((p) => [...p.filter((m) => !updates.some((u) => u.id === m.id)), ...updates]);
+      for (const u of updates) await backend.saveMode(s.user.id, u).catch(() => {});
+    },
+    async endMode() {
+      if (!s.user) return;
+      const today = dayKey(new Date());
+      const current = activeMode(modes, today);
+      if (!current) return;
+      // Ending today keeps today paused; the mode stops tomorrow.
+      const ended = { ...current, end_day: addDays(today, -1) };
+      setModes((p) => p.map((m) => (m.id === ended.id ? ended : m)));
+      await backend.saveMode(s.user.id, ended).catch(() => {});
+    },
     mode: backend.mode,
     today: dayKey(new Date()),
     wake: s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE,
@@ -268,7 +308,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, experiments]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, experiments, modes, checkinsWithPauses]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

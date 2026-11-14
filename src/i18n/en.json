@@ -957,5 +957,40 @@
     "remove": "Remove",
     "none": "No experiments yet.",
     "oneAtATime": "One experiment at a time keeps the result clear."
+  },
+  "modes": {
+    "title": "Life mode",
+    "chip": "Mode",
+    "length": "For how long",
+    "days": "{n} days",
+    "week": "1 week",
+    "twoWeeks": "2 weeks",
+    "start": "Start {mode}",
+    "until": "until {date}",
+    "end": "End",
+    "jetLag": "Open jet-lag plan",
+    "intro": "Life changes. Your plan can too.",
+    "kinds": {
+      "deadline": {
+        "title": "Deadline week",
+        "body": "Tiny versions only.",
+        "active": "Tiny versions are on. Streak counts as usual."
+      },
+      "travel": {
+        "title": "Travel",
+        "body": "Jet-lag plan, smaller patches.",
+        "active": "Try the tiny versions. Your reminders follow your time zone."
+      },
+      "sick": {
+        "title": "Sick",
+        "body": "Gentle only. Streak safe.",
+        "active": "Movement patches are off. Your streak is safe and reminders are paused."
+      },
+      "vacation": {
+        "title": "Vacation",
+        "body": "Pause everything.",
+        "active": "Everything is paused. Your streak is safe and reminders are off."
+      }
+    }
   }
 }

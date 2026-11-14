@@ -1,6 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
-import type { Experiment } from '../engine';
+import type { Experiment, LifeMode } from '../engine';
 import { AuthError, type AuthErrorCode, type Backend, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
@@ -148,6 +148,14 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async deleteExperiment(userId, id) {
       check(await sb.from('experiments').delete().eq('id', id).eq('user_id', userId));
+    },
+    async loadModes(userId) {
+      const res = await sb.from('life_modes').select('id, mode, start_day, end_day').eq('user_id', userId).order('start_day', { ascending: false }).limit(60);
+      if (res.error) return []; // table missing until migrations-modes.sql is run
+      return res.data as LifeMode[];
+    },
+    async saveMode(userId, m) {
+      check(await sb.from('life_modes').upsert({ ...m, user_id: userId }));
     },
     async latestMessage() {
       const res = await sb.rpc('latest_message');

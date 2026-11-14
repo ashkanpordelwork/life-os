@@ -28,6 +28,7 @@ import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
 import { DailyCheckIn } from '../components/DailyCheckIn';
+import { MODE_ICON, ModeBanner, ModePicker } from '../components/LifeModes';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
 
 const TOUR_STEPS: TourStep[] = [
@@ -59,7 +60,7 @@ function greeting(name: string, firstDay: boolean): string {
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan } = useSession();
+  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
   const { message, dismissMessage, user, logs, logToday } = useSession();
@@ -75,8 +76,9 @@ export function Today() {
   }, [user]);
   const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
-  const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
-  const [tiny, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
+  const [sheet, setSheet] = useState<'busy' | 'rest' | 'mode' | null>(null);
+  const [tinyPref, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
+  const tiny = tinyPref || lifeMode?.mode === 'deadline';
 
   const stats = useMemo(() => {
     const answers = profile?.answers ?? {};
@@ -94,7 +96,12 @@ export function Today() {
   const day = sprintDay(startDay, today, sprint.length_days);
   const doneToday = new Set(checkins.filter((c) => c.day === today).map((c) => c.item_id));
   // In the order of the user's day (wake and bed time).
-  const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined).sort((a, b) => dayOrder(a, wake, bed) - dayOrder(b, wake, bed));
+  // Life modes: deadline week forces tiny versions; sick mode sets movement and hard patches aside.
+  const deadline = lifeMode?.mode === 'deadline';
+  const sick = lifeMode?.mode === 'sick';
+  const items = sprint.patch_ids.map(getItem).filter((x) => x !== undefined)
+    .filter((i) => !(sick && (i.area === 'Movement' || i.safety_rules.includes('health_lock'))))
+    .sort((a, b) => dayOrder(a, wake, bed) - dayOrder(b, wake, bed));
   const theme = sprintTheme(sprint);
   // Weekly patches (e.g. strength 3× a week) are optional on any given day: they show their week count
   // and only count toward today's progress on the days they are done.
@@ -105,7 +112,8 @@ export function Today() {
   const doneCount = dailyList.filter((i) => doneToday.has(i.id)).length;
   const allDone = dailyList.length > 0 && doneCount === dailyList.length;
   const firstDay = day === 1 && !checkins.some((c) => c.item_id !== REST_ID);
-  const resting = checkins.some((c) => c.day === today && c.item_id === REST_ID);
+  // Sick days are paused for the streak, but gentle patches stay doable (not dimmed).
+  const resting = !sick && checkins.some((c) => c.day === today && c.item_id === REST_ID);
   const restAllowed = canRestToday(checkins, today) && doneCount === 0;
 
   const saveTiny = (on: boolean) => {
@@ -134,6 +142,7 @@ export function Today() {
     <Screen>
       {tourOn && <GuidedTour steps={TOUR_STEPS} onDone={endTour} />}
       <ProBanner plan={plan} onOpen={() => navigate('/pro')} />
+      {lifeMode && <ModeBanner mode={lifeMode} onEnd={endMode} onJetLag={() => navigate('/tool/jet-lag')} />}
       <header className="today__header">
         <div className="today__greeting">
           <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
@@ -200,11 +209,16 @@ export function Today() {
           <MetaChip icon="verified_user" label={t('today.restOn')} />
         ) : (
           <>
-            <MetaChip icon="bolt" label={t(tiny ? 'today.tinyOn' : 'today.tiny')} onClick={onTinyChip} pressed={tiny} />
-            {restAllowed && <MetaChip icon="bedtime" label={t('today.rest')} onClick={() => setSheet('rest')} />}
+            <MetaChip icon="bolt" label={t(tiny ? 'today.tinyOn' : 'today.tiny')} onClick={deadline ? undefined : onTinyChip} pressed={tiny} />
+            {restAllowed && !lifeMode && <MetaChip icon="bedtime" label={t('today.rest')} onClick={() => setSheet('rest')} />}
           </>
         )}
+        <MetaChip icon={lifeMode ? MODE_ICON[lifeMode.mode] : 'hourglass'} label={lifeMode ? t(`modes.kinds.${lifeMode.mode}.title`) : t('modes.chip')} onClick={() => setSheet('mode')} pressed={!!lifeMode} />
       </div>
+
+      <BottomSheet open={sheet === 'mode'} onClose={() => setSheet(null)} eyebrow={t('modes.intro').toUpperCase()} title={t('modes.title')}>
+        <ModePicker current={lifeMode} onStart={async (k, d) => { setSheet(null); await startMode(k, d); }} />
+      </BottomSheet>
 
       <BottomSheet open={!!message} onClose={dismissMessage} eyebrow={t('nav.today').toUpperCase()} title={message?.title ?? ''}>
         <p className="text-body-m text-secondary">{message?.body}</p>

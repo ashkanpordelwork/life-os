@@ -2,6 +2,7 @@
 // 1. The daily nudge at the user's chosen time.
 // 2. Smart reminders: a push at each patch's own time (times worked out by the app, saved in reminders.patch_times).
 // 3. Tribe: a push when someone sends you a high five.
+// Sick and vacation modes pause 1 and 2.
 // Called every 10 minutes by pg_cron (see supabase/cron.sql). Secrets (Edge Functions -> Secrets):
 //   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, CRON_SECRET
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase automatically.
@@ -70,6 +71,14 @@ Deno.serve(async (req) => {
       ? (r.patch_times ?? []).filter((p) => inWindow(local.minutes, toMin(p.at)))
       : [];
     if (!dailyDue && patchesDue.length === 0) continue;
+
+    // Sick or vacation mode: no patch reminders (table exists after migrations-modes.sql).
+    const { data: paused } = await sb.from('life_modes').select('id').eq('user_id', r.user_id)
+      .in('mode', ['sick', 'vacation']).lte('start_day', local.date).gte('end_day', local.date).limit(1);
+    if (paused && paused.length) {
+      if (dailyDue) await sb.from('reminders').update({ last_sent_on: local.date }).eq('user_id', r.user_id);
+      continue;
+    }
 
     const { data: sprint } = await sb.from('sprints').select('patch_ids').eq('user_id', r.user_id).order('number', { ascending: false }).limit(1).maybeSingle();
     const { data: today } = await sb.from('checkins').select('item_id').eq('user_id', r.user_id).eq('day', local.date);

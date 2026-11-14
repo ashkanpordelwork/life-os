@@ -1,5 +1,5 @@
 import type { Area, HealthAnswers, NeedTag, Sprint, VersionKey } from '../data/types';
-import type { AnswerIndex, DailyLog, Experiment } from '../engine';
+import type { AnswerIndex, DailyLog, Experiment, LifeMode } from '../engine';
 
 export interface UserInfo {
   id: string;
@@ -134,6 +134,9 @@ export interface Backend {
   loadExperiments(userId: string): Promise<Experiment[]>;
   saveExperiment(userId: string, e: Experiment): Promise<void>;
   deleteExperiment(userId: string, id: string): Promise<void>;
+  /** Life modes (travel, sick, deadline, vacation). */
+  loadModes(userId: string): Promise<LifeMode[]>;
+  saveMode(userId: string, mode: LifeMode): Promise<void>;
   /** The latest in-app message from the admin, if any. */
   latestMessage(): Promise<Announcement | null>;
   deletePushSubscription(userId: string, endpoint: string): Promise<void>;
