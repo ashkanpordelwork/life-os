@@ -17,7 +17,7 @@ import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { Area } from '../data/types';
 import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, type AnswerIndex } from '../engine';
-import { t } from '../i18n';
+import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
@@ -28,6 +28,7 @@ import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
 import { DailyCheckIn } from '../components/DailyCheckIn';
+import { CoachTeaser } from '../components/CoachTeaser';
 import { MODE_ICON, ModeBanner, ModePicker } from '../components/LifeModes';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
 
@@ -76,7 +77,7 @@ export function Today() {
   }, [user]);
   const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
-  const [sheet, setSheet] = useState<'busy' | 'rest' | 'mode' | null>(null);
+  const [sheet, setSheet] = useState<'busy' | 'rest' | 'mode' | 'coach' | null>(null);
   const [tinyPref, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
   const tiny = tinyPref || lifeMode?.mode === 'deadline';
 
@@ -199,6 +200,8 @@ export function Today() {
 
       <DailyCheckIn log={logs.find((l) => l.day === today)} onLog={logToday} />
 
+      <CoachTeaser onOpen={() => setSheet('coach')} />
+
       <SprintStrip label={theme ? `Sprint ${pad2(sprint.number)} · ${theme}` : `Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
@@ -215,6 +218,19 @@ export function Today() {
         )}
         <MetaChip icon={lifeMode ? MODE_ICON[lifeMode.mode] : 'hourglass'} label={lifeMode ? t(`modes.kinds.${lifeMode.mode}.title`) : t('modes.chip')} onClick={() => setSheet('mode')} pressed={!!lifeMode} />
       </div>
+
+      <BottomSheet open={sheet === 'coach'} onClose={() => setSheet(null)} eyebrow={t('coach.eyebrow').toUpperCase()} title={t('coach.sheetTitle')} decoration={<Mascot name="core-thinking" size={120} />}>
+        <p className="text-body-m text-secondary">{t('coach.sheetBody')}</p>
+        <ul className="coach-list">
+          {tList('coach.points').map((x, i) => (
+            <motion.li key={x} className="text-body-m text-primary" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ ...motionTokens.page, delay: 0.1 + i * motionTokens.stagger }}>
+              <Icon name={(['ai_chat', 'ai_brain', 'ai_magic'] as const)[i % 3]} size={20} /> {x}
+            </motion.li>
+          ))}
+        </ul>
+        <p className="text-body-s text-secondary">{t('coach.privacy')}</p>
+        <Button block label={t('coach.ok')} onClick={() => setSheet(null)} />
+      </BottomSheet>
 
       <BottomSheet open={sheet === 'mode'} onClose={() => setSheet(null)} eyebrow={t('modes.intro').toUpperCase()} title={t('modes.title')}>
         <ModePicker current={lifeMode} onStart={async (k, d) => { setSheet(null); await startMode(k, d); }} />

@@ -13,7 +13,8 @@ import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
 import { SettingRow } from '../components/SettingRow';
 import { TextField } from '../components/TextField';
-import { addDays, timeAgo, tribeStreak } from '../engine';
+import { addDays, timeAgo, tribeChallenge, tribeStreak } from '../engine';
+import { Confetti } from '../components/Confetti';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
@@ -192,6 +193,14 @@ function TribeBody({ detail, me, today, onInvite, copied, onHighFive }: {
   const hue = (id: string) => HUES[Math.max(0, detail.members.indexOf(id)) % HUES.length];
   const active = detail.events.filter((e) => e.kind === 'active');
   const streak = tribeStreak(active, detail.members.length, today);
+  const challenge = tribeChallenge(active, detail.members.length, today);
+  // Celebrate once per Tribe per week when the challenge is reached.
+  const cheerKey = `lifeos.tribeCheer.${detail.tribe.id}.${today.slice(0, 7)}-${Math.floor(Number(today.slice(8)) / 7)}`;
+  const [cheer, setCheer] = useState(false);
+  useEffect(() => {
+    if (!challenge.reached) return;
+    try { if (localStorage.getItem(cheerKey) !== '1') { localStorage.setItem(cheerKey, '1'); setCheer(true); haptic(40); } } catch { /* ignore */ }
+  }, [challenge.reached, cheerKey]);
   const activeToday = new Set(active.filter((e) => e.day === today).map((e) => e.user_id)).size;
   const need = Math.ceil(detail.members.length / 2);
   // Members: me first, then by today's progress.
@@ -207,6 +216,21 @@ function TribeBody({ detail, me, today, onInvite, copied, onHighFive }: {
           <span className="text-display-xl">{streak}</span>
           <span className="text-body-s">{t('tribe.streakBody', { n: activeToday, total: detail.members.length, need })}</span>
         </div>
+      </motion.section>
+
+      <motion.section {...appear(1)} className={`tribe-challenge glass-card${challenge.reached ? ' tribe-challenge--done' : ''}`} aria-labelledby="tribe-challenge">
+        <div className="tribe-challenge__head">
+          <span className="text-mono-label text-brand">{t('tribe.challenge.label')}</span>
+          <span className="text-mono-caption text-secondary">{t('tribe.challenge.last', { n: challenge.lastDone, total: challenge.lastGoal })}</span>
+        </div>
+        <h2 id="tribe-challenge" className="text-title-s text-primary">
+          {challenge.reached ? t('tribe.challenge.done') : t('tribe.challenge.title', { goal: challenge.goal })}
+        </h2>
+        <div className="tribe-challenge__bar" role="progressbar" aria-valuemin={0} aria-valuemax={challenge.goal} aria-valuenow={challenge.done} aria-label={t('tribe.challenge.label')}>
+          <motion.span className="tribe-challenge__fill" initial={{ inlineSize: '0%' }} animate={{ inlineSize: `${Math.min(100, (challenge.done / challenge.goal) * 100)}%` }} transition={{ ...motionTokens.page, delay: 0.2 }} />
+        </div>
+        <span className="text-body-s text-secondary">{t(challenge.reached ? 'tribe.challenge.progressDone' : 'tribe.challenge.progress', { n: challenge.done, total: challenge.goal, left: Math.max(0, challenge.goal - challenge.done) })}</span>
+        {cheer && <Confetti count={30} />}
       </motion.section>
 
       <motion.div {...appear(1)} className="tribe__invite">

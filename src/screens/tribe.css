@@ -47,3 +47,11 @@
 }
 .tribe-five--on { background: var(--color-brand-soft); border-color: var(--color-border-focus); color: var(--color-text-brand); }
 .tribe-five--count { border: 0; background: none; cursor: default; color: var(--color-text-brand); }
+
+/* Weekly Tribe challenge */
+.tribe-challenge { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-16); border-radius: var(--radius-lg); }
+.tribe-challenge--done { border-color: var(--color-status-success); }
+.tribe-challenge__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); }
+.tribe-challenge__bar { display: block; block-size: 10px; border-radius: var(--radius-pill); background: var(--color-bg-subtle); overflow: hidden; }
+.tribe-challenge__fill { display: block; block-size: 100%; border-radius: var(--radius-pill); background: var(--gradient-pro); }
+.tribe-challenge--done .tribe-challenge__fill { background: var(--color-status-success); }

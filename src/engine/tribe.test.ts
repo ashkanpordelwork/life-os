@@ -26,3 +26,13 @@ describe('timeAgo', () => {
     expect(timeAgo('2026-03-08T12:00:00Z', now)).toEqual({ n: 2, unit: 'd' });
   });
 });
+
+describe('tribeChallenge', () => {
+  it('counts active member-days this week against 4 per member', async () => {
+    const { tribeChallenge } = await import('./tribe');
+    // 2026-03-11 is a Wednesday; week starts Monday 2026-03-09.
+    const active = [a('x', '2026-03-09'), a('x', '2026-03-10'), a('y', '2026-03-10'), a('x', '2026-03-10'), a('y', '2026-03-05')];
+    const c = tribeChallenge(active, 2, '2026-03-11');
+    expect(c).toMatchObject({ done: 3, goal: 8, lastDone: 1, reached: false });
+  });
+});

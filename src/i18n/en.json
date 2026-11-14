@@ -796,6 +796,14 @@
       "joined": "{name} joined the Tribe",
       "release": "{name} shipped Sprint {n}",
       "releaseTheme": "{name} shipped Sprint {n} · {theme}"
+    },
+    "challenge": {
+      "label": "This week's challenge",
+      "title": "{goal} active days, together",
+      "done": "Challenge complete. Nice work, Tribe.",
+      "progress": "{n} of {total} active days. {left} to go.",
+      "last": "Last week {n}/{total}",
+      "progressDone": "{n} of {total} active days."
     }
   },
   "admin": {
@@ -1051,5 +1059,21 @@
         ]
       }
     }
+  },
+  "coach": {
+    "aria": "AI Coach, coming soon",
+    "title": "AI Coach",
+    "soon": "Soon",
+    "subtitle": "A personal coach powered by AI. It learns your days.",
+    "eyebrow": "Coming soon",
+    "sheetTitle": "Your AI Coach is on the way",
+    "sheetBody": "Built on AI, trained on the science behind every patch. It reads your patches, streaks and check-ins to help you get better, week by week.",
+    "points": [
+      "Ask anything: “Why do I keep missing evening patches?”",
+      "Personal Release notes at the end of every Sprint",
+      "Smart swaps when life gets busy"
+    ],
+    "privacy": "It will never see your health answers.",
+    "ok": "Can't wait"
   }
 }

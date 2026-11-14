@@ -1,0 +1,38 @@
+.coach {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  inline-size: 100%;
+  padding: var(--space-16);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-area-mind);
+  color: var(--color-text-on-action);
+  text-align: start;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+  box-shadow: var(--shadow-floating);
+}
+.coach__blobs { position: absolute; inset: 0; z-index: -1; }
+.coach__blob { position: absolute; border-radius: 50%; filter: blur(22px); opacity: 0.75; }
+.coach__blob--a { inline-size: 160px; block-size: 160px; inset-block-start: -60px; inset-inline-start: -30px; background: var(--color-area-sleep); }
+.coach__blob--b { inline-size: 150px; block-size: 150px; inset-block-end: -70px; inset-inline-end: -20px; background: var(--color-brand-main); }
+.coach__blob--c { inline-size: 90px; block-size: 90px; inset-block-start: 10px; inset-inline-end: 30%; background: var(--color-area-move); opacity: 0.5; }
+.coach__icon {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  inline-size: 48px; block-size: 48px; border-radius: var(--radius-md);
+  background: var(--color-on-pro-soft); border: 1px solid var(--color-on-pro-soft);
+}
+.coach__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
+.coach__row { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; }
+.coach__soon { padding-block: 2px; padding-inline: var(--space-8); border-radius: var(--radius-pill); background: var(--color-text-on-action); color: var(--color-area-mind); }
+.coach__sub { opacity: 0.9; }
+.coach__shine {
+  position: absolute; inset-block: 0; inset-inline-start: -40%; inline-size: 35%; z-index: 0;
+  background: linear-gradient(100deg, transparent, var(--color-on-pro-soft), transparent);
+  animation: coach-shine 4.5s ease-in-out 1s infinite; pointer-events: none;
+}
+@keyframes coach-shine { 0%, 65% { transform: translateX(0); } 100% { transform: translateX(400%); } }
+@media (prefers-reduced-motion: reduce) { .coach__shine { animation: none; display: none; } }
