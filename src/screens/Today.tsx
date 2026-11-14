@@ -27,6 +27,7 @@ import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
+import { DailyCheckIn } from '../components/DailyCheckIn';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
 
 const TOUR_STEPS: TourStep[] = [
@@ -61,7 +62,7 @@ export function Today() {
   const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
-  const { message, dismissMessage, user } = useSession();
+  const { message, dismissMessage, user, logs, logToday } = useSession();
   // The tour: once per account on this device, or when replayed from You (location state).
   const location = useLocation();
   const replay = !!(location.state as { tour?: boolean } | null)?.tour;
@@ -186,6 +187,8 @@ export function Today() {
           />
         </motion.div>
       ))}
+
+      <DailyCheckIn log={logs.find((l) => l.day === today)} onLog={logToday} />
 
       <SprintStrip label={theme ? `Sprint ${pad2(sprint.number)} · ${theme}` : `Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}

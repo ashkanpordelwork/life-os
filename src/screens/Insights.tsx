@@ -5,6 +5,7 @@ import { AnimatedNumber } from '../components/AnimatedNumber';
 import { GlassPanel } from '../components/GlassPanel';
 import { IconTile } from '../components/IconTile';
 import { MetaChip } from '../components/MetaChip';
+import { ListRow } from '../components/ListRow';
 import { Progress } from '../components/Progress';
 import { Screen, Spacer } from '../components/Screen';
 import { StatChip } from '../components/StatChip';
@@ -13,7 +14,7 @@ import { getItem } from '../data';
 import { AREAS, type Area, type ChecklistItem } from '../data/types';
 import {
   LEVEL_UP_COMPLETION, areaScoresFromAnswers, bestIndex, currentStreak, longestStreak, overallScore,
-  patchRates, sprintCompletion, totalActiveDays, weekdayCounts, type AnswerIndex,
+  patchRates, sprintCompletion, topEffects, totalActiveDays, weekdayCounts, type AnswerIndex,
 } from '../engine';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
@@ -33,7 +34,8 @@ const WEEKDAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', '
  */
 export function Insights() {
   const navigate = useNavigate();
-  const { sprint, checkins, profile, today } = useSession();
+  const { sprint, checkins, profile, today, logs } = useSession();
+  const effects = useMemo(() => topEffects([...new Set(checkins.map((c) => c.item_id))].filter((id) => !!getItem(id)), checkins, logs), [checkins, logs]);
   const [pickedDay, setPickedDay] = useState<number | null>(null);
 
   const data = useMemo(() => {
@@ -151,6 +153,32 @@ export function Insights() {
         <StatChip fill icon="verified_user" value={<AnimatedNumber value={data.longest} />} label={t('insights.longest')} />
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={data.total} />} label={t('today.days')} />
       </motion.div>
+
+      {/* What works for you (daily check-in vs patches) */}
+      <motion.section {...appear(4)} className="insights__section" aria-labelledby="ins-works">
+        <div className="insights__row-head">
+          <h2 id="ins-works" className="text-title-m text-primary">{t('works.title')}</h2>
+        </div>
+        <GlassPanel gap={14}>
+          {effects.length === 0 && <p className="text-body-s text-secondary">{t('works.empty', { n: logs.length })}</p>}
+          {effects.map((e) => {
+            const item = getItem(e.itemId);
+            const up = e.change > 0;
+            return (
+              <div key={`${e.itemId}-${e.metric}`} className="works__row">
+                {item && <IconTile glyph={item.glyph} size="M" />}
+                <div className="works__mid">
+                  <span className="text-body-m-strong text-primary">{item?.title ?? e.itemId}</span>
+                  <span className="text-body-s text-secondary">{t('works.line', { metric: t(`checkin.short.${e.metric}`).toLowerCase(), n: e.nWith })}</span>
+                </div>
+                <span className={`works__delta text-mono-value${up ? ' works__delta--up' : ''}`}>{up ? '+' : '−'}{Math.round(Math.abs(e.change) * 100)}%</span>
+              </div>
+            );
+          })}
+          <p className="text-mono-caption text-secondary">{t('works.caveat')}</p>
+        </GlassPanel>
+        <ListRow icon="science" title={t('experiments.title')} subtitle={t('experiments.subtitle')} onClick={() => navigate('/experiments')} />
+      </motion.section>
 
       {/* What we notice */}
       <motion.section {...appear(4)} className="insights__section" aria-labelledby="ins-notes">

@@ -905,5 +905,57 @@
     "start": "Show me",
     "finish": "Start my day",
     "tapHint": "Tap the circle"
+  },
+  "checkin": {
+    "title": "How's today?",
+    "doneTitle": "Logged for today",
+    "edit": "Edit",
+    "close": "Done",
+    "low": "Low",
+    "high": "High",
+    "metrics": {
+      "energy": "Energy",
+      "mood": "Mood",
+      "sleep": "Last night's sleep",
+      "focus": "Focus"
+    },
+    "short": {
+      "energy": "Energy",
+      "mood": "Mood",
+      "sleep": "Sleep",
+      "focus": "Focus"
+    }
+  },
+  "works": {
+    "title": "What works for you",
+    "empty": "Log how you feel on Today for about a week. Then we show which patches lift your energy, mood, sleep and focus. ({n} days logged)",
+    "line": "Your {metric} on days you did it ({n} days)",
+    "caveat": "A pattern from your own days, not proof."
+  },
+  "experiments": {
+    "title": "Experiments",
+    "subtitle": "Test one patch on yourself",
+    "topTitle": "Experiments",
+    "intro": "Pick one patch and one thing to watch. Do it for a week or two, keep logging, and see what changes compared to the days before.",
+    "newTitle": "New experiment",
+    "patch": "Patch",
+    "metric": "Watch",
+    "days": "Length",
+    "daysN": "{n} days",
+    "start": "Start experiment",
+    "active": "Running",
+    "finished": "Finished",
+    "dayOf": "Day {n} of {total}",
+    "doneDays": "Done on {n} days",
+    "result": {
+      "up": "Your {metric} went up {p}% compared to the {days} days before.",
+      "down": "Your {metric} went down {p}% compared to the {days} days before.",
+      "same": "No real change in your {metric}.",
+      "wait": "Keep logging. We need at least 3 logged days during and before."
+    },
+    "stop": "Stop",
+    "remove": "Remove",
+    "none": "No experiments yet.",
+    "oneAtATime": "One experiment at a time keeps the result clear."
   }
 }

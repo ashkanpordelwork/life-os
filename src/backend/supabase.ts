@@ -1,5 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
+import type { Experiment } from '../engine';
 import { AuthError, type AuthErrorCode, type Backend, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
@@ -128,6 +129,25 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async deletePushSubscription(_userId, endpoint) {
       check(await sb.from('push_subscriptions').delete().eq('endpoint', endpoint));
+    },
+    async loadLogs(userId) {
+      const res = await sb.from('daily_logs').select('day, energy, mood, sleep, focus').eq('user_id', userId).order('day', { ascending: false }).limit(400);
+      if (res.error) return []; // table missing until migrations-experiments.sql is run
+      return (res.data ?? []).map((r) => ({ day: r.day, energy: r.energy ?? undefined, mood: r.mood ?? undefined, sleep: r.sleep ?? undefined, focus: r.focus ?? undefined }));
+    },
+    async saveLog(userId, log) {
+      check(await sb.from('daily_logs').upsert({ user_id: userId, day: log.day, energy: log.energy ?? null, mood: log.mood ?? null, sleep: log.sleep ?? null, focus: log.focus ?? null, updated_at: new Date().toISOString() }));
+    },
+    async loadExperiments(userId) {
+      const res = await sb.from('experiments').select('id, item_id, metric, start_day, days').eq('user_id', userId).order('created_at', { ascending: false });
+      if (res.error) return [];
+      return res.data as Experiment[];
+    },
+    async saveExperiment(userId, e) {
+      check(await sb.from('experiments').upsert({ ...e, user_id: userId }));
+    },
+    async deleteExperiment(userId, id) {
+      check(await sb.from('experiments').delete().eq('id', id).eq('user_id', userId));
     },
     async latestMessage() {
       const res = await sb.rpc('latest_message');

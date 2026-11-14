@@ -1,5 +1,5 @@
 import type { Area, HealthAnswers, NeedTag, Sprint, VersionKey } from '../data/types';
-import type { AnswerIndex } from '../engine';
+import type { AnswerIndex, DailyLog, Experiment } from '../engine';
 
 export interface UserInfo {
   id: string;
@@ -128,6 +128,12 @@ export interface Backend {
   tribes: TribeApi | null;
   /** Admin dashboard (live app only). */
   admin: AdminApi | null;
+  /** Daily check-in and self-experiments. */
+  loadLogs(userId: string): Promise<DailyLog[]>;
+  saveLog(userId: string, log: DailyLog): Promise<void>;
+  loadExperiments(userId: string): Promise<Experiment[]>;
+  saveExperiment(userId: string, e: Experiment): Promise<void>;
+  deleteExperiment(userId: string, id: string): Promise<void>;
   /** The latest in-app message from the admin, if any. */
   latestMessage(): Promise<Announcement | null>;
   deletePushSubscription(userId: string, endpoint: string): Promise<void>;

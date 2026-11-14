@@ -10,3 +10,4 @@ export * from './timeHint';
 export * from './insights';
 export * from './jetlag';
 export * from './tribe';
+export * from './experiments';

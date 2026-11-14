@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { backend, type Announcement, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
-import { REST_ID, dayKey, patchTimes } from '../engine';
+import { REST_ID, dayKey, patchTimes, type DailyLog, type Experiment, type Metric } from '../engine';
 import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 
@@ -55,6 +55,12 @@ interface SessionApi extends SessionState {
   /** Latest admin message the user hasn't dismissed yet. */
   message: Announcement | null;
   dismissMessage: () => void;
+  /** Daily check-in and self-experiments. */
+  logs: DailyLog[];
+  logToday: (patch: Partial<Omit<DailyLog, 'day'>>) => Promise<void>;
+  experiments: Experiment[];
+  startExperiment: (itemId: string, metric: Metric, days: number) => Promise<void>;
+  stopExperiment: (id: string) => Promise<void>;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -66,6 +72,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [tribeCount, setTribeCount] = useState(0);
   const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
   const [latest, setLatest] = useState<Announcement | null>(null);
+  const [logs, setLogs] = useState<DailyLog[]>([]);
+  const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
   draftRef.current = draft;
@@ -95,6 +103,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (sprint && sprint.length_days !== SPRINT_DAYS) sprint = { ...sprint, length_days: SPRINT_DAYS };
     setS({ ready: true, user, profile, sprint, checkins, reminders });
     backend.latestMessage().then(setLatest).catch(() => setLatest(null));
+    backend.loadLogs(user.id).then(setLogs).catch(() => setLogs([]));
+    backend.loadExperiments(user.id).then(setExperiments).catch(() => setExperiments([]));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
       backend.tribes.myTribes(user.id).then((t) => setTribeCount(t.length)).catch(() => {});
@@ -153,6 +163,26 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
     plan: planState(s.profile),
     isAdmin: !!s.profile?.is_admin,
+    logs,
+    async logToday(patch) {
+      if (!s.user) return;
+      const day = dayKey(new Date());
+      const next: DailyLog = { ...(logs.find((l) => l.day === day) ?? { day }), ...patch, day };
+      setLogs((p) => [...p.filter((l) => l.day !== day), next]);
+      await backend.saveLog(s.user.id, next).catch(() => {});
+    },
+    experiments,
+    async startExperiment(itemId, metric, days) {
+      if (!s.user) return;
+      const e: Experiment = { id: crypto.randomUUID(), item_id: itemId, metric, start_day: dayKey(new Date()), days };
+      setExperiments((p) => [e, ...p]);
+      await backend.saveExperiment(s.user.id, e).catch(() => {});
+    },
+    async stopExperiment(id) {
+      if (!s.user) return;
+      setExperiments((p) => p.filter((x) => x.id !== id));
+      await backend.deleteExperiment(s.user.id, id).catch(() => {});
+    },
     message: latest && latest.id > seenId ? latest : null,
     dismissMessage() {
       if (!latest) return;
@@ -238,7 +268,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, experiments]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

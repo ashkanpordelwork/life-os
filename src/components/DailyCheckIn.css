@@ -1,0 +1,25 @@
+.checkin { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
+.checkin__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); min-block-size: 28px; }
+.checkin__rows { display: flex; flex-direction: column; gap: 0; }
+.checkin__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.checkin__label { flex: 1; min-inline-size: 0; }
+.checkin__dots { display: flex; gap: var(--space-4); }
+.checkin__dot {
+  inline-size: var(--size-touch); block-size: var(--size-touch); padding: 0; border: 0; background: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; position: relative;
+}
+.checkin__dot::before {
+  content: ''; inline-size: 22px; block-size: 22px; border-radius: 50%;
+  border: 1.5px solid var(--color-border-default); background: var(--color-surface-card);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.checkin__dot--filled::before { background: var(--color-brand-soft); border-color: var(--color-brand-soft); }
+.checkin__dot--on::before { background: var(--color-action-primary); border-color: var(--color-action-primary); }
+.checkin__dot:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; border-radius: var(--radius-pill); }
+.checkin__scale { display: flex; justify-content: space-between; padding-inline-start: 40%; }
+.checkin__summary { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.checkin__chip {
+  display: inline-flex; align-items: center; gap: var(--space-4);
+  padding-block: var(--space-4); padding-inline: var(--space-8);
+  border-radius: var(--radius-pill); background: var(--color-brand-soft); color: var(--color-text-brand);
+}
