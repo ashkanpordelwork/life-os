@@ -884,7 +884,26 @@
       "tribe": {
         "title": "Better with a Tribe",
         "body": "Join your team, see each other's days, and send a high five."
+      },
+      "intro": {
+        "title": "Welcome to Life OS",
+        "body": "A 30-second tour of how small daily patches add up."
+      },
+      "check": {
+        "title": "Try it now",
+        "body": "Tap the circle to tick your first patch. It's that simple."
+      },
+      "checkDone": {
+        "title": "Nice. Day 1 is on the board.",
+        "body": "Untick any time. Every day with one patch keeps your streak."
+      },
+      "finale": {
+        "title": "You're set.",
+        "body": "One patch at a time. See you tomorrow."
       }
-    }
+    },
+    "start": "Show me",
+    "finish": "Start my day",
+    "tapHint": "Tap the circle"
   }
 }

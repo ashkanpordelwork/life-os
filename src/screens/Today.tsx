@@ -29,12 +29,15 @@ import { ProBanner } from '../components/ProBanner';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
 
 const TOUR_STEPS: TourStep[] = [
-  { target: 'patches', mascot: 'core-pointing' },
-  { target: 'tiny', mascot: 'rest-busy-day' },
-  { target: 'tools', mascot: 'morning-breathing' },
-  { target: 'roadmap', mascot: 'core-curious' },
-  { target: 'progress', mascot: 'milestone-small-win' },
-  { target: 'tribe', mascot: 'milestone-welcome-back' },
+  { key: 'intro', mascot: 'core-welcome' },
+  { key: 'patches', target: 'patches', mascot: 'core-pointing' },
+  { key: 'check', selector: '[data-tour="patches"] .patch-card__check', action: 'tap', mascot: 'core-pointing' },
+  { key: 'tiny', target: 'tiny', mascot: 'rest-busy-day' },
+  { key: 'tools', target: 'tools', mascot: 'morning-breathing' },
+  { key: 'roadmap', target: 'roadmap', mascot: 'core-curious' },
+  { key: 'progress', target: 'progress', mascot: 'milestone-small-win' },
+  { key: 'tribe', target: 'tribe', mascot: 'milestone-welcome-back' },
+  { key: 'finale', mascot: 'milestone-all-done' },
 ];
 const tourKey = (uid: string) => `lifeos.tour.v1.${uid}`;
 

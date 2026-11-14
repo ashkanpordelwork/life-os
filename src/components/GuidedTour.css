@@ -1,33 +1,70 @@
 /* Guided tour (designed in code) */
-.tour { position: fixed; inset: 0; z-index: 90; pointer-events: auto; }
-.tour__spot {
+.tour { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+/* Only the veil (outside the hole) and the card catch taps; the hole lets taps reach the page. */
+.tour__veil, .tour__card { pointer-events: auto; }
+.tour__veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-text-primary) 52%, transparent);
+  -webkit-backdrop-filter: blur(3px) saturate(0.85);
+  backdrop-filter: blur(3px) saturate(0.85);
+}
+.tour__ring {
   position: fixed;
-  border-radius: var(--radius-lg);
-  /* Everything around the spotlight is dimmed with the text colour at 55%. */
-  box-shadow: 0 0 0 9999px color-mix(in srgb, var(--color-text-primary) 55%, transparent);
-  outline: 2px solid var(--color-action-primary);
-  outline-offset: 2px;
-  animation: tour-breathe 2.4s ease-in-out infinite;
   pointer-events: none;
+  box-shadow: 0 0 0 2px var(--color-action-primary), 0 0 24px 4px color-mix(in srgb, var(--color-brand-main) 45%, transparent);
 }
-@keyframes tour-breathe {
-  0%, 100% { outline-color: var(--color-action-primary); }
-  50% { outline-color: var(--color-brand-soft); }
+.tour__pulse {
+  position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--color-action-primary);
+  animation: tour-pulse 1.8s ease-out infinite;
 }
+@keyframes tour-pulse { 0% { opacity: 0.9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.12); } }
+/* "Tap here" ripples, centred on the element. */
+.tour__tap { position: absolute; inset-block-start: 50%; inset-inline-start: 50%; translate: -50% -50%; }
+.tour__tap span {
+  position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
+  inline-size: 22px; block-size: 22px; margin: -11px 0 0 -11px; border-radius: 50%;
+  background: var(--color-action-primary); opacity: 0.55;
+  animation: tour-tap 1.4s ease-out infinite;
+}
+.tour__tap span + span { animation-delay: 0.7s; }
+@keyframes tour-tap { 0% { transform: scale(0.6); opacity: 0.6; } 100% { transform: scale(2.8); opacity: 0; } }
+
 .tour__card {
   position: fixed;
-  inset-inline: var(--space-16);
-  max-inline-size: 360px;
-  margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
+  gap: var(--space-16);
   padding: var(--space-16);
   border-radius: var(--radius-xl);
+  background: var(--color-surface-card);
   box-shadow: var(--shadow-floating);
+  touch-action: pan-y;
+  cursor: grab;
 }
-.tour__head { display: flex; align-items: center; gap: var(--space-12); }
+.tour__card--center { inset-block-start: 50%; inset-inline-start: 50%; translate: -50% -50%; padding: var(--space-24) var(--space-20) var(--space-20); }
+.tour__arrow {
+  position: absolute; inline-size: 16px; block-size: 16px; margin-inline-start: -8px;
+  background: var(--color-surface-card); rotate: 45deg; border-radius: 3px;
+}
+.tour__arrow--up { inset-block-start: -7px; }
+.tour__arrow--down { inset-block-end: -7px; }
+.tour__hero { display: flex; justify-content: center; }
+.tour__head { display: flex; align-items: flex-start; gap: var(--space-12); }
+.tour__mascot { flex-shrink: 0; }
 .tour__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
-.tour__actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
-.tour__actions > :last-child { min-inline-size: 120px; }
-@media (prefers-reduced-motion: reduce) { .tour__spot { animation: none; } }
+.tour__text--center { text-align: center; align-items: center; }
+.tour__title span { display: inline-block; white-space: pre; }
+.tour__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.tour__dots { display: flex; align-items: center; gap: 5px; }
+.tour__dot { display: block; inline-size: 6px; block-size: 6px; border-radius: var(--radius-pill); background: var(--color-border-default); }
+.tour__dot--done { background: var(--color-brand-soft); }
+.tour__dot--on { inline-size: 18px; background: var(--color-action-primary); }
+.tour__actions { display: flex; align-items: center; gap: var(--space-8); }
+.tour__actions .btn { min-inline-size: 104px; }
+.tour__hint { padding-inline: var(--space-8); animation: tour-blink 1.6s ease-in-out infinite; }
+@keyframes tour-blink { 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) {
+  .tour__pulse, .tour__tap span, .tour__hint { animation: none; }
+}
