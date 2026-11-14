@@ -38,6 +38,12 @@ export interface ReminderPrefs {
   remind_at: string;
   /** IANA time zone, e.g. Europe/London */
   tz: string;
+  /** Push at each patch's own time (needs push_enabled). */
+  patch_push?: boolean;
+  /** Push when someone in a Tribe sends a high five (needs push_enabled). */
+  tribe_push?: boolean;
+  /** Worked out by the app; the server sends at these times. */
+  patch_times?: PatchTime[];
 }
 
 export interface PushSub {
@@ -133,3 +139,6 @@ export interface TribeApi {
   logEvent(userId: string, kind: TribeEventKind, day: string, payload?: Record<string, unknown>): Promise<void>;
   highFive(userId: string, eventId: number, on: boolean): Promise<void>;
 }
+
+/** One patch reminder for today: local time "HH:MM". `cutoff` = the time is a deadline (caffeine, alcohol). */
+export interface PatchTime { id: string; title: string; at: string; cutoff: boolean }

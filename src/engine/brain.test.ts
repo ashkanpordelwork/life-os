@@ -128,3 +128,15 @@ describe('jetLagPlan (book SL15)', () => {
     expect(jetLagPlan('07:00', -8)).toEqual({ direction: 'west', tminLocal: '21:00', light: ['19:00', '20:00'] });
   });
 });
+
+describe('patchTimes (smart reminders)', () => {
+  it('lists patches with a clock time, in order, with cutoffs marked', async () => {
+    const { patchTimes } = await import('./timeHint');
+    const list = patchTimes(['SL11a', 'EX01b', 'SL01', 'SL14'].map(it_), '07:00', '23:00');
+    expect(list).toEqual([
+      { id: 'SL01', title: 'Morning light', at: '07:00', cutoff: false },
+      { id: 'SL11a', title: 'Caffeine cutoff', at: '13:00', cutoff: true },
+      { id: 'SL14', title: 'Screens off', at: '22:00', cutoff: false },
+    ]);
+  });
+});

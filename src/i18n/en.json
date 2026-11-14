@@ -323,7 +323,7 @@
     "topTitle": "Reminders",
     "push": "Push notifications",
     "inapp": "In-app reminder",
-    "time": "Daily reminder at",
+    "time": "Daily nudge at",
     "hint": "One gentle nudge a day. Skipped if you're done or resting.",
     "offTitle": "Notifications off.",
     "deniedSteps": [
@@ -343,7 +343,12 @@
     "failed": "Couldn't turn on push. Try again.",
     "rowSubtitleOn": "Push · {time}",
     "rowSubtitleInapp": "In-app · {time}",
-    "rowSubtitleOff": "Off"
+    "rowSubtitleOff": "Off",
+    "smartTitle": "Smart reminders",
+    "patchPush": "At each patch's time",
+    "tribePush": "Tribe high fives",
+    "smartHint": "A push at your patch's own time, from your wake and bed times. Skipped once it's done or on a rest day.",
+    "smartOff": "Turn on push notifications first."
   },
   "nudge": {
     "text": "{n} patches left today. About {m} min.",

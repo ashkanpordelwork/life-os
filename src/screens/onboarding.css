@@ -19,3 +19,6 @@
 
 /* Pick patches: hint when more than 3 are picked */
 .pick__hint { display: flex; align-items: center; gap: var(--space-8); }
+
+/* Smart reminders schedule */
+.reminders__time { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-12); min-block-size: 32px; }

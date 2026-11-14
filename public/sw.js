@@ -11,7 +11,8 @@ self.addEventListener('push', (event) => {
       icon: self.registration.scope + 'icon-192.png',
       badge: self.registration.scope + 'icon-192.png',
       data: { url: data.url },
-      tag: 'daily-reminder',
+      // Each kind has its own tag (daily, patch-SL01, high-five), so one doesn't replace another.
+      tag: data.tag || 'daily-reminder',
     }),
   );
 });

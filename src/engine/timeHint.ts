@@ -51,3 +51,12 @@ export function dayOrder(item: ChecklistItem, wake: string, bed: string): number
   const step = (b - w) / 5;
   return w + step * SLOT_ORDER[item.slot] + step / 2;
 }
+
+/** Reminder times for today's patches: only patches with a clock time (meal and desk ones have none). */
+export function patchTimes(items: ChecklistItem[], wake: string, bed: string): { id: string; title: string; at: string; cutoff: boolean }[] {
+  return items
+    .map((i) => ({ i, h: timeHint(i, wake, bed) }))
+    .filter((x) => x.h !== null)
+    .sort((a, b) => a.h!.at - b.h!.at)
+    .map(({ i, h }) => ({ id: i.id, title: i.title, at: fromMinutes(h!.at), cutoff: h!.cutoff }));
+}

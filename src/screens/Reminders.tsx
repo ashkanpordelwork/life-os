@@ -52,6 +52,8 @@ export function Reminders() {
     : support === 'unsupported' ? t('reminders.unsupported')
     : '';
 
+  const pushOn = reminders.push_enabled && pushAvailable;
+
   return (
     <Screen>
       <TopBar title={t('reminders.topTitle')} onBack={() => navigate(-1)} />
@@ -59,6 +61,22 @@ export function Reminders() {
         <SettingRow icon="notifications" label={t('reminders.push')} on={reminders.push_enabled && pushAvailable} onChange={togglePush} disabled={!pushAvailable || busy} />
         <SettingRow icon="task_alt" label={t('reminders.inapp')} on={reminders.inapp_enabled} onChange={(on) => saveReminders({ inapp_enabled: on })} />
       </GlassPanel>
+      <p className="text-mono-label text-secondary">{t('reminders.smartTitle')}</p>
+      <GlassPanel gap={8}>
+        <SettingRow icon="timer" label={t('reminders.patchPush')} on={pushOn && reminders.patch_push !== false} onChange={(on) => saveReminders({ patch_push: on })} disabled={!pushOn} />
+        <SettingRow icon="high_five" label={t('reminders.tribePush')} on={pushOn && reminders.tribe_push !== false} onChange={(on) => saveReminders({ tribe_push: on })} disabled={!pushOn} />
+      </GlassPanel>
+      <p className="text-body-s text-secondary">{t(pushOn ? 'reminders.smartHint' : 'reminders.smartOff')}</p>
+      {pushOn && reminders.patch_push !== false && (reminders.patch_times?.length ?? 0) > 0 && (
+        <GlassPanel gap={8}>
+          {reminders.patch_times!.map((p) => (
+            <div key={p.id} className="reminders__time">
+              <span className="text-body-m text-primary">{p.title}</span>
+              <span className="text-mono-value text-primary">{p.cutoff ? t('time.until', { time: p.at }) : p.at}</span>
+            </div>
+          ))}
+        </GlassPanel>
+      )}
       <TextField label={t('reminders.time')} icon="timer" type="time" value={reminders.remind_at} onChange={(e) => e.target.value && saveReminders({ remind_at: e.target.value })} />
       <p className="text-body-s text-secondary">{t('reminders.hint')}</p>
       {note && <p className="text-caption text-secondary">{note}</p>}

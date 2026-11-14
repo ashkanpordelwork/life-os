@@ -1,6 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
-import { AuthError, type AuthErrorCode, type Backend, type HighFive, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -110,11 +110,17 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       else check(await sb.from('checkins').delete().match({ user_id: userId, day: c.day, item_id: c.item_id }));
     },
     async loadReminders(userId) {
-      const row = check(await sb.from('reminders').select('push_enabled, inapp_enabled, remind_at, tz').eq('user_id', userId).maybeSingle());
-      return row ?? null;
+      // Newer columns may be missing until migrations-notify.sql has been run.
+      let res = await sb.from('reminders').select('push_enabled, inapp_enabled, remind_at, tz, patch_push, tribe_push, patch_times').eq('user_id', userId).maybeSingle();
+      if (res.error) res = await sb.from('reminders').select('push_enabled, inapp_enabled, remind_at, tz').eq('user_id', userId).maybeSingle();
+      return (check(res) as ReminderPrefs | null) ?? null;
     },
     async saveReminders(userId, prefs) {
-      check(await sb.from('reminders').upsert({ user_id: userId, ...prefs }));
+      const res = await sb.from('reminders').upsert({ user_id: userId, ...prefs });
+      if (res.error && /column|schema/i.test(res.error.message)) {
+        const { push_enabled, inapp_enabled, remind_at, tz } = prefs;
+        check(await sb.from('reminders').upsert({ user_id: userId, push_enabled, inapp_enabled, remind_at, tz }));
+      } else check(res);
     },
     async savePushSubscription(userId, sub) {
       check(await sb.from('push_subscriptions').upsert({ user_id: userId, ...sub }));

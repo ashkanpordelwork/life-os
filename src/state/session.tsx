@@ -1,8 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { backend, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
-import { SPRINT_DAYS, type Sprint, type VersionKey } from '../data/types';
-import { REST_ID, dayKey } from '../engine';
+import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
+import { REST_ID, dayKey, patchTimes } from '../engine';
+import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 import { planState, type PlanState } from './plan';
 import { buildStatus, dailyPatches, type ShareSettings } from './tribeStatus';
@@ -111,6 +112,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }, 800);
     return () => clearTimeout(id);
   }, [s.user, s.profile, s.sprint, s.checkins, tribeCount, share]);
+
+  // Smart reminders: keep today's patch times on the server, so pushes arrive at each patch's own time.
+  const wakeNow = s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE;
+  const bedNow = s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED;
+  useEffect(() => {
+    if (!s.user || !s.reminders.push_enabled) return;
+    const items = (s.sprint?.patch_ids ?? []).map(getItem).filter((x): x is ChecklistItem => !!x);
+    const times = patchTimes(items, wakeNow, bedNow);
+    if (JSON.stringify(times) === JSON.stringify(s.reminders.patch_times ?? [])) return;
+    const next = { ...s.reminders, patch_times: times, tz: localTimeZone() };
+    setS((p) => ({ ...p, reminders: next }));
+    backend.saveReminders(s.user.id, next).catch(() => {});
+  }, [s.user, s.sprint, s.reminders, wakeNow, bedNow]);
 
   /** Feed events for Tribes. Fire-and-forget. */
   const logTribe = useCallback((kind: TribeEventKind, payload?: Record<string, unknown>) => {
