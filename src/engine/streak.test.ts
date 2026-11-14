@@ -36,10 +36,11 @@ describe('dates', () => {
     expect(addDays('2026-11-30', 1)).toBe('2026-12-01');
   });
 
-  it('Sprint day is 1 on the start day and stops at 14', () => {
+  it('Sprint day is 1 on the start day and stops at the Sprint length (7 by default)', () => {
     expect(sprintDay('2026-11-13', '2026-11-13')).toBe(1);
     expect(sprintDay('2026-11-13', '2026-11-17')).toBe(5);
-    expect(sprintDay('2026-11-01', '2026-12-30')).toBe(14);
+    expect(sprintDay('2026-11-01', '2026-12-30')).toBe(7);
+    expect(sprintDay('2026-11-01', '2026-12-30', 14)).toBe(14);
   });
 
   it('week runs Monday to Sunday', () => {

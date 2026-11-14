@@ -85,11 +85,15 @@ export interface HealthAnswers {
 
 export type SprintTheme = 'Morning basics' | 'Move more' | 'Eat on time' | 'Sleep base' | 'Calm focus';
 
+/** Owner decision: a Sprint lasts 7 days (Figma and engine-spec said 14). */
+export const SPRINT_DAYS = 7;
+
 export interface Sprint {
   number: number;
   /** Picked from the patches by engine/theme.ts. */
   theme: SprintTheme | null;
-  length_days: 14;
+  /** Days in a Sprint. Owner decision: 7 (was 14 in Figma and engine-spec). */
+  length_days: number;
   patch_ids: string[];
   started_at: string;
 }

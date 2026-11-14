@@ -17,25 +17,27 @@ import { motionTokens } from '../styles/motion';
 import { itemAmount } from './flow';
 import './onboarding.css';
 import './library.css';
+import { useSession } from '../state/session';
+import { hasPro } from '../state/plan';
 
 type Tab = 'tools' | 'learn';
 
-const TOOL_GROUPS: { key: string; tools: { to: string; key: string; icon: IconName }[] }[] = [
+const TOOL_GROUPS: { key: string; tools: { to: string; key: string; icon: IconName; pro?: boolean }[] }[] = [
   { key: 'calm', tools: [
     { to: '/tool/sigh', key: 'sigh', icon: 'air' },
     { to: '/tool/nsdr', key: 'nsdr', icon: 'self_improvement' },
   ] },
   { key: 'focusGroup', tools: [
-    { to: '/tool/focus', key: 'focus', icon: 'bolt' },
-    { to: '/tool/woop', key: 'woop', icon: 'task_alt' },
-    { to: '/tool/errors', key: 'errors85', icon: 'insights' },
-    { to: '/tool/self-test', key: 'selfTest', icon: 'timer' },
+    { to: '/tool/focus', key: 'focus', icon: 'bolt', pro: true },
+    { to: '/tool/woop', key: 'woop', icon: 'task_alt', pro: true },
+    { to: '/tool/errors', key: 'errors85', icon: 'insights', pro: true },
+    { to: '/tool/self-test', key: 'selfTest', icon: 'timer', pro: true },
   ] },
   { key: 'nutritionGroup', tools: [
-    { to: '/tool/nutrition', key: 'nutrition', icon: 'restaurant' },
+    { to: '/tool/nutrition', key: 'nutrition', icon: 'restaurant', pro: true },
   ] },
   { key: 'travelGroup', tools: [
-    { to: '/tool/jet-lag', key: 'jetlag', icon: 'event' },
+    { to: '/tool/jet-lag', key: 'jetlag', icon: 'event', pro: true },
   ] },
 ];
 
@@ -58,6 +60,7 @@ export function Library() {
   const [tab, setTab] = useState<Tab>('tools');
   const [area, setArea] = useState<Area | 'All'>('All');
   const [open, setOpen] = useState<ChecklistItem | null>(null);
+  const pro = hasPro(useSession().plan);
   const patches = ITEMS.filter((i) => i.kind === 'patch' && (area === 'All' || i.area === area));
 
   return (
@@ -76,7 +79,7 @@ export function Library() {
               <h2 id={`lib-${g.key}`} className="text-title-m text-primary">{t(`library.${g.key}`)}</h2>
               {g.tools.map((r, i) => (
                 <motion.div key={r.to} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: (gi * 2 + i) * motionTokens.stagger }}>
-                  <ListRow icon={r.icon} title={t(`${r.key}.title`)} subtitle={t(`${r.key}.subtitle`)} onClick={() => navigate(r.to)} />
+                  <ListRow icon={r.pro && !pro ? 'lock' : r.icon} title={t(`${r.key}.title`)} subtitle={r.pro && !pro ? t('library.proOnly') : t(`${r.key}.subtitle`)} onClick={() => navigate(r.pro && !pro ? '/pro' : r.to)} />
                 </motion.div>
               ))}
             </section>
@@ -87,7 +90,7 @@ export function Library() {
       {tab === 'learn' && (
         <>
           <p className="text-body-s text-secondary">{t('library.learnIntro')}</p>
-          <ListRow icon="science" title={t('supps.title')} subtitle={t('supps.subtitle')} onClick={() => navigate('/library/supplements')} />
+          <ListRow icon={pro ? 'science' : 'lock'} title={t('supps.title')} subtitle={pro ? t('supps.subtitle') : t('library.proOnly')} onClick={() => navigate(pro ? '/library/supplements' : '/pro')} />
           <div className="chip-wrap">
             {(['All', ...AREAS] as const).map((a) => (
               <Chip key={a} label={a === 'All' ? t('review.all') : t(`review.areas.${a}`)} selected={area === a} onToggle={() => setArea(a)} />

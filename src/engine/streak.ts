@@ -90,7 +90,7 @@ export function totalActiveDays(checkins: DayCheckin[]): number {
 }
 
 /** Day number inside the Sprint (1 to length). */
-export function sprintDay(startDay: string, today: string, length = 14): number {
+export function sprintDay(startDay: string, today: string, length = 7): number {
   return Math.min(length, Math.max(1, daysBetween(startDay, today) + 1));
 }
 

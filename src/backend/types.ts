@@ -18,6 +18,10 @@ export interface Profile {
   wake_time?: string;
   bed_time?: string;
   health?: HealthAnswers;
+  /** Read-only for the app: set on the server (payment, or the founding-member migration). */
+  plan?: 'free' | 'pro';
+  founder?: boolean;
+  pro_since?: string;
 }
 
 export interface Checkin {

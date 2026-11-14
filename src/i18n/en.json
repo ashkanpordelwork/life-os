@@ -103,7 +103,7 @@
     "title": "You're set.",
     "subtitle": "{count} patches. About {minutes} minutes a day.",
     "panelLabel": "Sprint {nn}",
-    "sprintDef": "Sprint: 14 days with the same patches.",
+    "sprintDef": "Sprint: 7 days with the same patches.",
     "patchDef": "Patch: one small habit you tick off each day.",
     "releaseDef": "Release: at the end, you keep, swap or drop each patch.",
     "cta": "Go to Today",
@@ -246,7 +246,7 @@
     "sleepTimes": "Sleep times",
     "library": "Library",
     "pro": "Life OS Pro",
-    "proSubtitle": "See what Pro adds · free in beta"
+    "proSubtitle": "Your plan and what's included"
   },
   "review": {
     "cta": "Review Sprint {nn}",
@@ -286,7 +286,11 @@
     "levelUpBody": "You did {p}% of days. New, bigger patches are in.",
     "levelLocked": "Level 2 locked",
     "levelLockedBody": "You did {p}% of days. Reach {need}% to unlock bigger patches.",
-    "addPatch": "Add a patch"
+    "addPatch": "Add a patch",
+    "lockedTitle": "Sprint {n} shipped.",
+    "lockedBody": "Sprint {n} and every Sprint after it come with Pro. Or keep your patches for 7 more days.",
+    "keepGoing": "Keep my patches for 7 more days",
+    "seePro": "See Pro"
   },
   "progress": {
     "label": "Progress",
@@ -311,7 +315,8 @@
     "next": "Next",
     "pastText": "Released",
     "nextText": "You pick it at the end of this Sprint.",
-    "plan": "Plan Sprint {n}"
+    "plan": "Plan Sprint {n}",
+    "nextPro": "Opens with Pro."
   },
   "reminders": {
     "topTitle": "Reminders",
@@ -392,7 +397,8 @@
     "calm": "Calm",
     "focusGroup": "Focus",
     "nutritionGroup": "Nutrition",
-    "travelGroup": "Travel"
+    "travelGroup": "Travel",
+    "proOnly": "Pro · tap to see what's in it"
   },
   "sigh": {
     "title": "Physiological sigh",
@@ -457,8 +463,8 @@
     "start": "Let's start",
     "sprint": {
       "label": "Sprint",
-      "title": "14 days, 3 patches.",
-      "body": "A Sprint is 14 days with the same 3 small habits. About 12 minutes a day."
+      "title": "7 days, 3 patches.",
+      "body": "A Sprint is one week with the same small habits. About 12 minutes a day."
     },
     "patch": {
       "label": "Patch",
@@ -478,28 +484,39 @@
   },
   "pro": {
     "topTitle": "Pro",
-    "label": "Life OS Pro",
-    "title": "Go further.",
-    "subtitle": "Free covers the basics. Pro adds bigger patches and deeper tools.",
-    "soon": "Soon",
-    "beta": "Beta: all of Pro is free for now",
-    "cta": "Got it",
+    "title": "Go further, one week at a time.",
+    "subtitle": "Every Sprint, bigger patches and deeper tools.",
+    "status": {
+      "founder": "Founding member",
+      "pro": "Pro",
+      "beta": "Free in beta",
+      "free": "Free plan"
+    },
+    "getTitle": "What you get",
+    "compareTitle": "Free vs Pro",
+    "feature": "Feature",
+    "free": "Free",
+    "pro": "Pro",
+    "oneSprint": "{n} Sprint",
+    "allSprints": "All",
+    "included": "Included",
+    "notIncluded": "Not included",
     "features": {
-      "level2": {
-        "title": "{n} Level 2 patches",
-        "body": "Afternoon sun, screens off, mobility, zone 2 cardio, gratitude and more."
+      "sprints": {
+        "title": "Every Sprint",
+        "body": "A new 7-day Sprint opens each time you finish one."
       },
-      "level3": {
-        "title": "{n} Level 3 patches",
-        "body": "Strength, cardio, HIIT, cold exposure and more, behind a health check."
+      "levels": {
+        "title": "{n} bigger patches",
+        "body": "Level 2 and 3: cardio, strength, cold, sleep and more."
       },
       "focus": {
         "title": "Focus tools",
-        "body": "Tools for deep work, goal setting and learning."
+        "body": "Focus session, WOOP, 85% rule, self-test."
       },
       "nutrition": {
-        "title": "Nutrition tools",
-        "body": "Protein quality and a personal water plan."
+        "title": "Your nutrition",
+        "body": "Personal protein and water numbers."
       },
       "travel": {
         "title": "Jet-lag plan",
@@ -507,9 +524,33 @@
       },
       "supplements": {
         "title": "Supplement guides",
-        "body": "Reference cards with clear safety notes."
+        "body": "Clear doses and safety notes."
       }
-    }
+    },
+    "compare": {
+      "sprints": "Sprints",
+      "level1": "Level 1 patches",
+      "levels": "Level 2–3 patches",
+      "calm": "Calm tools",
+      "insights": "Insights",
+      "tools": "Focus, nutrition, travel tools",
+      "supplements": "Supplement guides"
+    },
+    "statusTitle": {
+      "founder": "You have Pro, for good",
+      "pro": "You're Pro",
+      "beta": "You have Pro during the beta",
+      "free": "You're on the free plan"
+    },
+    "statusBody": {
+      "founder": "Thanks for being here early.",
+      "founderSince": "Founding member since {date}. Thanks for being here early.",
+      "pro": "Everything is open.",
+      "beta": "Everything is open while Life OS is in beta.",
+      "free": "Your first Sprint is free. Paying for Pro is coming soon."
+    },
+    "cta": "Back to Today",
+    "soonCta": "Pro is coming soon"
   },
   "focus": {
     "title": "Focus session",
@@ -671,5 +712,30 @@
       "avoid": "Be careful"
     },
     "footer": "Life OS never adds supplements to your Sprint. Habits come first."
+  },
+  "proBanner": {
+    "founder": {
+      "title": "You have Pro.",
+      "body": "Founding member."
+    },
+    "pro": {
+      "title": "You're Pro.",
+      "body": "See what's included."
+    },
+    "beta": {
+      "title": "Pro is free in beta.",
+      "body": "See what's included."
+    },
+    "free": {
+      "title": "Unlock every Sprint.",
+      "body": "See Pro."
+    }
+  },
+  "founderWelcome": {
+    "eyebrow": "Founding member",
+    "title": "You have Pro, for good.",
+    "body": "Thanks for being here early. Every Sprint, all patches and every tool are yours.",
+    "cta": "Nice",
+    "more": "See what's in Pro"
   }
 }

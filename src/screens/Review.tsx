@@ -14,13 +14,15 @@ import { Screen, Spacer } from '../components/Screen';
 import { TopBar } from '../components/TopBar';
 import { ITEMS, getItem } from '../data';
 import { flagsFromHealth, SAFETY_RULES } from '../data/safetyRules';
-import { AREAS, type Area, type ChecklistItem, type Sprint } from '../data/types';
+import { AREAS, SPRINT_DAYS, type Area, type ChecklistItem, type Sprint } from '../data/types';
 import {
   LEVEL_UP_COMPLETION, addDays, allowedLevels, areaScoresFromAnswers, dayKey, levelFilter, overallScore, recommend,
   sprintCompletion, themeFor, type AnswerIndex,
 } from '../engine';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
+import { canStartSprint, hasPro } from '../state/plan';
+import { Mascot } from '../components/Mascot';
 import { MAX_PATCHES, MIN_PATCHES } from '../state/onboarding';
 import { motionTokens } from '../styles/motion';
 import { itemAmount, pad2 } from './flow';
@@ -28,7 +30,7 @@ import './onboarding.css';
 import './review.css';
 
 type Decision = 'keep' | 'swap' | 'drop';
-type Step = 'assess' | 'scores' | 'review' | 'suggest' | 'browse' | 'confirm';
+type Step = 'assess' | 'scores' | 'locked' | 'review' | 'suggest' | 'browse' | 'confirm';
 type Answers = Partial<Record<Area, AnswerIndex>>;
 
 const GLYPH: Record<Area, Glyph> = { Movement: 'Move', Nutrition: 'Nutrition', Sleep: 'Sleep', Mind: 'Mind' };
@@ -44,7 +46,7 @@ const full = (a: Answers | undefined): a is Record<Area, AnswerIndex> => !!a && 
 export function Review() {
   const navigate = useNavigate();
   const session = useSession();
-  const { checkins, profile, saveSprint, updateProfile, today } = session;
+  const { checkins, profile, saveSprint, updateProfile, today, plan } = session;
   // Keep the Sprint being released fixed while this screen is open: saving the new one
   // must not change the lists on screen before we leave.
   const [sprint] = useState(session.sprint);
@@ -68,7 +70,9 @@ export function Review() {
   const excluded = new Set(current.map((i) => i.id));
 
   const completion = sprint ? sprintCompletion(sprint, checkins, today) : 0;
-  const levelCtx = { prevCompletion: completion, l2Open: current.some((i) => i.level >= 2) };
+  const levelCtx = { prevCompletion: completion, l2Open: current.some((i) => i.level >= 2), pro: hasPro(plan) };
+  // Free plan (only when the Pro lock is on): no new Sprint after the first; the same patches go on.
+  const locked = !canStartSprint(plan, (sprint?.number ?? 1) + 1);
   const l2Now = allowedLevels(nextNumber, levelCtx).includes(2);
   const l2Before = allowedLevels(sprint?.number ?? 1, { l2Open: levelCtx.l2Open }).includes(2) || levelCtx.l2Open;
 
@@ -106,13 +110,21 @@ export function Review() {
     else if (picked.length < maxPick) setPicked([...picked, id]);
   };
 
+  // Free plan: same patches, same Sprint number, a fresh 7 days. New answers are still saved.
+  const keepGoing = async () => {
+    setBusy(true);
+    if (profile && full(answers)) await updateProfile({ answers, start_answers: profile.start_answers ?? profile.answers });
+    await saveSprint({ ...sprint!, length_days: SPRINT_DAYS, started_at: new Date().toISOString() });
+    navigate('/today', { replace: true });
+  };
+
   const confirm = async () => {
     setBusy(true);
     const ids = [...kept, ...picked];
     const next: Sprint = {
       number: nextNumber,
       theme: themeFor(ids.map(getItem).filter((x): x is ChecklistItem => !!x)),
-      length_days: 14,
+      length_days: SPRINT_DAYS,
       patch_ids: ids,
       started_at: new Date().toISOString(),
     };
@@ -182,10 +194,22 @@ export function Review() {
                   ))}
                 </GlassPanel>
                 <Spacer />
-                <Button block label={t('common.continue')} onClick={() => setStep('review')} />
+                <Button block label={t('common.continue')} onClick={() => setStep(locked ? 'locked' : 'review')} />
               </>
             );
           })()}
+
+          {step === 'locked' && (
+            <>
+              <TopBar title={t('review.topTitle', { n: sprint.number })} onBack={() => setStep('scores')} />
+              <div className="hero"><Mascot name="milestone-release-shipped" size={200} animated /></div>
+              <h2 className="text-title-l text-primary text-center">{t('review.lockedTitle', { n: sprint.number })}</h2>
+              <p className="text-body-m text-secondary text-center">{t('review.lockedBody', { n: nextNumber })}</p>
+              <Spacer />
+              <Button block label={t('review.keepGoing')} busy={busy} onClick={keepGoing} />
+              <Button block variant="Ghost" label={t('review.seePro')} onClick={() => navigate('/pro')} />
+            </>
+          )}
 
           {step === 'review' && (
             <>

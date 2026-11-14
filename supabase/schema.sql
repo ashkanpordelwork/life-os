@@ -79,3 +79,8 @@ create policy "own reminders" on public.reminders
 drop policy if exists "own push subscriptions" on public.push_subscriptions;
 create policy "own push subscriptions" on public.push_subscriptions
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Plans (see supabase/migrations-plans.sql for the trigger and the founding-member update).
+alter table public.profiles add column if not exists plan text not null default 'free';
+alter table public.profiles add column if not exists founder boolean not null default false;
+alter table public.profiles add column if not exists pro_since timestamptz;

@@ -26,6 +26,8 @@ export interface LevelContext {
   prevCompletion?: number;
   /** L2 was already open earlier (e.g. the last Sprint had an L2 patch). Once open, it stays open. */
   l2Open?: boolean;
+  /** false = free plan with the Pro lock on: Level 1 only. Undefined = no plan limit. */
+  pro?: boolean;
 }
 
 /**
@@ -33,7 +35,7 @@ export interface LevelContext {
  * Sprint 1–2: L1. Sprint 3+: L2 too, if earned (70%) or already open. Sprint 5+: L3 too, when L2 is open.
  */
 export function allowedLevels(sprintNumber: number, ctx: LevelContext = {}): Level[] {
-  if (sprintNumber <= 2) return [1];
+  if (sprintNumber <= 2 || ctx.pro === false) return [1];
   const l2 = !!ctx.l2Open || (ctx.prevCompletion ?? 0) >= LEVEL_UP_COMPLETION;
   if (!l2) return [1];
   return sprintNumber <= 4 ? [1, 2] : [1, 2, 3];

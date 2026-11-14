@@ -25,6 +25,9 @@ import { openLibrary } from './Library';
 import { reviewDue, reviewLabel } from './Review';
 import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
+import { ProBanner } from '../components/ProBanner';
+
+const WELCOME_KEY = 'lifeos.founderWelcome.v1';
 
 const TINY_KEY = 'lifeos.tinyMode';
 const NUDGE_KEY = 'lifeos.nudge.dismissed';
@@ -40,7 +43,10 @@ function greeting(name: string, firstDay: boolean): string {
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed } = useSession();
+  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan } = useSession();
+  // Founding members see a one-time thank-you sheet.
+  const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
+  const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
   const [tiny, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
@@ -99,6 +105,7 @@ export function Today() {
 
   return (
     <Screen>
+      <ProBanner plan={plan} onOpen={() => navigate('/pro')} />
       <header className="today__header">
         <div className="today__greeting">
           <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
@@ -168,6 +175,12 @@ export function Today() {
           </>
         )}
       </div>
+
+      <BottomSheet open={welcome && plan === 'founder'} onClose={closeWelcome} eyebrow={t('founderWelcome.eyebrow').toUpperCase()} title={t('founderWelcome.title')} decoration={<Mascot name="milestone-small-win" size={120} />}>
+        <p className="text-body-m text-secondary">{t('founderWelcome.body')}</p>
+        <Button block label={t('founderWelcome.cta')} onClick={closeWelcome} />
+        <Button block variant="Ghost" label={t('founderWelcome.more')} onClick={() => { closeWelcome(); navigate('/pro'); }} />
+      </BottomSheet>
 
       <BottomSheet open={sheet === 'busy'} onClose={() => setSheet(null)} title={t('today.busyTitle')} decoration={<Mascot name="rest-busy-day" size={136} />}>
         <p className="text-body-m text-primary">{t('today.busyBody')}</p>

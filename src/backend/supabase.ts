@@ -73,7 +73,8 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async loadProfile(userId) {
       // The extra columns come from a later schema update. If it hasn't been run yet, fall back.
-      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health').eq('id', userId).maybeSingle();
+      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health, plan, founder, pro_since').eq('id', userId).maybeSingle();
+      if (res.error) res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health').eq('id', userId).maybeSingle();
       if (res.error) res = await sb.from('profiles').select('name, symptoms, answers').eq('id', userId).maybeSingle();
       const row = check(res) as Record<string, any> | null;
       if (!row) return null;
@@ -81,6 +82,7 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
         name: row.name ?? '', symptoms: row.symptoms ?? [], answers: row.answers ?? {},
         start_answers: row.start_answers ?? undefined, wake_time: row.wake_time ?? undefined, bed_time: row.bed_time ?? undefined,
         health: row.health ?? undefined,
+        plan: row.plan ?? undefined, founder: row.founder ?? undefined, pro_since: row.pro_since ?? undefined,
       };
     },
     async saveProfile(userId, p) {

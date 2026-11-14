@@ -1,9 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
-import type { Sprint, VersionKey } from '../data/types';
+import { SPRINT_DAYS, type Sprint, type VersionKey } from '../data/types';
 import { REST_ID, dayKey } from '../engine';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
+import { planState, type PlanState } from './plan';
 
 interface SessionState {
   /** false until we know whether someone is logged in */
@@ -36,6 +37,8 @@ interface SessionApi extends SessionState {
   /** The user's wake and bed time, with safe defaults. */
   wake: string;
   bed: string;
+  /** founder / pro / beta / free (src/state/plan.ts). */
+  plan: PlanState;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -68,6 +71,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       sprint = d.sprint;
       await backend.saveSprint(user.id, sprint);
     }
+    // Owner decision: every Sprint is 7 days now, also ones started as 14.
+    if (sprint && sprint.length_days !== SPRINT_DAYS) sprint = { ...sprint, length_days: SPRINT_DAYS };
     setS({ ready: true, user, profile, sprint, checkins, reminders });
   }, []);
 
@@ -88,6 +93,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     today: dayKey(new Date()),
     wake: s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE,
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
+    plan: planState(s.profile),
     async updateProfile(patch) {
       if (!s.user || !s.profile) return;
       const next = { ...s.profile, ...patch };

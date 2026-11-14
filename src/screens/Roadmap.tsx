@@ -8,6 +8,7 @@ import { getItem } from '../data';
 import { dayKey, sprintDay } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
+import { canStartSprint } from '../state/plan';
 import { motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
 import { pad2, sprintTheme } from './flow';
@@ -21,7 +22,8 @@ import './roadmap.css';
  */
 export function Roadmap() {
   const navigate = useNavigate();
-  const { sprint, today } = useSession();
+  const { sprint, today, plan } = useSession();
+  const nextLocked = !canStartSprint(plan, (sprint?.number ?? 1) + 1);
 
   if (!sprint) return <Navigate to="/today" replace />;
 
@@ -48,10 +50,10 @@ export function Roadmap() {
               </span>
             </div>
             <p className="text-body-m-strong text-primary">
-              {r.state === 'now' ? currentText : r.state === 'done' ? t('roadmap.pastText') : t('roadmap.nextText')}
+              {r.state === 'now' ? currentText : r.state === 'done' ? t('roadmap.pastText') : nextLocked ? t('roadmap.nextPro') : t('roadmap.nextText')}
             </p>
             {r.state === 'now' && currentText !== patchTitles && <p className="text-body-s text-secondary">{patchTitles}</p>}
-            <SegmentedProgress total={14} filled={r.state === 'done' ? 14 : r.state === 'now' ? day : 0} />
+            <SegmentedProgress total={sprint.length_days} filled={r.state === 'done' ? sprint.length_days : r.state === 'now' ? day : 0} />
           </motion.div>
         ))}
       </GlassPanel>

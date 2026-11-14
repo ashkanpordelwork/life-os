@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { getItem } from '../data';
-import type { Area, ChecklistItem, HealthAnswers, NeedTag, Sprint } from '../data/types';
+import { SPRINT_DAYS, type Area, type ChecklistItem, type HealthAnswers, type NeedTag, type Sprint } from '../data/types';
 import { themeFor, type AnswerIndex } from '../engine';
 
 /** Onboarding answers. Kept in localStorage only (no login, no database in this phase). */
@@ -34,7 +34,11 @@ const EMPTY: OnboardingState = { symptoms: [], answers: {}, picked: [], sprint: 
 function load(): OnboardingState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? { ...EMPTY, ...JSON.parse(raw) } : EMPTY;
+    if (!raw) return EMPTY;
+    const s = { ...EMPTY, ...JSON.parse(raw) } as OnboardingState;
+    // Owner decision: every Sprint is 7 days now, also ones started as 14.
+    if (s.sprint) s.sprint = { ...s.sprint, length_days: SPRINT_DAYS };
+    return s;
   } catch {
     return EMPTY;
   }
@@ -87,7 +91,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const setSafetyOk = useCallback((safetyOk: boolean) => setState((s) => ({ ...s, safetyOk })), []);
 
   const startSprint = useCallback((patchIds: string[]) => {
-    const sprint: Sprint = { number: 1, theme: themeFor(patchIds.map(getItem).filter((x): x is ChecklistItem => !!x)), length_days: 14, patch_ids: patchIds, started_at: new Date().toISOString() };
+    const sprint: Sprint = { number: 1, theme: themeFor(patchIds.map(getItem).filter((x): x is ChecklistItem => !!x)), length_days: SPRINT_DAYS, patch_ids: patchIds, started_at: new Date().toISOString() };
     setState((s) => ({ ...s, picked: patchIds, sprint }));
     return sprint;
   }, []);

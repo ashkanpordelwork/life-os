@@ -28,6 +28,7 @@ import { Progress } from '../components/Progress';
 import { ScoreRow } from '../components/ScoreRow';
 import { SegmentedProgress } from '../components/SegmentedProgress';
 import { SleepTimes } from '../components/SleepTimes';
+import { ProBanner } from '../components/ProBanner';
 import { WheelPicker } from '../components/WheelPicker';
 import { SprintDot } from '../components/SprintDot';
 import { StatChip } from '../components/StatChip';
@@ -365,11 +366,11 @@ export function Styleguide() {
             <Button block label="Main action" />
           </div>
         </Spec>
-        <Spec name="SegmentedProgress" desc="Row of 4px bars. Onboarding steps (7), area score (5), Sprint days (14).">
+        <Spec name="SegmentedProgress" desc="Row of 4px bars. Onboarding steps (7), area score (5), Sprint days (7).">
           <div className="sg-stack sg-phone">
             <SegmentedProgress total={6} filled={2} />
             <SegmentedProgress total={5} filled={3} />
-            <SegmentedProgress total={14} filled={0} />
+            <SegmentedProgress total={7} filled={0} />
           </div>
         </Spec>
         <Spec name="GlassPanel + ScoreRow" desc="Glass panel (Glass/Card), 16px padding, radius 20. ScoreRow: mono label, mono value, 5 segments.">
@@ -392,12 +393,17 @@ export function Styleguide() {
         <Spec name="IconButton" desc="44px glass circle with a 24px icon (TopBar back, Today bell).">
           <div className="sg-wrap sg-wrap--tinted"><IconButton icon="arrow_back" label="Back" /><IconButton icon="notifications" label="Reminders" /></div>
         </Spec>
-        <Spec name="SprintStrip" desc="Today: Sprint label, day/14 and one 18x8 bar per day.">
-          <div className="sg-phone sg-wrap--tinted"><SprintStrip label="Sprint 01" day={5} length={14} /></div>
+        <Spec name="SprintStrip" desc="Today: Sprint label, day/7 and one 18x8 bar per day.">
+          <div className="sg-phone sg-wrap--tinted"><SprintStrip label="Sprint 01" day={5} length={7} /></div>
         </Spec>
         <Spec name="WeekStrip" desc="Done screen: this week as 7 HeatCells with day letters. Cells pop in one by one.">
           <div className="sg-phone sg-wrap--tinted">
             <WeekStrip title="This week" days={(['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const).map((l, i) => ({ letter: l, level: ([3, 4, 2, 3, 4, 0, 3] as const)[i], label: l }))} />
+          </div>
+        </Spec>
+        <Spec name="ProBanner" desc="Slim bar on top of Today; one tap opens Pro. Text follows the plan (founder, pro, beta, free). Pro gradient keeps white text AA.">
+          <div className="sg-stack sg-phone">
+            {(['founder', 'beta', 'free'] as const).map((p) => <ProBanner key={p} plan={p} onOpen={() => {}} />)}
           </div>
         </Spec>
         <Spec name="WheelPicker" desc="iPhone-style time drums: scroll-snap, tilted rows, brand highlight band, arrow keys. Value HH:MM, 5-min steps.">
@@ -410,7 +416,7 @@ export function Styleguide() {
           <div className="sg-stack sg-phone">
             <SegmentedProgress variant="steps" total={6} filled={3} />
             <SegmentedProgress variant="today" total={3} filled={2} />
-            <SegmentedProgress variant="sprint" total={14} filled={5} />
+            <SegmentedProgress variant="sprint" total={7} filled={5} />
           </div>
         </Spec>
         <Spec name="MetaChip as a button" desc="Tiny mode on Today. Pressed = brand border and text.">

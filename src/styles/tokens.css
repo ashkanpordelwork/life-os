@@ -94,6 +94,8 @@
   --color-heat-4: var(--orange-700);
 
   --color-brand-soft: var(--orange-100);
+  /* On the Pro gradient (added in code): soft white for icon bubbles and the shine. */
+  --color-on-pro-soft: var(--white-a30);
   --color-brand-main: var(--orange-500);
   --color-progress-track: var(--neutral-400);
 
@@ -133,6 +135,8 @@
   /* ---------- Paints (Figma paint styles) ---------- */
   --gradient-hero: linear-gradient(180deg, #ffcba6 0%, #ffdcc4 15%, #fffaf6 38%, #fffaf6 100%);
   --gradient-soft: linear-gradient(180deg, #ffe6d4 0%, #fff4ec 100%);
+  /* Pro surfaces (added in code). Dark enough for white text (AA). */
+  --gradient-pro: linear-gradient(135deg, var(--orange-600) 0%, var(--orange-700) 55%, var(--orange-800) 100%);
   /* Alpha mask (not a colour): fades the top and bottom rows of the WheelPicker. Added in code. */
   --mask-fade-y: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
   --glass-fill: var(--white-a60);

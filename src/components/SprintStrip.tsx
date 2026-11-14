@@ -4,7 +4,7 @@ import './SprintStrip.css';
 
 /**
  * SprintStrip (from Figma Today 2034:3528, "Sprint strip")
- * Glass card: "SPRINT 01" and "day/14", then one bar per Sprint day.
+ * Glass card: "SPRINT 01" and "day/7", then one bar per Sprint day.
  */
 export function SprintStrip({ label, day, length }: { label: string; day: number; length: number }) {
   return (
