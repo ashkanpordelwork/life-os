@@ -39,6 +39,8 @@ function data(id: string): StoredData {
 
 export const localBackend: Backend = {
   tribes: null,
+  admin: null,
+  async latestMessage() { return null; },
   mode: 'local',
   async getUser() {
     const id = read<string | null>(SESSION, null);

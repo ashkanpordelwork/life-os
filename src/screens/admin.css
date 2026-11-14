@@ -1,0 +1,13 @@
+/* Admin dashboard (designed in code) */
+.admin__body { display: flex; flex-direction: column; gap: var(--space-12); }
+.admin__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12); }
+.admin__row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-12); }
+.admin__tribe { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-16); border-radius: var(--radius-lg); }
+.admin__tribe-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-8); flex-wrap: wrap; }
+.admin__area-label { display: block; }
+.admin__area {
+  inline-size: 100%; padding: var(--space-12) var(--space-16); resize: vertical;
+  border-radius: var(--radius-md); border: 1px solid var(--color-border-default);
+  background: var(--color-surface-card); color: var(--color-text-primary); font-family: var(--font-sans);
+}
+.admin__area:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }

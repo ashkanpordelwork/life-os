@@ -247,7 +247,8 @@
     "sleepTimes": "Sleep times",
     "library": "Library",
     "pro": "Life OS Pro",
-    "proSubtitle": "Your plan and what's included"
+    "proSubtitle": "Your plan and what's included",
+    "admin": "Admin"
   },
   "review": {
     "cta": "Review Sprint {nn}",
@@ -796,5 +797,59 @@
       "release": "{name} shipped Sprint {n}",
       "releaseTheme": "{name} shipped Sprint {n} · {theme}"
     }
+  },
+  "admin": {
+    "title": "Admin",
+    "tabs": {
+      "stats": "Stats",
+      "users": "People",
+      "tribes": "Tribes",
+      "message": "Message"
+    },
+    "loading": "Loading…",
+    "error": "Something went wrong. Try again.",
+    "none": "Nothing here yet.",
+    "users": "Users",
+    "new7": "New, 7 days",
+    "activeToday": "Active today",
+    "active7": "Active, 7 days",
+    "retention": "Back after 7 days",
+    "tribes": "Tribes",
+    "plans": "Plans",
+    "plan": {
+      "founder": "Founding member",
+      "pro": "Pro",
+      "free": "Free",
+      "label": "Plan"
+    },
+    "topPatches": "Most done, last 30 days",
+    "search": "Find someone",
+    "searchPlaceholder": "Email or name",
+    "lastActive": "Last active {date}",
+    "neverActive": "Never active",
+    "days": "{n} active days",
+    "joined": "Joined",
+    "privacy": "You see activity and plan only. Health answers and symptoms are never shown here.",
+    "founderNote": "Founding members keep Pro for good.",
+    "grant": "Give Pro",
+    "revoke": "Take back Pro",
+    "planDone": "Done.",
+    "notFound": "No account with that email.",
+    "noName": "No name",
+    "noTribes": "No Tribes yet.",
+    "members": "{n} members",
+    "created": "Created {date}",
+    "deleteTribe": "Delete Tribe",
+    "deleteTitle": "Delete this Tribe?",
+    "deleteBody": "{name} and its members will be removed. Activity stays in the members' own history.",
+    "deleteConfirm": "Yes, delete",
+    "messageIntro": "Send one message to everyone. It appears once, as a sheet on Today.",
+    "msgTitle": "Title",
+    "msgBody": "Message",
+    "send": "Send",
+    "sent": "Sent. Everyone will see it next time they open Life OS."
+  },
+  "message": {
+    "ok": "Got it"
   }
 }

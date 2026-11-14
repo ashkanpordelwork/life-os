@@ -1,10 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { backend, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
+import { backend, type Announcement, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
 import { REST_ID, dayKey, patchTimes } from '../engine';
 import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
+
+const SEEN_KEY = 'lifeos.seenMessage';
 import { planState, type PlanState } from './plan';
 import { buildStatus, dailyPatches, type ShareSettings } from './tribeStatus';
 
@@ -48,6 +50,11 @@ interface SessionApi extends SessionState {
   setShare: (s: Partial<ShareSettings>) => Promise<void>;
   /** Re-read how many Tribes the user is in (after create, join or leave). */
   refreshTribes: () => Promise<void>;
+  /** Admin dashboard access (set in the database). */
+  isAdmin: boolean;
+  /** Latest admin message the user hasn't dismissed yet. */
+  message: Announcement | null;
+  dismissMessage: () => void;
 }
 
 const Ctx = createContext<SessionApi | null>(null);
@@ -58,6 +65,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [s, setS] = useState<SessionState>(EMPTY);
   const [tribeCount, setTribeCount] = useState(0);
   const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
+  const [latest, setLatest] = useState<Announcement | null>(null);
+  const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
   draftRef.current = draft;
   const userIdRef = useRef<string | null>(null);
@@ -85,6 +94,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     // Owner decision: every Sprint is 7 days now, also ones started as 14.
     if (sprint && sprint.length_days !== SPRINT_DAYS) sprint = { ...sprint, length_days: SPRINT_DAYS };
     setS({ ready: true, user, profile, sprint, checkins, reminders });
+    backend.latestMessage().then(setLatest).catch(() => setLatest(null));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
       backend.tribes.myTribes(user.id).then((t) => setTribeCount(t.length)).catch(() => {});
@@ -142,6 +152,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     wake: s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE,
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
     plan: planState(s.profile),
+    isAdmin: !!s.profile?.is_admin,
+    message: latest && latest.id > seenId ? latest : null,
+    dismissMessage() {
+      if (!latest) return;
+      setSeenId(latest.id);
+      try { localStorage.setItem(SEEN_KEY, String(latest.id)); } catch { /* ignore */ }
+    },
     tribesEnabled: !!backend.tribes,
     tribeCount,
     share,
@@ -221,7 +238,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

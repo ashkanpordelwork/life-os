@@ -22,6 +22,8 @@ export interface Profile {
   plan?: 'free' | 'pro';
   founder?: boolean;
   pro_since?: string;
+  /** Admin dashboard access. Set in the database only. */
+  is_admin?: boolean;
 }
 
 export interface Checkin {
@@ -124,6 +126,10 @@ export interface Backend {
   savePushSubscription(userId: string, sub: PushSub): Promise<void>;
   /** Tribes need the live app (Supabase). The local backend has `tribes: null`. */
   tribes: TribeApi | null;
+  /** Admin dashboard (live app only). */
+  admin: AdminApi | null;
+  /** The latest in-app message from the admin, if any. */
+  latestMessage(): Promise<Announcement | null>;
   deletePushSubscription(userId: string, endpoint: string): Promise<void>;
 }
 
@@ -142,3 +148,24 @@ export interface TribeApi {
 
 /** One patch reminder for today: local time "HH:MM". `cutoff` = the time is a deadline (caffeine, alcohol). */
 export interface PatchTime { id: string; title: string; at: string; cutoff: boolean }
+
+export interface Announcement { id: number; title: string; body: string; created_at: string }
+
+export interface AdminStats {
+  users: number; new_7d: number; active_today: number; active_7d: number;
+  plans: Record<string, number>; tribes: number; tribe_members: number;
+  retention7: number | null;
+  top_patches: { id: string; n: number }[];
+}
+export interface AdminUser { id: string; email: string; name: string; plan: string; founder: boolean; created_at: string; last_active: string | null; active_days: number }
+export interface AdminTribe { id: string; name: string; code: string; members: number; created_at: string }
+
+export interface AdminApi {
+  stats(): Promise<AdminStats>;
+  users(search: string): Promise<AdminUser[]>;
+  setPlan(email: string, plan: 'free' | 'pro'): Promise<'ok' | 'not_found'>;
+  tribes(): Promise<AdminTribe[]>;
+  deleteTribe(id: string): Promise<void>;
+  removeMember(tribeId: string, userId: string): Promise<void>;
+  publish(title: string, body: string): Promise<void>;
+}

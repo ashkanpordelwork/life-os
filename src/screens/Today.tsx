@@ -46,6 +46,7 @@ export function Today() {
   const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
+  const { message, dismissMessage } = useSession();
   const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | null>(null);
@@ -175,6 +176,11 @@ export function Today() {
           </>
         )}
       </div>
+
+      <BottomSheet open={!!message} onClose={dismissMessage} eyebrow={t('nav.today').toUpperCase()} title={message?.title ?? ''}>
+        <p className="text-body-m text-secondary">{message?.body}</p>
+        <Button block label={t('message.ok')} onClick={dismissMessage} />
+      </BottomSheet>
 
       <BottomSheet open={welcome && plan === 'founder'} onClose={closeWelcome} eyebrow={t('founderWelcome.eyebrow').toUpperCase()} title={t('founderWelcome.title')} decoration={<Mascot name="milestone-small-win" size={120} />}>
         <p className="text-body-m text-secondary">{t('founderWelcome.body')}</p>

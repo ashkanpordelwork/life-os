@@ -20,7 +20,7 @@ import './today.css';
  */
 export function You() {
   const navigate = useNavigate();
-  const { user, profile, sprint, checkins, today, signOut, reminders, wake, bed } = useSession();
+  const { user, profile, sprint, checkins, today, signOut, reminders, wake, bed, isAdmin } = useSession();
   const [busy, setBusy] = useState(false);
 
   const stats = useMemo(() => {
@@ -59,6 +59,7 @@ export function You() {
         onClick={() => navigate('/reminders')}
       />
       <ListRow icon="verified_user" title={t('you.pro')} subtitle={t('you.proSubtitle')} onClick={() => navigate('/pro')} />
+      {isAdmin && <ListRow icon="settings" title={t('you.admin')} subtitle={t('admin.title')} onClick={() => navigate('/admin')} />}
       <ListRow icon="science" title={t('you.library')} subtitle={t('library.openSubtitle')} onClick={() => openLibrary(navigate, '/you')} />
       <ListRow icon="bedtime" title={t('you.sleepTimes')} subtitle={`${wake} – ${bed}`} onClick={() => navigate('/sleep-times')} />
       <p className="text-body-s text-secondary text-center">{t('you.email')} {user?.email}</p>

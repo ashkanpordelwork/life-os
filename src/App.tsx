@@ -27,6 +27,7 @@ import { Insights } from './screens/Insights';
 import { Library } from './screens/Library';
 import { Pro } from './screens/Pro';
 import { Tribe, TribeJoinLink } from './screens/Tribe';
+import { Admin } from './screens/Admin';
 import { Sigh } from './screens/Sigh';
 import { Nsdr } from './screens/Nsdr';
 import { ErrorZone, FocusSession, SelfTest, WoopTool } from './screens/FocusTools';
@@ -95,6 +96,7 @@ function AnimatedRoutes() {
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
         <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
         <Route path="/sleep-times" element={page(<RequireUser><SleepTimesEdit /></RequireUser>)} />
+        <Route path="/admin" element={page(<RequireUser><Admin /></RequireUser>)} />
         <Route path="/tribe" element={page(<RequireUser><Tribe /></RequireUser>)} />
         <Route path="/tribe/join/:code" element={<TribeJoinLink />} />
         <Route path="/pro" element={page(<RequireUser><Pro /></RequireUser>)} />

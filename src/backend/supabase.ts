@@ -1,6 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
-import { AuthError, type AuthErrorCode, type Backend, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -73,7 +73,8 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async loadProfile(userId) {
       // The extra columns come from a later schema update. If it hasn't been run yet, fall back.
-      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health, plan, founder, pro_since').eq('id', userId).maybeSingle();
+      let res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health, plan, founder, pro_since, is_admin').eq('id', userId).maybeSingle();
+      if (res.error) res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health, plan, founder, pro_since').eq('id', userId).maybeSingle();
       if (res.error) res = await sb.from('profiles').select('name, symptoms, answers, start_answers, wake_time, bed_time, health').eq('id', userId).maybeSingle();
       if (res.error) res = await sb.from('profiles').select('name, symptoms, answers').eq('id', userId).maybeSingle();
       const row = check(res) as Record<string, any> | null;
@@ -82,7 +83,7 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
         name: row.name ?? '', symptoms: row.symptoms ?? [], answers: row.answers ?? {},
         start_answers: row.start_answers ?? undefined, wake_time: row.wake_time ?? undefined, bed_time: row.bed_time ?? undefined,
         health: row.health ?? undefined,
-        plan: row.plan ?? undefined, founder: row.founder ?? undefined, pro_since: row.pro_since ?? undefined,
+        plan: row.plan ?? undefined, founder: row.founder ?? undefined, pro_since: row.pro_since ?? undefined, is_admin: row.is_admin ?? false,
       };
     },
     async saveProfile(userId, p) {
@@ -127,6 +128,21 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async deletePushSubscription(_userId, endpoint) {
       check(await sb.from('push_subscriptions').delete().eq('endpoint', endpoint));
+    },
+    async latestMessage() {
+      const res = await sb.rpc('latest_message');
+      if (res.error) return null;
+      const row = (res.data as Announcement[] | null)?.[0];
+      return row ?? null;
+    },
+    admin: {
+      async stats() { return check(await sb.rpc('admin_stats')) as AdminStats; },
+      async users(search) { return check(await sb.rpc('admin_users', { p_search: search, p_limit: 50 })) as AdminUser[]; },
+      async setPlan(email, plan) { return check(await sb.rpc('admin_set_plan', { p_email: email, p_plan: plan })) as 'ok' | 'not_found'; },
+      async tribes() { return check(await sb.rpc('admin_tribes')) as AdminTribe[]; },
+      async deleteTribe(id) { check(await sb.rpc('admin_delete_tribe', { p_id: id })); },
+      async removeMember(tribeId, userId) { check(await sb.rpc('admin_remove_member', { p_tribe: tribeId, p_user: userId })); },
+      async publish(title, body) { check(await sb.rpc('admin_publish_message', { p_title: title, p_body: body })); },
     },
     tribes: {
       async myTribes(userId) {
