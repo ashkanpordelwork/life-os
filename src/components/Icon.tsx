@@ -1,27 +1,53 @@
-import type { CSSProperties } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  Analytics01Icon, ArrowLeft02Icon, ArrowRight01Icon, Calendar01Icon, Calendar03Icon, ChartLineData01Icon,
+  Coffee02Icon, DropletIcon, Dumbbell01Icon, FastWindIcon, Fire02Icon, FlashIcon, Home01Icon,
+  InformationCircleIcon, LockIcon, Mail01Icon, Moon02Icon, Notification01Icon, Restaurant01Icon, Route01Icon,
+  SecurityCheckIcon, SlidersHorizontalIcon, Sun03Icon, TaskDone01Icon, TestTube01Icon, Tick02Icon, Timer02Icon,
+  TrendingUpIcon, UserIcon, WalkingIcon, Yoga02Icon,
+} from '@hugeicons/core-free-icons';
 import './Icon.css';
 
-// Material Symbols (weight 400) exported from the Figma `Icon` page.
-const files = import.meta.glob('../assets/icons/*.svg', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-}) as Record<string, string>;
+/**
+ * Icons from Hugeicons (free "Stroke Rounded" set, MIT). Owner decision: the code is the source of truth
+ * for icons (Figma still shows Material Symbols). Names are kept from the old Material set so no screen changes.
+ */
+const icons = {
+  air: FastWindIcon,
+  arrow_back: ArrowLeft02Icon,
+  bedtime: Moon02Icon,
+  bolt: FlashIcon,
+  calendar_today: Calendar03Icon,
+  check: Tick02Icon,
+  chevron_right: ArrowRight01Icon,
+  directions_walk: WalkingIcon,
+  event: Calendar01Icon,
+  fitness_center: Dumbbell01Icon,
+  home: Home01Icon,
+  info: InformationCircleIcon,
+  insights: Analytics01Icon,
+  lock: LockIcon,
+  mail: Mail01Icon,
+  notifications: Notification01Icon,
+  local_cafe: Coffee02Icon,
+  local_fire_department: Fire02Icon,
+  monitoring: ChartLineData01Icon,
+  person: UserIcon,
+  restaurant: Restaurant01Icon,
+  route: Route01Icon,
+  science: TestTube01Icon,
+  self_improvement: Yoga02Icon,
+  sunny: Sun03Icon,
+  task_alt: TaskDone01Icon,
+  timer: Timer02Icon,
+  trending_up: TrendingUpIcon,
+  tune: SlidersHorizontalIcon,
+  verified_user: SecurityCheckIcon,
+  water_drop: DropletIcon,
+} as const;
 
-const urls: Record<string, string> = {};
-for (const [path, url] of Object.entries(files)) {
-  const name = path.split('/').pop()!.replace('.svg', '');
-  urls[name] = url;
-}
-
-export const iconNames = Object.keys(urls).sort();
-
-export type IconName =
-  | 'air' | 'arrow_back' | 'bedtime' | 'bolt' | 'calendar_today' | 'check' | 'chevron_right'
-  | 'directions_walk' | 'event' | 'fitness_center' | 'home' | 'info' | 'insights' | 'lock' | 'mail' | 'notifications'
-  | 'local_cafe' | 'local_fire_department' | 'monitoring' | 'person'
-  | 'restaurant' | 'route' | 'science' | 'self_improvement' | 'sunny'
-  | 'task_alt' | 'timer' | 'trending_up' | 'tune' | 'verified_user' | 'water_drop';
+export type IconName = keyof typeof icons;
+export const iconNames = Object.keys(icons).sort() as IconName[];
 
 type IconProps = {
   name: IconName;
@@ -30,14 +56,23 @@ type IconProps = {
   className?: string;
 };
 
+/** Hugeicons stroke at 24 px; thinner lines look heavier when small, so it scales a little. */
+const strokeFor = (size: number) => (size <= 18 ? 1.75 : 1.5);
+
 /**
  * Icon. The glyph takes the current text colour (`color`), so a parent sets the colour
- * with a semantic token, e.g. `color: var(--color-text-brand)`.
+ * with a semantic token, e.g. `color: var(--color-text-brand)`. Decorative (hidden from screen readers).
  */
 export function Icon({ name, size = 24, className }: IconProps) {
-  const style = {
-    '--icon-size': `${size}px`,
-    '--icon-url': `url("${urls[name]}")`,
-  } as CSSProperties;
-  return <span aria-hidden="true" className={['icon', className].filter(Boolean).join(' ')} style={style} />;
+  return (
+    <HugeiconsIcon
+      icon={icons[name]}
+      size={size}
+      color="currentColor"
+      strokeWidth={strokeFor(size)}
+      className={className ? `icon ${className}` : 'icon'}
+      aria-hidden="true"
+      focusable="false"
+    />
+  );
 }
