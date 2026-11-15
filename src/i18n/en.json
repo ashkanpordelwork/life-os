@@ -43,44 +43,72 @@
   "symptomsScreen": {
     "topTitle": "About you",
     "title": "What feels off?",
-    "subtitle": "Pick any. No wrong answers.",
+    "subtitle": "Pick any. No wrong answers. Then 4 quick questions about a normal day (about 1 min).",
     "limit": "Up to 3."
   },
   "questions": {
     "Movement": {
-      "question": "Days you moved 20+ min last week?",
+      "question": "On a normal day, how much do you move?",
+      "why": "So we pick moves that fit your day.",
       "answers": [
-        "0 days",
-        "1–2 days",
-        "3–4 days",
-        "5 days or more"
+        "Mostly sitting",
+        "A short walk here and there",
+        "I walk a lot",
+        "I work out most days"
+      ],
+      "emoji": [
+        "🪑",
+        "🚶",
+        "👟",
+        "🏃"
       ]
     },
     "Nutrition": {
-      "question": "Days you ate a real breakfast?",
+      "question": "How do you usually eat on a workday?",
+      "why": "So we start with the easiest food habit.",
       "answers": [
-        "0 days",
-        "1–2 days",
-        "3–4 days",
-        "5 days or more"
+        "I skip meals a lot",
+        "Snacks and quick bites",
+        "Mostly proper meals",
+        "Real, home-style meals"
+      ],
+      "emoji": [
+        "⏭️",
+        "🍫",
+        "🥪",
+        "🥗"
       ]
     },
     "Sleep": {
-      "question": "Nights you slept 7+ hours?",
+      "question": "How do you usually wake up?",
+      "why": "This helps us pick your sleep habits.",
       "answers": [
-        "0 nights",
-        "1–2 nights",
-        "3–4 nights",
-        "5 nights or more"
+        "Groggy, I need coffee",
+        "Slow, but OK after a while",
+        "Mostly fine",
+        "Rested and ready"
+      ],
+      "emoji": [
+        "😵",
+        "😐",
+        "🙂",
+        "😄"
       ]
     },
     "Mind": {
-      "question": "Days you took a real break?",
+      "question": "After work, can you switch off?",
+      "why": "So we know how much calm to add.",
       "answers": [
-        "0 days",
-        "1–2 days",
-        "3–4 days",
-        "5 days or more"
+        "Hardly ever",
+        "Not often",
+        "Most days",
+        "Easily"
+      ],
+      "emoji": [
+        "🤯",
+        "😬",
+        "🙂",
+        "😌"
       ]
     }
   },
@@ -1066,5 +1094,9 @@
     "ml": "{n} ml",
     "l": "{n} L",
     "g": "{n} g"
+  },
+  "questionScreen": {
+    "label": "{area} · {n} of 4",
+    "notSure": "Not sure? Skip this one"
   }
 }

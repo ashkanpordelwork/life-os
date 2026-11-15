@@ -5,6 +5,8 @@ import './AnswerRow.css';
 
 type AnswerRowProps = {
   label: string;
+  /** Optional emoji in front of the label (onboarding questions). */
+  lead?: string;
   /** Figma property `State`: Off | On */
   selected?: boolean;
   onSelect?: () => void;
@@ -17,7 +19,7 @@ type AnswerRowProps = {
  * Put several inside an element with role="radiogroup".
  * Motion: shrinks while pressed; the radio check pops in.
  */
-export function AnswerRow({ label, selected = false, onSelect }: AnswerRowProps) {
+export function AnswerRow({ label, lead, selected = false, onSelect }: AnswerRowProps) {
   return (
     <motion.button
       type="button"
@@ -28,6 +30,7 @@ export function AnswerRow({ label, selected = false, onSelect }: AnswerRowProps)
       whileTap={{ scale: 0.985 }}
       transition={motionTokens.press}
     >
+      {lead && <span className="answer-row__lead" aria-hidden="true">{lead}</span>}
       <span className="answer-row__label text-body-m-strong">{label}</span>
       <span className="answer-row__radio" aria-hidden="true">
         <AnimatePresence initial={false}>

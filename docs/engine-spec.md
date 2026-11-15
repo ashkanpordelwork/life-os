@@ -61,10 +61,10 @@ Nov 13, 2026 ·
 
 | سؤال در اپ | حوزه | پروتکل‌های متصل |
 | --- | --- | --- |
-| Days you moved 20+ min last week? | `Movement` | EX01a–d (کم‌امتیاز)، EX04، EX03a–c، EX02 (امتیاز بالا) |
-| Days you ate a real breakfast? | `Nutrition` | NU03a–c، NU02a–d، NU01a–c، NU04–NU07 |
-| Nights you slept 7+ hours? | `Sleep` | SL01–SL15، LI03–LI05 (گره نور زیر همین حوزه است) |
-| Days you took a real break? | `Mind` | FM05، ST01–ST05، PG01–PG02، FM01–FM04، FM06 |
+| Days you moved 20+ min last week? (در اپ: On a normal day, how much do you move?) | `Movement` | EX01a–d (کم‌امتیاز)، EX04، EX03a–c، EX02 (امتیاز بالا) |
+| Days you ate a real breakfast? (در اپ: How do you usually eat on a workday?) | `Nutrition` | NU03a–c، NU02a–d، NU01a–c، NU04–NU07 |
+| Nights you slept 7+ hours? (در اپ: How do you usually wake up?) | `Sleep` | SL01–SL15، LI03–LI05 (گره نور زیر همین حوزه است) |
+| Days you took a real break? (در اپ: After work, can you switch off?) | `Mind` | FM05، ST01–ST05، PG01–PG02، FM01–FM04، FM06 |
 
 **۳ خلأی واقعی بین اپ و کتاب (به من نگفته‌اید کاری بکنم، پس فقط گزارش‌شان می‌دهم):**
 

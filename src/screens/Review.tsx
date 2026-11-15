@@ -187,7 +187,7 @@ export function Review() {
                 <h2 className="text-title-l text-primary">{q}</h2>
                 <div className="answer-list" role="radiogroup" aria-label={q}>
                   {tList(`questions.${area}.answers`).map((label, i) => (
-                    <AnswerRow key={label} label={label} selected={answers[area] === i} onSelect={() => setAnswers({ ...answers, [area]: i as AnswerIndex })} />
+                    <AnswerRow key={label} label={label} lead={tList(`questions.${area}.emoji`)[i]} selected={answers[area] === i} onSelect={() => setAnswers({ ...answers, [area]: i as AnswerIndex })} />
                   ))}
                 </div>
                 <Spacer />

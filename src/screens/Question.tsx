@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { haptic, motionTokens } from '../styles/motion';
 import { AnswerRow } from '../components/AnswerRow';
 import { Button } from '../components/Button';
+import { TextButton } from '../components/TextButton';
 import { IconTile, type Glyph } from '../components/IconTile';
 import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
@@ -16,7 +17,9 @@ import './onboarding.css';
 
 const GLYPH: Record<Area, Glyph> = { Movement: 'Move', Nutrition: 'Nutrition', Sleep: 'Sleep', Mind: 'Mind' };
 
-/** Questions 1–4 (Figma 55:229 Movement, 55:262 Nutrition, 55:293 Sleep, 55:324 Mind). */
+/** Questions 1–4 (Figma 55:229 Movement, 55:262 Nutrition, 55:293 Sleep, 55:324 Mind).
+ *  Owner decision (user feedback): everyday questions about a normal day instead of counting days.
+ *  Same 4 levels (0–3), so the engine is unchanged. */
 export function Question() {
   const navigate = useNavigate();
   const { area: slug } = useParams();
@@ -30,6 +33,9 @@ export function Question() {
   const selected = state.answers[area];
   const back = index === 0 ? '/symptoms' : AREAS[index - 1] === 'Sleep' ? TIMES_ROUTE : QUESTION_ROUTES[AREAS[index - 1]];
   const next = area === 'Sleep' ? TIMES_ROUTE : index === AREAS.length - 1 ? HEALTH_ROUTE : QUESTION_ROUTES[AREAS[index + 1]];
+  const emoji = tList(`questions.${area}.emoji`);
+  /** "Not sure": counts as the second answer, so we start with easy habits (app choice). */
+  const notSure = () => { setAnswer(area, 1); navigate(next); };
 
   return (
     <Screen>
@@ -37,13 +43,15 @@ export function Question() {
       <SegmentedProgress total={TOTAL_STEPS} filled={step} />
       <IconTile glyph={GLYPH[area]} size="L" />
       <h2 className="text-title-l text-primary">{t(`questions.${area}.question`)}</h2>
+      <p className="text-body-s text-secondary">{t(`questions.${area}.why`)}</p>
       <div className="answer-list" role="radiogroup" aria-label={t(`questions.${area}.question`)}>
         {tList(`questions.${area}.answers`).map((label, i) => (
           <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.06 + i * motionTokens.stagger }}>
-            <AnswerRow label={label} selected={selected === i} onSelect={() => { haptic(8); setAnswer(area, i as AnswerIndex); }} />
+            <AnswerRow label={label} lead={emoji[i]} selected={selected === i} onSelect={() => { haptic(8); setAnswer(area, i as AnswerIndex); }} />
           </motion.div>
         ))}
       </div>
+      <div className="question__notsure"><TextButton label={t('questionScreen.notSure')} onClick={notSure} /></div>
       <Spacer />
       <Button block label={t('common.continue')} disabled={selected === undefined} onClick={() => navigate(next)} />
     </Screen>

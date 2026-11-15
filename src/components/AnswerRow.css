@@ -37,3 +37,4 @@
   background: var(--color-action-primary);
   color: var(--color-surface-card);
 }
+.answer-row__lead { flex-shrink: 0; font-size: 22px; line-height: 1; }
