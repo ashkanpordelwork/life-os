@@ -805,7 +805,7 @@
     },
     "reactedToYou": "{n} reactions",
     "nudge": {
-      "cta": "Nudge",
+      "cta": "Poke",
       "sent": "Nudged",
       "title": "Your Tribe is poking you",
       "line": "{name}: {msg}",
@@ -844,7 +844,18 @@
           "body": "Biggest rise since last week"
         }
       }
-    }
+    },
+    "tabFeed": "Feed",
+    "tabWeek": "This week",
+    "cheer": "Cheer",
+    "moreTitle": "More reactions",
+    "noCheers": "No cheers yet",
+    "cheers": "{n} cheers",
+    "waiting": "{name} hasn’t started today",
+    "waitingYou": "You haven’t started today",
+    "notStartedHint": "Tick one habit to show up.",
+    "summaryStreak": "{n} day Tribe streak",
+    "summaryWeek": "{n} of {total} active days this week"
   },
   "admin": {
     "title": "Admin",

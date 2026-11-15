@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { backend, REACTIONS, type ReactionKind, type TribeDetail, type Tribe as TribeT, type TribeEvent, type TribeReaction, type TribeStatus } from '../backend';
+import { backend, type ReactionKind, type TribeDetail, type Tribe as TribeT, type TribeEvent, type TribeReaction } from '../backend';
 import { BottomSheet } from '../components/BottomSheet';
 import { Button } from '../components/Button';
 import { Chip } from '../components/Chip';
@@ -10,7 +10,6 @@ import { Icon } from '../components/Icon';
 import { IconButton } from '../components/IconButton';
 import { Mascot } from '../components/Mascot';
 import { Screen, Spacer } from '../components/Screen';
-import { SegmentedProgress } from '../components/SegmentedProgress';
 import { SettingRow } from '../components/SettingRow';
 import { TextField } from '../components/TextField';
 import { addDays, timeAgo, tribeChallenge, tribeStreak, weekBoard } from '../engine';
@@ -199,7 +198,15 @@ function TribeEmpty({ title, body }: { title: string; body: string }) {
 }
 
 type ReactTarget = { eventId?: number; day: string };
+type Ring = 'done' | 'started' | 'idle';
 
+const MORE_KINDS: ReactionKind[] = ['fire', 'power'];
+
+/**
+ * The Tribe as a small social feed (owner decision): a row of avatars with a ring for today,
+ * then one feed of posts. The main action is "Cheer" (high five); "more" opens fire and power.
+ * "Poke" is the only nudge. The weekly board sits under its own tab. Nothing shows health answers.
+ */
 function TribeBody({ detail, me, today, onInvite, copied, onReact, onNudge }: {
   detail: TribeDetail; me: string; today: string; onInvite: () => void; copied: boolean;
   onReact: (to: string, target: ReactTarget, kind: ReactionKind, on: boolean) => void;
@@ -218,48 +225,53 @@ function TribeBody({ detail, me, today, onInvite, copied, onReact, onNudge }: {
     if (!challenge.reached) return;
     try { if (localStorage.getItem(cheerKey) !== '1') { localStorage.setItem(cheerKey, '1'); setCheer(true); haptic(40); } } catch { /* ignore */ }
   }, [challenge.reached, cheerKey]);
-  const activeToday = new Set(active.filter((e) => e.day === today).map((e) => e.user_id)).size;
-  const need = Math.ceil(detail.members.length / 2);
-  // Members: me first, then by today's progress.
-  const members = [...detail.members].sort((a, b) => (a === me ? -1 : b === me ? 1 : (statusOf.get(b)?.done ?? 0) - (statusOf.get(a)?.done ?? 0)));
-  const feed = detail.events.filter((e) => e.kind !== 'active' || e.day === today).slice(0, 30);
-  const board = useMemo(() => weekBoard(detail.events, detail.members, today), [detail.events, detail.members, today]);
+  const [tab, setTab] = useState<'feed' | 'week'>('feed');
+  const [more, setMore] = useState<{ to: string; target: ReactTarget } | null>(null);
+
   const msgs = tList('tribe.nudge.msgs');
   const nudgedMe = detail.nudges.filter((n) => n.to_user === me && n.day === today);
   const iNudged = new Set(detail.nudges.filter((n) => n.from_user === me && n.day === today).map((n) => n.to_user));
+  const board = useMemo(() => weekBoard(detail.events, detail.members, today), [detail.events, detail.members, today]);
   const appear = (i: number) => ({ initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { ...motionTokens.page, delay: i * motionTokens.stagger } });
+
+  // Today's ring per person: done (all habits), started (some), idle (not yet).
+  const ringOf = (id: string): Ring => {
+    const st = statusOf.get(id);
+    if (!st || st.day !== today || st.done === 0) return 'idle';
+    return st.done >= (st.total || 1) ? 'done' : 'started';
+  };
+  const activeToday = new Set(active.filter((e) => e.day === today).map((e) => e.user_id));
+  // Members first, then by today's progress.
+  const people = [...detail.members].sort((a, b) => (a === me ? -1 : b === me ? 1 : (statusOf.get(b)?.done ?? 0) - (statusOf.get(a)?.done ?? 0)));
+  const notStarted = people.filter((id) => !activeToday.has(id));
+  const events = detail.events.filter((e) => e.kind !== 'active' || e.day === today).slice(0, 30);
+  const reactsOf = (eventId: number | null, to: string, day: string) =>
+    detail.reactions.filter((r) => r.to_user === to && r.day === day && r.event_id === eventId);
+  const canPoke = (id: string) => id !== me && !!statusOf.get(id) && statusOf.get(id)!.allow_nudges !== false;
 
   return (
     <>
-      {/* Pokes from friends today: a flat note, not a card (nothing here is tappable). */}
-      {nudgedMe.length > 0 && (
-        <motion.section {...appear(0)} className="tribe-poked" aria-label={t('tribe.nudge.title')}>
-          <span className="text-mono-label text-brand tribe-poked__title"><Icon name="bolt" size={14} />{t('tribe.nudge.title')}</span>
-          {nudgedMe.map((n) => (
-            <span key={n.from_user} className="text-body-m text-primary">{t('tribe.nudge.line', { name: nameOf(n.from_user), msg: msgs[n.msg % msgs.length] })}</span>
-          ))}
-        </motion.section>
-      )}
-      <motion.section {...appear(0)} className="tribe-streak" aria-label={t('tribe.streakLabel')}>
-        <span className="tribe-streak__flame"><Icon name="local_fire_department" size={28} /></span>
-        <div className="tribe-streak__text">
-          <span className="text-display-xl">{streak}</span>
-          <span className="text-body-s">{t('tribe.streakBody', { n: activeToday, total: detail.members.length, need })}</span>
-        </div>
+      {/* Story row: one circle per person. Ring = today's progress. */}
+      <motion.section {...appear(0)} className="tribe-stories" aria-label={t('tribe.todayTitle')}>
+        {people.map((id) => {
+          const ring = ringOf(id);
+          const st = statusOf.get(id);
+          return (
+            <div key={id} className={`tribe-story tribe-story--${ring}`}>
+              <span className={`tribe-story__ring tribe-story__ring--${ring}`}>
+                <span className={`tribe-avatar tribe-avatar--${hue(id)}`} aria-hidden="true">{initial(nameOf(id))}</span>
+              </span>
+              <span className="tribe-story__name text-mono-caption text-primary">{nameOf(id)}</span>
+              <span className="tribe-story__count text-mono-caption text-secondary">{st && st.day === today ? `${st.done}/${st.total || 1}` : '0/—'}</span>
+            </div>
+          );
+        })}
       </motion.section>
 
-      <motion.section {...appear(1)} className={`tribe-challenge glass-card${challenge.reached ? ' tribe-challenge--done' : ''}`} aria-labelledby="tribe-challenge">
-        <div className="tribe-challenge__head">
-          <span className="text-mono-label text-brand">{t('tribe.challenge.label')}</span>
-          <span className="text-mono-caption text-secondary">{t('tribe.challenge.last', { n: challenge.lastDone, total: challenge.lastGoal })}</span>
-        </div>
-        <h2 id="tribe-challenge" className="text-title-s text-primary">
-          {challenge.reached ? t('tribe.challenge.done') : t('tribe.challenge.title', { goal: challenge.goal })}
-        </h2>
-        <div className="tribe-challenge__bar" role="progressbar" aria-valuemin={0} aria-valuemax={challenge.goal} aria-valuenow={challenge.done} aria-label={t('tribe.challenge.label')}>
-          <motion.span className="tribe-challenge__fill" initial={{ inlineSize: '0%' }} animate={{ inlineSize: `${Math.min(100, (challenge.done / challenge.goal) * 100)}%` }} transition={{ ...motionTokens.page, delay: 0.2 }} />
-        </div>
-        <span className="text-body-s text-secondary">{t(challenge.reached ? 'tribe.challenge.progressDone' : 'tribe.challenge.progress', { n: challenge.done, total: challenge.goal, left: Math.max(0, challenge.goal - challenge.done) })}</span>
+      {/* One quiet summary line: streak and this week's goal. */}
+      <motion.section {...appear(1)} className="tribe-summary" aria-label={t('tribe.streakLabel')}>
+        <span className="tribe-summary__item"><Icon name="local_fire_department" size={16} /><span className="text-body-s text-primary">{t('tribe.summaryStreak', { n: streak })}</span></span>
+        <span className="tribe-summary__item"><Icon name="trending_up" size={16} /><span className="text-body-s text-primary">{t('tribe.summaryWeek', { n: challenge.done, total: challenge.goal })}</span></span>
         {cheer && <Confetti count={30} />}
       </motion.section>
 
@@ -268,139 +280,127 @@ function TribeBody({ detail, me, today, onInvite, copied, onReact, onNudge }: {
         <Button variant="Secondary" label={copied ? t('tribe.copied') : t('tribe.invite')} onClick={onInvite} />
       </motion.div>
 
-      <motion.section {...appear(2)} className="tribe__section" aria-labelledby="tribe-today">
-        <h2 id="tribe-today" className="text-title-m text-primary">{t('tribe.todayTitle')}</h2>
-        <GlassPanel gap={14}>
-          {members.map((id) => (
-            <MemberRow key={id} id={id} me={me} today={today} name={nameOf(id)} hue={hue(id)} status={statusOf.get(id)}
-              reactions={detail.reactions.filter((r) => r.to_user === id && r.day === today && r.event_id === null)}
-              nudged={iNudged.has(id)} onReact={(k, on) => onReact(id, { day: today }, k, on)} onNudge={() => onNudge(id)} />
+      {nudgedMe.length > 0 && (
+        <motion.section {...appear(2)} className="tribe-poked" aria-label={t('tribe.nudge.title')}>
+          <span className="text-mono-label text-brand tribe-poked__title"><Icon name="bolt" size={14} />{t('tribe.nudge.title')}</span>
+          {nudgedMe.map((n) => (
+            <span key={n.from_user} className="text-body-m text-primary">{t('tribe.nudge.line', { name: nameOf(n.from_user), msg: msgs[n.msg % msgs.length] })}</span>
           ))}
-        </GlassPanel>
-      </motion.section>
+        </motion.section>
+      )}
 
-      <motion.section {...appear(3)} className="tribe__section" aria-labelledby="tribe-board">
-        <h2 id="tribe-board" className="text-title-m text-primary">{t('tribe.board.title')}</h2>
-        {board.rows.every((r) => r.activeDays === 0) ? (
-          <p className="text-body-s text-secondary">{t('tribe.board.empty')}</p>
-        ) : (
-          <GlassPanel gap={14}>
-            {board.rows.map((r, i) => (
-              <div key={r.user_id} className="tribe-rank">
-                <span className="tribe-rank__n text-mono-value text-secondary">{i + 1}</span>
-                <span className={`tribe-avatar tribe-avatar--${hue(r.user_id)}`} aria-hidden="true">{initial(nameOf(r.user_id))}</span>
-                <span className="tribe-rank__name text-body-m-strong text-primary">{nameOf(r.user_id)}</span>
-                {r.crown && <span className="tribe-rank__crown" aria-label={t('tribe.board.leading')}><Icon name="crown" size={18} /></span>}
-                <span className="text-mono-caption text-secondary">{r.activeDays === 0 ? t('tribe.board.none') : r.activeDays === 1 ? t('tribe.board.one') : t('tribe.board.days', { n: r.activeDays })}</span>
-              </div>
-            ))}
-          </GlassPanel>
-        )}
-        {board.titles.length > 0 && (
-          <ul className="tribe-titles" aria-label={t('tribe.board.titlesTitle')}>
-            {board.titles.map((x) => (
-              <li key={x.kind} className="tribe-title text-body-s text-secondary">
-                <Icon name={x.kind === 'earlyBird' ? 'sunrise' : x.kind === 'finisher' ? 'task_alt' : 'trending_up'} size={16} />
-                <span><strong className="text-primary">{t(`tribe.board.titles.${x.kind}.name`)}</strong> · {nameOf(x.user_id)} · {t(`tribe.board.titles.${x.kind}.body`)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </motion.section>
+      <div className="chip-wrap" role="tablist">
+        <Chip label={t('tribe.tabFeed')} selected={tab === 'feed'} onToggle={() => setTab('feed')} />
+        <Chip label={t('tribe.tabWeek')} selected={tab === 'week'} onToggle={() => setTab('week')} />
+      </div>
 
-      <motion.section {...appear(4)} className="tribe__section" aria-labelledby="tribe-feed">
-        <h2 id="tribe-feed" className="text-title-m text-primary">{t('tribe.feedTitle')}</h2>
-        {feed.length === 0 && <p className="text-body-s text-secondary">{t('tribe.feedEmpty')}</p>}
-        <AnimatePresence initial={false}>
-          {feed.map((ev) => {
-            const reacts = detail.reactions.filter((r) => r.event_id === ev.id);
-            const ago = timeAgo(ev.created_at);
-            return (
-              <motion.div key={ev.id} layout className="tribe-event glass-card" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-                <span className={`tribe-avatar tribe-avatar--${hue(ev.user_id)}`} aria-hidden="true">{initial(nameOf(ev.user_id))}</span>
-                <span className="tribe-event__text">
-                  <span className="text-body-m text-primary">{eventText(ev, nameOf(ev.user_id))}</span>
-                  <span className="text-mono-caption text-secondary">{ago.unit === 'now' ? t('tribe.ago.now') : t(`tribe.ago.${ago.unit}`, { n: ago.n })}</span>
+      {tab === 'feed' && (
+        <motion.section {...appear(3)} className="tribe-feed" aria-label={t('tribe.feedTitle')}>
+          {notStarted.map((id) => (
+            <article key={`wait-${id}`} className="tribe-post tribe-post--quiet">
+              <div className="tribe-post__head">
+                <span className={`tribe-avatar tribe-avatar--${hue(id)}`} aria-hidden="true">{initial(nameOf(id))}</span>
+                <span className="tribe-post__who">
+                  <span className="text-body-m text-primary">{id === me ? t('tribe.waitingYou') : t('tribe.waiting', { name: nameOf(id) })}</span>
+                  <span className="text-mono-caption text-secondary">{t('tribe.notStartedHint')}</span>
                 </span>
-                <ReactionBar reactions={reacts} me={me} own={ev.user_id === me} onToggle={(k, on) => onReact(ev.user_id, { eventId: ev.id, day: ev.day }, k, on)} />
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </motion.section>
+              </div>
+              {canPoke(id) && (iNudged.has(id)
+                ? <span className="tribe-nudged text-mono-caption text-secondary"><Icon name="check" size={14} />{t('tribe.nudge.sent')}</span>
+                : <button type="button" className="tribe-nudge" onClick={() => onNudge(id)}><Icon name="bolt" size={18} /><span className="text-body-s">{t('tribe.nudge.cta')}</span></button>)}
+            </article>
+          ))}
+
+          {events.length === 0 && notStarted.length === 0 && <p className="text-body-s text-secondary">{t('tribe.feedEmpty')}</p>}
+
+          <AnimatePresence initial={false}>
+            {events.map((ev) => {
+              const ago = timeAgo(ev.created_at);
+              const reacts = reactsOf(ev.id, ev.user_id, ev.day);
+              return (
+                <motion.article key={ev.id} layout className="tribe-post glass-card" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="tribe-post__head">
+                    <span className={`tribe-avatar tribe-avatar--${hue(ev.user_id)}`} aria-hidden="true">{initial(nameOf(ev.user_id))}</span>
+                    <span className="tribe-post__who">
+                      <span className="text-body-m-strong text-primary">{eventText(ev, nameOf(ev.user_id))}</span>
+                      <span className="text-mono-caption text-secondary">{ago.unit === 'now' ? t('tribe.ago.now') : t(`tribe.ago.${ago.unit}`, { n: ago.n })}</span>
+                    </span>
+                  </div>
+                  <CheerRow reactions={reacts} me={me} own={ev.user_id === me}
+                    onCheer={() => { const on = !reacts.some((r) => r.kind === 'five' && r.from_user === me); onReact(ev.user_id, { eventId: ev.id, day: ev.day }, 'five', on); }}
+                    onMore={() => setMore({ to: ev.user_id, target: { eventId: ev.id, day: ev.day } })} />
+                </motion.article>
+              );
+            })}
+          </AnimatePresence>
+        </motion.section>
+      )}
+
+      {tab === 'week' && (
+        <motion.section {...appear(3)} className="tribe__section" aria-labelledby="tribe-board">
+          <h2 id="tribe-board" className="text-title-m text-primary">{t('tribe.board.title')}</h2>
+          {board.rows.every((r) => r.activeDays === 0) ? (
+            <p className="text-body-s text-secondary">{t('tribe.board.empty')}</p>
+          ) : (
+            <GlassPanel gap={14}>
+              {board.rows.map((r, i) => (
+                <div key={r.user_id} className="tribe-rank">
+                  <span className="tribe-rank__n text-mono-value text-secondary">{i + 1}</span>
+                  <span className={`tribe-avatar tribe-avatar--${hue(r.user_id)}`} aria-hidden="true">{initial(nameOf(r.user_id))}</span>
+                  <span className="tribe-rank__name text-body-m-strong text-primary">{nameOf(r.user_id)}</span>
+                  {r.crown && <span className="tribe-rank__crown" aria-label={t('tribe.board.leading')}><Icon name="crown" size={18} /></span>}
+                  <span className="text-mono-caption text-secondary">{r.activeDays === 0 ? t('tribe.board.none') : r.activeDays === 1 ? t('tribe.board.one') : t('tribe.board.days', { n: r.activeDays })}</span>
+                </div>
+              ))}
+            </GlassPanel>
+          )}
+          {board.titles.length > 0 && (
+            <ul className="tribe-titles" aria-label={t('tribe.board.titlesTitle')}>
+              {board.titles.map((x) => (
+                <li key={x.kind} className="tribe-title text-body-s text-secondary">
+                  <Icon name={x.kind === 'earlyBird' ? 'sunrise' : x.kind === 'finisher' ? 'task_alt' : 'trending_up'} size={16} />
+                  <span><strong className="text-primary">{t(`tribe.board.titles.${x.kind}.name`)}</strong> · {nameOf(x.user_id)} · {t(`tribe.board.titles.${x.kind}.body`)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </motion.section>
+      )}
+
+      <BottomSheet open={!!more} onClose={() => setMore(null)} title={t('tribe.moreTitle')}>
+        {more && (
+          <div className="tribe-more">
+            {MORE_KINDS.map((k) => {
+              const on = reactsOf(more.target.eventId ?? null, more.to, more.target.day).some((r) => r.kind === k && r.from_user === me);
+              return (
+                <Button key={k} block variant={on ? 'Secondary' : 'Ghost'} label={`${t(`tribe.react.${k}`)}${on ? ' ✓' : ''}`}
+                  onClick={() => onReact(more.to, more.target, k, !on)} />
+              );
+            })}
+          </div>
+        )}
+      </BottomSheet>
     </>
   );
 }
 
-const REACTION_ICON = { five: 'high_five', fire: 'local_fire_department', power: 'bolt' } as const;
-
-/**
- * Reactions on a post or a day: three buttons (high five, fire, power) on other people's things,
- * only the counts on your own (nothing to tap there).
- */
-function ReactionBar({ reactions, me, own, onToggle }: { reactions: TribeReaction[]; me: string; own: boolean; onToggle: (kind: ReactionKind, on: boolean) => void }) {
-  const count = (k: ReactionKind) => reactions.filter((r) => r.kind === k).length;
-  const mine = (k: ReactionKind) => reactions.some((r) => r.kind === k && r.from_user === me);
+/** Under each post: one "Cheer" button with the count, and "more" for fire and power. Your own posts only show counts. */
+function CheerRow({ reactions, me, own, onCheer, onMore }: {
+  reactions: TribeReaction[]; me: string; own: boolean; onCheer: () => void; onMore: () => void;
+}) {
+  const total = reactions.length;
+  const mine = reactions.some((r) => r.kind === 'five' && r.from_user === me);
   if (own) {
-    const shown = REACTIONS.filter((k) => count(k) > 0);
-    if (!shown.length) return null;
-    return (
-      <span className="tribe-reacts">
-        {shown.map((k) => (
-          <span key={k} className="tribe-five tribe-five--count" aria-label={`${t(`tribe.react.${k}`)}: ${count(k)}`}><Icon name={REACTION_ICON[k]} size={20} /><span className="text-mono-caption">{count(k)}</span></span>
-        ))}
-      </span>
-    );
+    return <p className="tribe-post__stats text-mono-caption text-secondary">{total === 0 ? t('tribe.noCheers') : t('tribe.cheers', { n: total })}</p>;
   }
   return (
-    <span className="tribe-reacts" role="group" aria-label={t('tribe.react.five')}>
-      {REACTIONS.map((k) => (
-        <motion.button key={k} type="button" className={`tribe-five${mine(k) ? ' tribe-five--on' : ''}`} aria-pressed={mine(k)} aria-label={t(`tribe.react.${k}`)} whileTap={{ scale: 0.85 }} onClick={() => onToggle(k, !mine(k))}>
-          <motion.span key={String(mine(k))} initial={{ scale: mine(k) ? 0.5 : 1, rotate: mine(k) ? -20 : 0 }} animate={{ scale: 1, rotate: 0 }} transition={motionTokens.pop}><Icon name={REACTION_ICON[k]} size={20} /></motion.span>
-          {count(k) > 0 && <span className="text-mono-caption">{count(k)}</span>}
-        </motion.button>
-      ))}
-    </span>
-  );
-}
-
-function MemberRow({ id, me, today, name, hue, status, reactions, nudged, onReact, onNudge }: {
-  id: string; me: string; today: string; name: string; hue: string; status?: TribeStatus;
-  reactions: TribeReaction[]; nudged: boolean; onReact: (kind: ReactionKind, on: boolean) => void; onNudge: () => void;
-}) {
-  const fresh = status?.day === today;
-  const done = fresh ? status!.done : 0;
-  // Nudge only people who haven't started, who allow it, and who aren't you.
-  const canNudge = id !== me && !!status && status.allow_nudges !== false && done === 0;
-  const total = status?.total || 3;
-  return (
-    <div className="tribe-member">
-      <span className={`tribe-avatar tribe-avatar--${hue}`} aria-hidden="true">{initial(name)}</span>
-      <div className="tribe-member__mid">
-        <div className="tribe-member__head">
-          <span className="text-body-m-strong text-primary">{name}</span>
-          <span className="tribe-member__chips">
-            <span className="text-mono-caption text-secondary tribe-member__streak"><Icon name="local_fire_department" size={14} />{status?.streak ?? 0}</span>
-            {status?.score != null && <span className="text-mono-caption text-secondary">{status.score.toFixed(1)}</span>}
-          </span>
-        </div>
-        <div className="tribe-member__progress">
-          <SegmentedProgress variant="today" total={total} filled={done} label={t('tribe.doneOf', { n: done, total })} />
-          <span className="text-mono-caption text-primary">{done}/{total}</span>
-        </div>
-        {status?.sprint_number != null && (
-          <span className="text-body-s text-secondary">
-            {[t('tribe.weekN', { n: status.sprint_number }), status.sprint_theme, status.patch_titles?.join(', ')].filter(Boolean).join(' · ')}
-          </span>
-        )}
-        {!status && id !== me && <span className="text-body-s text-secondary">{t('tribe.noStatus')}</span>}
-        <div className="tribe-member__actions">
-          <ReactionBar reactions={reactions} me={me} own={id === me} onToggle={onReact} />
-          {canNudge && (nudged
-            ? <span className="tribe-nudged text-mono-caption text-secondary"><Icon name="check" size={14} />{t('tribe.nudge.sent')}</span>
-            : <motion.button type="button" className="tribe-nudge" whileTap={{ scale: 0.92 }} onClick={onNudge}><Icon name="bolt" size={18} /><span className="text-body-s">{t('tribe.nudge.cta')}</span></motion.button>)}
-        </div>
-      </div>
+    <div className="tribe-post__actions">
+      <motion.button type="button" className={`tribe-cheer${mine ? ' tribe-cheer--on' : ''}`} aria-pressed={mine} whileTap={{ scale: 0.92 }} onClick={onCheer}>
+        <motion.span key={String(mine)} initial={{ scale: mine ? 0.6 : 1 }} animate={{ scale: 1 }} transition={motionTokens.pop}><Icon name="high_five" size={18} /></motion.span>
+        <span className="text-body-s">{t('tribe.cheer')}</span>
+        {total > 0 && <span className="text-mono-caption">{total}</span>}
+      </motion.button>
+      <button type="button" className="tribe-more-btn" aria-label={t('tribe.moreTitle')} onClick={onMore}><Icon name="more" size={20} /></button>
     </div>
   );
 }
