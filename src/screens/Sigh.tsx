@@ -9,6 +9,7 @@ import { TopBar } from '../components/TopBar';
 import { t } from '../i18n';
 import { haptic, motionTokens } from '../styles/motion';
 import './library.css';
+import { toolBack } from './toolBack';
 
 /** Book (ST01, protocol 1): 1–3 sighs in a row. */
 const REPS = [1, 2, 3] as const;
@@ -53,7 +54,7 @@ export function Sigh() {
 
   return (
     <Screen align="center">
-      <TopBar title={t('sigh.title')} onBack={() => { stop(); navigate('/library'); }} />
+      <TopBar title={t('sigh.title')} onBack={() => { stop(); toolBack(navigate); }} />
       {phase === 'ready' && (
         <div className="chip-wrap tool__reps" role="radiogroup" aria-label={t('sigh.reps')}>
           {REPS.map((n) => <Chip key={n} label={t('sigh.repsN', { n })} selected={reps === n} onToggle={() => setReps(n)} />)}
@@ -92,7 +93,7 @@ export function Sigh() {
       {phase === 'done' && (
         <>
           <Button block label={t('sigh.again')} onClick={() => run(1)} />
-          <Button block variant="Ghost" label={t('sigh.close')} onClick={() => navigate('/library')} />
+          <Button block variant="Ghost" label={t('sigh.close')} onClick={() => toolBack(navigate)} />
         </>
       )}
       <p className="text-body-s text-secondary text-center">{t('sigh.safety')}</p>

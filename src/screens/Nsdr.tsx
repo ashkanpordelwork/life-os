@@ -10,6 +10,7 @@ import { TopBar } from '../components/TopBar';
 import { t, tList } from '../i18n';
 import { haptic } from '../styles/motion';
 import './library.css';
+import { toolBack } from './toolBack';
 
 /** Book (SL08 / ST03): 10, 20 or 30 minutes, lying down, eyes closed. */
 const LENGTHS = [10, 20, 30] as const;
@@ -82,7 +83,7 @@ export function Nsdr() {
 
   return (
     <Screen align="center">
-      <TopBar title={t('nsdr.title')} onBack={() => { stop(); navigate('/library'); }} />
+      <TopBar title={t('nsdr.title')} onBack={() => { stop(); toolBack(navigate); }} />
       {!running && !done && (
         <div className="chip-wrap tool__reps" role="radiogroup" aria-label={t('nsdr.length')}>
           {LENGTHS.map((n) => <Chip key={n} label={t('time.minutes', { n })} selected={minutes === n} onToggle={() => setMinutes(n)} />)}
@@ -112,7 +113,7 @@ export function Nsdr() {
       <Spacer />
       {!running && <Button block label={done ? t('nsdr.again') : t('nsdr.start')} onClick={start} />}
       {running && <Button block variant="Ghost" label={t('nsdr.stop')} onClick={stop} />}
-      {done && <Button block variant="Ghost" label={t('sigh.close')} onClick={() => navigate('/library')} />}
+      {done && <Button block variant="Ghost" label={t('sigh.close')} onClick={() => toolBack(navigate)} />}
     </Screen>
   );
 }

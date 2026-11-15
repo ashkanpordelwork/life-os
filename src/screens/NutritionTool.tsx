@@ -10,6 +10,7 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import './library.css';
+import { toolBack } from './toolBack';
 
 /** Book NU03: complete protein per 150 kcal (g). */
 const CPC: { key: string; g: number }[] = [
@@ -44,7 +45,7 @@ export function NutritionTool() {
 
   return (
     <Screen>
-      <TopBar title={t('nutrition.title')} onBack={() => navigate('/library')} />
+      <TopBar title={t('nutrition.title')} onBack={() => toolBack(navigate)} />
       <motion.div {...appear(0)}>
         <GlassPanel gap={8}>
           <span className="text-mono-label text-secondary">{t('nutrition.weight')}</span>

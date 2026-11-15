@@ -13,6 +13,9 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic } from '../styles/motion';
 import { GoalLog } from './GoalLog';
+import { HABIT_TOOL } from './habitTools';
+import { ListRow } from '../components/ListRow';
+import { hasPro } from '../state/plan';
 import { itemAmount, whenLabel } from './flow';
 import './patch.css';
 
@@ -26,7 +29,7 @@ const VERSIONS: { key: VersionKey; icon: IconName }[] = [
 export function PatchDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { checkins, today, sprint, setDone, wake, bed, goals, setGoal } = useSession();
+  const { checkins, today, sprint, setDone, wake, bed, goals, setGoal, plan } = useSession();
   const item = id ? getItem(id) : undefined;
   const [version, setVersion] = useState<VersionKey>(() => {
     try { return localStorage.getItem('lifeos.tinyMode') === '1' ? 'tiny' : 'standard'; } catch { return 'standard'; }
@@ -49,6 +52,8 @@ export function PatchDetail() {
     navigate(allDoneNow ? '/done' : '/today');
   };
   const mark = () => save(!done);
+  const tool = HABIT_TOOL[item.id];
+  const locked = !!tool?.pro && !hasPro(plan);
   const withGoal = item.goal ? (item as ChecklistItem & { goal: HabitGoal }) : null;
   const factIcon = item.measure === 'count' || item.measure === 'amount' ? 'target' : 'timer';
 
@@ -81,6 +86,12 @@ export function PatchDetail() {
           </motion.p>
         </AnimatePresence>
       </div>
+      {tool && (
+        <section className="patch__tool" aria-label={t('patch.toolLabel')}>
+          <p className="text-mono-label text-secondary">{t('patch.toolLabel')}</p>
+          <ListRow icon={locked ? 'lock' : tool.icon} title={t(`${tool.key}.title`)} subtitle={locked ? t('library.proOnly') : t(`${tool.key}.subtitle`)} onClick={() => navigate(locked ? '/pro' : tool.to)} />
+        </section>
+      )}
       <section className="patch__why" aria-labelledby="patch-why">
         <h3 id="patch-why" className="text-mono-label text-secondary"><Icon name="science" size={14} />{t('patch.why')}</h3>
         <p className="text-body-m text-primary">{item.science_note}</p>

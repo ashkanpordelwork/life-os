@@ -234,7 +234,8 @@
     "logFull": "Hit my goal",
     "logPartial": "Still counts for your streak.",
     "less": "Less",
-    "more": "More"
+    "more": "More",
+    "toolLabel": "Helps with this habit"
   },
   "slots": {
     "ALL_DAY": "All day",
@@ -389,19 +390,14 @@
   },
   "library": {
     "title": "Library",
-    "tools": "Tools",
     "learn": "Learn",
-    "toolsIntro": "Quick help for the moment you need it.",
-    "learnIntro": "Every habit and why it works.",
+    "learnIntro": "Every habit and why it works. Tools now open from inside your habits.",
     "level": "Level {n}",
     "unlocks": "Unlocks in a later week",
     "open": "Library",
-    "openSubtitle": "Tools and the science behind each habit",
-    "calm": "Calm",
-    "focusGroup": "Focus",
-    "nutritionGroup": "Nutrition",
-    "travelGroup": "Travel",
-    "proOnly": "Pro · tap to see what's in it"
+    "openSubtitle": "Read why each habit works",
+    "proOnly": "Pro · tap to see what's in it",
+    "learningGroup": "Learning tools"
   },
   "sigh": {
     "title": "Physiological sigh",
@@ -875,8 +871,8 @@
         "body": "Tiny mode gives you the 20-second version of each habit. It still counts."
       },
       "tools": {
-        "title": "Need a moment?",
-        "body": "Breathing, NSDR and focus tools live in Library, one tap away."
+        "title": "Why it works",
+        "body": "Tap the book to read why each habit helps. Tools like breathing open right inside the habit."
       },
       "roadmap": {
         "title": "Your journey",

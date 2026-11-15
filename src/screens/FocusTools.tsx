@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { CheckCircle } from '../components/CheckCircle';
 import { Chip } from '../components/Chip';
@@ -13,9 +13,10 @@ import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import './library.css';
+import { toolBack } from './toolBack';
 
 const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-const back = (navigate: (to: string) => void) => () => navigate('/library');
+const back = (navigate: NavigateFunction) => () => toolBack(navigate);
 
 /** Plays 40 Hz binaural beats in headphones (book FM01: 5 min before or during work). No sound file. */
 function useBinaural() {

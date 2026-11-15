@@ -11,6 +11,7 @@ import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import './library.css';
+import { toolBack } from './toolBack';
 
 type Trip = 'short' | 'long';
 
@@ -37,7 +38,7 @@ export function JetLag() {
 
   return (
     <Screen>
-      <TopBar title={t('jetlag.title')} onBack={() => navigate('/library')} />
+      <TopBar title={t('jetlag.title')} onBack={() => toolBack(navigate)} />
       <GlassPanel gap={8}>
         <span className="text-mono-label text-secondary">{t('jetlag.diffLabel')}</span>
         <div className="nutri__weight">

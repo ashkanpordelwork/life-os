@@ -16,3 +16,5 @@
 .goal-log { display: flex; flex-direction: column; gap: var(--space-12); }
 .goal-log h3 { margin: 0; }
 .goal-log__actions { display: flex; gap: var(--space-8); }
+.patch__tool { display: flex; flex-direction: column; gap: var(--space-8); }
+.patch__tool p { margin: 0; }
