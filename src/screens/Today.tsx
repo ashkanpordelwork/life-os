@@ -13,7 +13,6 @@ import { MetaChip } from '../components/MetaChip';
 import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
-import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
 import type { ChecklistItem } from '../data/types';
@@ -24,7 +23,7 @@ import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
 import { openLibrary } from './Library';
 import { reviewDue, reviewLabel } from './Review';
-import { formatOf, itemAmount, pad2, patchMeta, sprintTheme } from './flow';
+import { formatOf, itemAmount, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
@@ -50,18 +49,10 @@ const WELCOME_KEY = 'lifeos.founderWelcome.v1';
 const TINY_KEY = 'lifeos.tinyMode';
 const NUDGE_KEY = 'lifeos.nudge.dismissed';
 
-function greeting(name: string, firstDay: boolean): string {
-  const n = name.trim().split(' ')[0];
-  if (firstDay) return n ? t('today.hi', { name: n }) : t('today.hiNoName');
-  const h = new Date().getHours();
-  const part = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
-  return n ? t(`today.${part}`, { name: n }) : t(`today.${part}NoName`);
-}
-
 /** Today (Figma 2034:3528 day 1, 2033:2883 in progress, 2033:3011 all done) */
 export function Today() {
   const navigate = useNavigate();
-  const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
+  const { sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
   const { message, dismissMessage, user, goals } = useSession();
@@ -110,7 +101,6 @@ export function Today() {
   const dailyList = daily.length ? daily : items;
   const doneCount = dailyList.filter((i) => doneToday.has(i.id)).length;
   const allDone = dailyList.length > 0 && doneCount === dailyList.length;
-  const firstDay = day === 1 && !checkins.some((c) => c.item_id !== REST_ID);
   // Sick days are paused for the streak, but gentle patches stay doable (not dimmed).
   const resting = !sick && checkins.some((c) => c.day === today && c.item_id === REST_ID);
   const restAllowed = canRestToday(checkins, today) && doneCount === 0;
@@ -163,9 +153,11 @@ export function Today() {
       <ProBanner plan={plan} onOpen={() => navigate('/pro')} />
       {lifeMode && <ModeBanner mode={lifeMode} onEnd={endMode} onJetLag={() => navigate('/tool/jet-lag')} />}
       <header className="today__header">
-        <div className="today__greeting">
-          <p className="text-mono-label text-primary">{t('today.label', { nn: pad2(sprint.number), dd: pad2(day) })}</p>
-          <h1 className="text-title-l text-primary">{greeting(profile?.name ?? '', firstDay)}</h1>
+        {/* Owner decision: no greeting. The week sits here instead (plain text + bar, not a card). */}
+        <div className="today__week">
+          <p className="text-mono-label text-primary">{theme ? t('today.stripTheme', { n: sprint.number, theme }) : t('today.strip', { n: sprint.number })}</p>
+          <h1 className="text-title-l text-primary">{t('today.dayOf', { d: day, n: sprint.length_days })}</h1>
+          <SegmentedProgress variant="sprint" total={sprint.length_days} filled={day} label={t('today.dayOf', { d: day, n: sprint.length_days })} />
         </div>
         <div className="today__actions" data-tour="tools">
           <IconButton icon="book" label={t('today.tools')} onClick={() => openLibrary(navigate, '/today')} />
@@ -219,7 +211,6 @@ export function Today() {
 
       <CoachTeaser onOpen={() => setSheet('coach')} />
 
-      <SprintStrip label={theme ? t('today.stripTheme', { n: sprint.number, theme }) : t('today.strip', { n: sprint.number })} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
       <div className="today__chip" data-tour="tiny">

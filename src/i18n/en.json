@@ -173,15 +173,6 @@
     }
   },
   "today": {
-    "label": "Week {nn} · Day {dd}",
-    "hi": "Hi, {name}",
-    "hiNoName": "Hi there",
-    "morning": "Morning, {name}",
-    "afternoon": "Afternoon, {name}",
-    "evening": "Evening, {name}",
-    "morningNoName": "Good morning",
-    "afternoonNoName": "Good afternoon",
-    "eveningNoName": "Good evening",
     "streak": "Streak",
     "days": "Days",
     "score": "This week",
@@ -205,7 +196,8 @@
     "tools": "Library",
     "thisWeek": "{n}/{total} this week",
     "strip": "Week {n}",
-    "stripTheme": "Week {n} · {theme}"
+    "stripTheme": "Week {n} · {theme}",
+    "dayOf": "Day {d} of {n}"
   },
   "nav": {
     "today": "Today",
