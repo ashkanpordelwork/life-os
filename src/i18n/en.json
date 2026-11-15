@@ -169,8 +169,14 @@
       "email": "This email can't be used.",
       "confirm": "Confirm your email first. Check your inbox.",
       "network": "No connection. Try again.",
-      "unknown": "Something went wrong. Try again."
-    }
+      "unknown": "Something went wrong. Try again.",
+      "mismatch": "The two passwords don't match."
+    },
+    "newPasswordTitle": "Choose a new password",
+    "newPasswordBody": "Pick something only you know. At least 8 characters.",
+    "passwordNewLabel": "New password",
+    "passwordAgain": "Type it again",
+    "newPasswordSave": "Save password"
   },
   "today": {
     "streak": "Streak",
@@ -895,7 +901,39 @@
     "approve": "Approve",
     "decline": "Decline",
     "requestsWaiting": "{n} Pro requests waiting",
-    "requestWaiting": "1 Pro request waiting"
+    "requestWaiting": "1 Pro request waiting",
+    "account": {
+      "title": "Account",
+      "email": "Email",
+      "confirmed": "Confirmed",
+      "unconfirmed": "Not confirmed yet",
+      "lastSignIn": "Last sign-in",
+      "status": "Status",
+      "statusActive": "Active",
+      "statusSuspended": "Suspended",
+      "passwordNote": "You can’t see or set their password. Send a reset link and they pick their own.",
+      "sendReset": "Send reset email",
+      "resetSent": "Reset email sent.",
+      "copyLink": "Copy reset link",
+      "linkCopied": "Link copied. Send it to them. Don’t open it yourself: it signs in as them.",
+      "linkShown": "Copy this link and send it to them: {link}",
+      "suspend": "Suspend account",
+      "unsuspend": "Unsuspend account",
+      "suspended": "Suspended. They can’t log in.",
+      "unsuspended": "Unsuspended.",
+      "resetProgress": "Reset progress",
+      "progressTitle": "Reset progress?",
+      "progressBody": "This clears their habits, weeks, goals and Tribe activity. Their account and name stay. It can’t be undone.",
+      "progressConfirm": "Reset progress",
+      "progressDone": "Progress reset.",
+      "delete": "Delete account",
+      "deleteTitle": "Delete this account?",
+      "deleteBody": "This deletes the account and everything of theirs for good: habits, weeks, goals and Tribe activity. It can’t be undone.",
+      "typeEmail": "Type {email} to confirm",
+      "deleteConfirm": "Delete for good",
+      "deleteDone": "Account deleted.",
+      "isAdmin": "Admin accounts can’t be changed here."
+    }
   },
   "message": {
     "ok": "Got it"

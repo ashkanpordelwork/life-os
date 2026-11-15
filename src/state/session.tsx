@@ -30,6 +30,9 @@ interface SessionApi extends SessionState {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  /** True after a reset link was opened, until the user has set a new password. */
+  recovery: boolean;
+  setNewPassword: (password: string) => Promise<void>;
   saveSprint: (sprint: Sprint) => Promise<void>;
   /** Tick or untick a patch for today. Ticking on a rest day ends the rest day. */
   /** Tick a habit, or untick it. `amount` saves how much was done (habits with a goal). */
@@ -81,6 +84,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [latest, setLatest] = useState<Announcement | null>(null);
   const [goals, setGoals] = useState<Record<string, number>>({});
   const [proRequest, setProRequest] = useState<ProRequest | null>(null);
+  const [recovery, setRecovery] = useState(false);
+  useEffect(() => backend.onPasswordRecovery(() => setRecovery(true)), []);
   const [modes, setModes] = useState<LifeMode[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
@@ -264,6 +269,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setS({ ...EMPTY, ready: true });
     },
     resetPassword: (email) => backend.resetPassword(email),
+    recovery,
+    async setNewPassword(password) { await backend.updatePassword(password); setRecovery(false); },
     async saveSprint(sprint) {
       if (!s.user) return;
       await backend.saveSprint(s.user.id, sprint);
@@ -314,7 +321,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, goals, proRequest, modes, checkinsWithPauses]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, goals, proRequest, recovery, modes, checkinsWithPauses]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

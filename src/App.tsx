@@ -1,6 +1,6 @@
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import { lazy, Suspense, type ReactNode } from 'react';
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useEffect, type ReactNode } from 'react';
+import { HashRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { OnboardingProvider } from './state/onboarding';
 import { SessionProvider, useSession } from './state/session';
 import { motionTokens } from './styles/motion';
@@ -15,7 +15,7 @@ import { Intro } from './screens/Intro';
 import { SleepTimesEdit } from './screens/SleepTimesEdit';
 import { PickPatches } from './screens/PickPatches';
 import { SprintReady } from './screens/SprintReady';
-import { Login, Signup } from './screens/Auth';
+import { Login, NewPassword, Signup } from './screens/Auth';
 import { Today } from './screens/Today';
 import { PatchDetail } from './screens/PatchDetail';
 import { Done } from './screens/Done';
@@ -68,6 +68,15 @@ function Page({ children }: { children: ReactNode }) {
   );
 }
 
+/** A reset link was opened: go to "choose a new password" first, wherever the app was opened. */
+function RecoveryGate() {
+  const { recovery } = useSession();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => { if (recovery && pathname !== '/new-password') navigate('/new-password', { replace: true }); }, [recovery, pathname, navigate]);
+  return null;
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
   const page = (el: ReactNode) => <Page>{el}</Page>;
@@ -84,6 +93,7 @@ function AnimatedRoutes() {
         <Route path="/score" element={page(<StartingScore />)} />
         <Route path="/patches" element={page(<PickPatches />)} />
         <Route path="/ready" element={page(<SprintReady />)} />
+        <Route path="/new-password" element={page(<RequireUser><NewPassword /></RequireUser>)} />
         <Route path="/login" element={page(<GuestOnly><Login /></GuestOnly>)} />
         <Route path="/signup" element={page(<GuestOnly><Signup /></GuestOnly>)} />
         <Route path="/today" element={page(<RequireUser><Today /></RequireUser>)} />
@@ -124,6 +134,7 @@ export function App() {
       <OnboardingProvider>
         <SessionProvider>
           <HashRouter>
+            <RecoveryGate />
             <AnimatedRoutes />
             <TabBar />
           </HashRouter>

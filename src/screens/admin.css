@@ -12,3 +12,9 @@
 }
 .admin__area:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
 .admin__decide { display: flex; gap: var(--space-8); }
+
+/* Account section in the person sheet */
+.admin__account { display: flex; flex-direction: column; gap: var(--space-8); }
+.admin__account h3 { margin: 0; }
+.admin__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4) var(--space-16); padding: var(--space-12) var(--space-16); border-radius: var(--radius-md); background: var(--color-bg-subtle); }
+.admin__msg { overflow-wrap: anywhere; }

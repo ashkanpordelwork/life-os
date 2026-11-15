@@ -79,6 +79,8 @@ export const localBackend: Backend = {
     write(SESSION, null);
     emit(null);
   },
+  onPasswordRecovery() { return () => {}; },
+  async updatePassword() {},
   async resetPassword() {
     // Nothing to send in local mode.
   },

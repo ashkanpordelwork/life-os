@@ -1,7 +1,7 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
 import type { LifeMode } from '../engine';
-import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminProRequest, type ProRequest, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type NudgeResult, type ReactionKind, type TribeNudge, type TribeReaction, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminProRequest, type AdminUserInfo, type ProRequest, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type NudgeResult, type ReactionKind, type TribeNudge, type TribeReaction, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -12,10 +12,22 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
   });
   // After the code is used, remove it from the address bar.
   sb.auth.onAuthStateChange((event) => {
-    if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
+    if (event === 'PASSWORD_RECOVERY') markRecovery();
+    if ((event === 'SIGNED_IN' || event === 'PASSWORD_RECOVERY') && window.location.search.includes('code=')) {
       window.history.replaceState(null, '', window.location.pathname + window.location.hash);
     }
   });
+  // A reset link was opened (from the email, or one an admin sent): the app must ask for a new password.
+  let recovering = false;
+  const recoveryListeners = new Set<() => void>();
+  function markRecovery() { recovering = true; recoveryListeners.forEach((f) => f()); }
+  // Admin-made link: ?token_hash=...&type=recovery. Swap the token for a session, then ask for the password.
+  const qs = new URLSearchParams(window.location.search);
+  if (qs.get('type') === 'recovery' && qs.get('token_hash')) {
+    const tokenHash = qs.get('token_hash')!;
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+    sb.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' }).then(({ error }) => { if (!error) markRecovery(); }).catch(() => {});
+  }
 
   const toInfo = (u: User): UserInfo => ({
     id: u.id,
@@ -39,6 +51,18 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     if (error) throw new Error(error.message);
     return data;
   };
+
+  /** One call to the admin-users Edge Function (it checks the caller is an admin). */
+  async function adminCall<T = unknown>(body: Record<string, unknown>): Promise<T> {
+    const { data, error } = await sb.functions.invoke('admin-users', { body });
+    if (error) {
+      // The function answers { error } with a 4xx: read it so the admin sees the reason.
+      let reason = error.message;
+      try { const j = await (error as { context?: Response }).context?.json(); if (j?.error) reason = String(j.error); } catch { /* keep the generic one */ }
+      throw new Error(reason);
+    }
+    return data as T;
+  }
 
   return {
     mode: 'supabase',
@@ -67,6 +91,15 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async signOut() {
       await sb.auth.signOut();
+    },
+    onPasswordRecovery(cb) {
+      recoveryListeners.add(cb);
+      if (recovering) cb();
+      return () => { recoveryListeners.delete(cb); };
+    },
+    async updatePassword(password) {
+      const { error } = await sb.auth.updateUser({ password });
+      if (error) fail(error);
     },
     async resetPassword(email) {
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
@@ -182,6 +215,12 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       async deleteTribe(id) { check(await sb.rpc('admin_delete_tribe', { p_id: id })); },
       async removeMember(tribeId, userId) { check(await sb.rpc('admin_remove_member', { p_tribe: tribeId, p_user: userId })); },
       async publish(title, body) { check(await sb.rpc('admin_publish_message', { p_title: title, p_body: body })); },
+      async userInfo(id) { return adminCall<AdminUserInfo>({ action: 'info', user_id: id }); },
+      async sendReset(email) { await adminCall({ action: 'send_reset', email }); },
+      async resetLink(email) { return (await adminCall<{ link: string }>({ action: 'reset_link', email })).link; },
+      async resetProgress(id) { await adminCall({ action: 'reset_progress', user_id: id }); },
+      async suspend(id, on) { await adminCall({ action: 'suspend', user_id: id, on }); },
+      async deleteUser(id) { await adminCall({ action: 'delete_user', user_id: id }); },
       async proRequests() { return (check(await sb.rpc('admin_pro_requests')) ?? []) as AdminProRequest[]; },
       async decidePro(id, approve) {
         const res = check(await sb.rpc('admin_decide_pro', { p_id: id, p_approve: approve })) as 'ok' | 'not_found';

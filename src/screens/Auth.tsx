@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthError } from '../backend';
 import { Button } from '../components/Button';
 import { Mascot } from '../components/Mascot';
@@ -133,6 +133,56 @@ export function Signup() {
           <span className="text-body-s text-secondary">{t('auth.haveAccount')}</span>
           <TextButton label={t('auth.login')} onClick={() => navigate('/login')} />
         </div>
+      </form>
+    </Screen>
+  );
+}
+
+/**
+ * New password: shown after someone opens a reset link (from the email, or one an admin sent).
+ * They are already signed in by the link; they only choose a password.
+ */
+export function NewPassword() {
+  const navigate = useNavigate();
+  const { recovery, setNewPassword } = useSession();
+  const [password, setPassword] = useState('');
+  const [again, setAgain] = useState('');
+  const [errors, setErrors] = useState<{ password?: string; again?: string; form?: string }>({});
+  const [busy, setBusy] = useState(false);
+  // Not coming from a reset link: nothing to do here.
+  if (!recovery && !busy) return <Navigate to="/today" replace />;
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    const next: typeof errors = {};
+    if (password.length < 8) next.password = t(password ? 'auth.errors.short' : 'auth.errors.required');
+    if (!next.password && again !== password) next.again = t('auth.errors.mismatch');
+    setErrors(next);
+    if (Object.keys(next).length) return;
+    setBusy(true);
+    try {
+      await setNewPassword(password);
+      navigate('/today', { replace: true });
+    } catch (err) {
+      setErrors({ form: errorText(err) });
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Screen>
+      <form className="auth" onSubmit={submit} noValidate>
+        <div className="hero"><Mascot name="core-welcome" size={143} animated /></div>
+        <p className="text-mono-label text-brand text-center">{t('auth.brand')}</p>
+        <h1 className="text-title-l text-primary text-center">{t('auth.newPasswordTitle')}</h1>
+        <p className="text-body-s text-secondary text-center">{t('auth.newPasswordBody')}</p>
+        <div className="auth__fields">
+          <TextField label={t('auth.passwordNewLabel')} icon="lock" type="password" autoComplete="new-password" placeholder={t('auth.passwordNew')} value={password} onChange={(e) => setPassword(e.target.value)} error={errors.password} />
+          <TextField label={t('auth.passwordAgain')} icon="lock" type="password" autoComplete="new-password" placeholder={t('auth.passwordNew')} value={again} onChange={(e) => setAgain(e.target.value)} error={errors.again} />
+        </div>
+        {errors.form && <p className="text-body-s auth__error" role="alert">{errors.form}</p>}
+        <Button block type="submit" label={t('auth.newPasswordSave')} busy={busy} />
+        <Spacer />
       </form>
     </Screen>
   );

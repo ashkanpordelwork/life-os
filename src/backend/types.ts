@@ -130,6 +130,9 @@ export interface Backend {
   signIn(email: string, password: string): Promise<UserInfo>;
   signOut(): Promise<void>;
   resetPassword(email: string): Promise<void>;
+  /** Called when the user opened a reset link: they must now choose a new password. */
+  onPasswordRecovery(cb: () => void): () => void;
+  updatePassword(password: string): Promise<void>;
   loadProfile(userId: string): Promise<Profile | null>;
   saveProfile(userId: string, profile: Profile): Promise<void>;
   loadSprint(userId: string): Promise<Sprint | null>;
@@ -199,7 +202,20 @@ export interface AdminApi {
   proRequests(): Promise<AdminProRequest[]>;
   /** Approve (gives Pro) or decline. Also pushes the answer to the user. */
   decidePro(id: string, approve: boolean): Promise<'ok' | 'not_found'>;
+  /** Account facts for one person (never health answers or passwords). */
+  userInfo(id: string): Promise<AdminUserInfo>;
+  /** Email them a reset link. */
+  sendReset(email: string): Promise<void>;
+  /** A one-use link the admin sends to the person (the admin should not open it). */
+  resetLink(email: string): Promise<string>;
+  /** Clear their habits, weeks, goals and Tribe activity; keep the account. */
+  resetProgress(id: string): Promise<void>;
+  suspend(id: string, on: boolean): Promise<void>;
+  /** Delete the account and everything of theirs. */
+  deleteUser(id: string): Promise<void>;
 }
+
+export interface AdminUserInfo { confirmed: boolean; last_sign_in_at: string | null; suspended: boolean; is_admin: boolean }
 
 export interface AdminProRequest { id: string; user_id: string; email: string; name: string | null; created_at: string }
 
