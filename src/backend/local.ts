@@ -1,5 +1,5 @@
 import type { Sprint } from '../data/types';
-import type { DailyLog, LifeMode } from '../engine';
+import type { LifeMode } from '../engine';
 import { AuthError, type Backend, type Checkin, type Profile, type ReminderPrefs, type UserInfo } from './types';
 
 /**
@@ -11,7 +11,7 @@ const SESSION = 'lifeos.local.session';
 const dataKey = (id: string) => `lifeos.local.data.${id}`;
 
 interface StoredUser { id: string; email: string; name: string; hash: string }
-interface StoredData { profile: Profile | null; sprint: Sprint | null; checkins: Checkin[]; reminders?: ReminderPrefs | null; logs?: DailyLog[]; modes?: LifeMode[]; goals?: Record<string, number> }
+interface StoredData { profile: Profile | null; sprint: Sprint | null; checkins: Checkin[]; reminders?: ReminderPrefs | null; modes?: LifeMode[]; goals?: Record<string, number> }
 
 function read<T>(key: string, fallback: T): T {
   try {
@@ -44,8 +44,6 @@ export const localBackend: Backend = {
   async latestMessage() { return null; },
   async loadGoals(id) { return data(id).goals ?? {}; },
   async saveGoal(id, itemId, goal) { const d = data(id); write(dataKey(id), { ...d, goals: { ...(d.goals ?? {}), [itemId]: goal } }); },
-  async loadLogs(id) { return data(id).logs ?? []; },
-  async saveLog(id, log) { const d = data(id); write(dataKey(id), { ...d, logs: [...(d.logs ?? []).filter((l) => l.day !== log.day), log] }); },
   async loadModes(id) { return data(id).modes ?? []; },
   async saveMode(id, m) { const d = data(id); write(dataKey(id), { ...d, modes: [...(d.modes ?? []).filter((x) => x.id !== m.id), m] }); },
   mode: 'local',

@@ -1,5 +1,5 @@
 import type { Area, HealthAnswers, NeedTag, Sprint, VersionKey } from '../data/types';
-import type { AnswerIndex, DailyLog, LifeMode } from '../engine';
+import type { AnswerIndex, LifeMode } from '../engine';
 
 export interface UserInfo {
   id: string;
@@ -134,8 +134,6 @@ export interface Backend {
   /** Personal goals per habit, e.g. { EX01a: 5000 }. */
   loadGoals(userId: string): Promise<Record<string, number>>;
   saveGoal(userId: string, itemId: string, goal: number): Promise<void>;
-  loadLogs(userId: string): Promise<DailyLog[]>;
-  saveLog(userId: string, log: DailyLog): Promise<void>;
   /** Life modes (travel, sick, deadline, vacation). */
   loadModes(userId: string): Promise<LifeMode[]>;
   saveMode(userId: string, mode: LifeMode): Promise<void>;

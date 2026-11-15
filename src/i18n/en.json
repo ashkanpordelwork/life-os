@@ -914,26 +914,6 @@
     "finish": "Start my day",
     "tapHint": "Tap the circle"
   },
-  "checkin": {
-    "title": "How's today?",
-    "doneTitle": "Logged for today",
-    "edit": "Edit",
-    "close": "Done",
-    "low": "Low",
-    "high": "High",
-    "metrics": {
-      "energy": "Energy",
-      "mood": "Mood",
-      "sleep": "Last night's sleep",
-      "focus": "Focus"
-    },
-    "short": {
-      "energy": "Energy",
-      "mood": "Mood",
-      "sleep": "Sleep",
-      "focus": "Focus"
-    }
-  },
   "works": {
     "title": "What works for you",
     "empty": "Log how you feel on Today for about a week. Then we show which habits lift your energy, mood, sleep and focus. ({n} days logged)",
@@ -1064,8 +1044,7 @@
     "title": "What we notice",
     "empty": "Give it about a week. Then we'll point out what's working for you.",
     "bestDay": "{day} is your best day.",
-    "steady": "{title} is your most steady habit.",
-    "helps": "{title} seems to lift your {metric}."
+    "steady": "{title} is your most steady habit."
   },
   "units": {
     "steps": "{n} steps",

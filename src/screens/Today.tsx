@@ -28,7 +28,6 @@ import { formatOf, itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
-import { DailyCheckIn } from '../components/DailyCheckIn';
 import { CoachTeaser } from '../components/CoachTeaser';
 import { MODE_ICON, ModeBanner, ModePicker } from '../components/LifeModes';
 import { GuidedTour, type TourStep } from '../components/GuidedTour';
@@ -65,7 +64,7 @@ export function Today() {
   const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
-  const { message, dismissMessage, user, logs, logToday, goals } = useSession();
+  const { message, dismissMessage, user, goals } = useSession();
   // The tour: once per account on this device, or when replayed from You (location state).
   const location = useLocation();
   const replay = !!(location.state as { tour?: boolean } | null)?.tour;
@@ -217,8 +216,6 @@ export function Today() {
           />
         </motion.div>
       ))}
-
-      <DailyCheckIn log={logs.find((l) => l.day === today)} onLog={logToday} />
 
       <CoachTeaser onOpen={() => setSheet('coach')} />
 

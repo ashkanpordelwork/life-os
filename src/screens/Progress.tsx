@@ -15,7 +15,7 @@ import { getItem } from '../data';
 import { AREAS, type Area, type ChecklistItem } from '../data/types';
 import {
   REST_ID, addDays, areaScoresFromAnswers, currentStreak, heatLevel, overallScore,
-  totalActiveDays, weekDays, weekPercent, bestIndex, weekdayCounts, patchRates, topEffects, type AnswerIndex,
+  totalActiveDays, weekDays, weekPercent, bestIndex, weekdayCounts, patchRates, type AnswerIndex,
 } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
@@ -39,7 +39,7 @@ function dayTitle(key: string) {
 /** Progress (Figma 50:161) + Day detail sheet (59:891). */
 export function Progress() {
   const navigate = useNavigate();
-  const { checkins, sprint, profile, today, logs, goals } = useSession();
+  const { checkins, sprint, profile, today, goals } = useSession();
   const [filter, setFilter] = useState<Area | 'All'>('All');
   const [openDay, setOpenDay] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ export function Progress() {
     : t(diff > 0 ? 'progress.scoreSubtitleNow' : 'progress.scoreSubtitleDown', { x: Math.abs(diff).toFixed(1) });
   const week = useMemo(() => sprint ? weekPercent(sprint, checkins, today, (id) => getItem(id)?.per_week) : { done: 0, target: 0, percent: 0 }, [sprint, checkins, today]);
 
-  // Up to three plain notes: best weekday, steadiest habit, and one pattern from the daily check-in.
+  // Up to two plain notes: best weekday and steadiest habit.
   const notes = useMemo(() => {
     const out: string[] = [];
     if (totalActiveDays(checkins) < NOTES_AFTER_DAYS) return out;
@@ -91,10 +91,8 @@ export function Progress() {
       const item = top ? getItem(top.id) : undefined;
       if (item) out.push(t('notice.steady', { title: item.title }));
     }
-    const effect = topEffects([...new Set(checkins.map((c) => c.item_id))].filter((id) => !!getItem(id)), checkins, logs, 1)[0];
-    if (effect && effect.change > 0) out.push(t('notice.helps', { title: getItem(effect.itemId)!.title, metric: t(`checkin.short.${effect.metric}`).toLowerCase() }));
     return out;
-  }, [checkins, sprint, today, logs]);
+  }, [checkins, sprint, today]);
 
   // Day detail: the Sprint's patches (done or not) plus anything else ticked that day.
   const detailIds = openDay ? Array.from(new Set([...sprintItems.map((i) => i.id), ...(byDay.get(openDay) ?? [])])) : [];

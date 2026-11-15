@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { backend, type Announcement, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
-import { REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type DailyLog, type LifeMode, type ModeKind } from '../engine';
+import { REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type LifeMode, type ModeKind } from '../engine';
 import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 
@@ -59,9 +59,6 @@ interface SessionApi extends SessionState {
   /** Latest admin message the user hasn't dismissed yet. */
   message: Announcement | null;
   dismissMessage: () => void;
-  /** Daily check-in. */
-  logs: DailyLog[];
-  logToday: (patch: Partial<Omit<DailyLog, 'day'>>) => Promise<void>;
   /** Life mode running today, and controls. */
   lifeMode: LifeMode | null;
   startMode: (kind: ModeKind, days: number) => Promise<void>;
@@ -77,7 +74,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [tribeCount, setTribeCount] = useState(0);
   const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
   const [latest, setLatest] = useState<Announcement | null>(null);
-  const [logs, setLogs] = useState<DailyLog[]>([]);
   const [goals, setGoals] = useState<Record<string, number>>({});
   const [modes, setModes] = useState<LifeMode[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
@@ -109,7 +105,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (sprint && sprint.length_days !== SPRINT_DAYS) sprint = { ...sprint, length_days: SPRINT_DAYS };
     setS({ ready: true, user, profile, sprint, checkins, reminders });
     backend.latestMessage().then(setLatest).catch(() => setLatest(null));
-    backend.loadLogs(user.id).then(setLogs).catch(() => setLogs([]));
     backend.loadGoals(user.id).then(setGoals).catch(() => setGoals({}));
     backend.loadModes(user.id).then(setModes).catch(() => setModes([]));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
@@ -210,14 +205,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setGoals((p) => ({ ...p, [itemId]: goal }));
       await backend.saveGoal(s.user.id, itemId, goal).catch(() => {});
     },
-    logs,
-    async logToday(patch) {
-      if (!s.user) return;
-      const day = dayKey(new Date());
-      const next: DailyLog = { ...(logs.find((l) => l.day === day) ?? { day }), ...patch, day };
-      setLogs((p) => [...p.filter((l) => l.day !== day), next]);
-      await backend.saveLog(s.user.id, next).catch(() => {});
-    },
     message: latest && latest.id > seenId ? latest : null,
     dismissMessage() {
       if (!latest) return;
@@ -304,7 +291,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, goals, modes, checkinsWithPauses]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, goals, modes, checkinsWithPauses]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

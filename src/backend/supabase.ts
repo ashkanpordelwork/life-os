@@ -147,14 +147,6 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     async saveGoal(userId, itemId, goal) {
       check(await sb.from('habit_goals').upsert({ user_id: userId, item_id: itemId, goal }, { onConflict: 'user_id,item_id' }));
     },
-    async loadLogs(userId) {
-      const res = await sb.from('daily_logs').select('day, energy, mood, sleep, focus').eq('user_id', userId).order('day', { ascending: false }).limit(400);
-      if (res.error) return []; // table missing until migrations-experiments.sql is run
-      return (res.data ?? []).map((r) => ({ day: r.day, energy: r.energy ?? undefined, mood: r.mood ?? undefined, sleep: r.sleep ?? undefined, focus: r.focus ?? undefined }));
-    },
-    async saveLog(userId, log) {
-      check(await sb.from('daily_logs').upsert({ user_id: userId, day: log.day, energy: log.energy ?? null, mood: log.mood ?? null, sleep: log.sleep ?? null, focus: log.focus ?? null, updated_at: new Date().toISOString() }));
-    },
     async loadModes(userId) {
       const res = await sb.from('life_modes').select('id, mode, start_day, end_day').eq('user_id', userId).order('start_day', { ascending: false }).limit(60);
       if (res.error) return []; // table missing until migrations-modes.sql is run
