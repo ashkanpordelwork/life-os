@@ -16,3 +16,5 @@
   color: var(--color-text-brand);
 }
 .chip { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+.chip--muted { color: var(--color-text-disabled); border-style: dashed; background: transparent; }
+.chip { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease; }

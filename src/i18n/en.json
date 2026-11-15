@@ -43,8 +43,11 @@
   "symptomsScreen": {
     "topTitle": "About you",
     "title": "What feels off?",
-    "subtitle": "Pick any. No wrong answers. Then 4 quick questions about a normal day (about 1 min).",
-    "limit": "Up to 3."
+    "subtitle": "Pick up to 3. No wrong answers.",
+    "limit": "That’s 3. Untap one first.",
+    "count": "{n} of 3 picked",
+    "full": "All 3 picked. Untap one to change.",
+    "next": "Next: 4 quick questions · about 1 min"
   },
   "questions": {
     "Movement": {
