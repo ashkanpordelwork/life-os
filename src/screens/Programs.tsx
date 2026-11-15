@@ -94,18 +94,23 @@ export function Programs() {
 
       <BottomSheet open={!!open} onClose={() => setOpen(null)} eyebrow={open ? t('programs.weeks', { n: open.weeks.length }).toUpperCase() : undefined} title={open ? t(`programs.list.${open.id}.title`) : ''}>
         {open && (
-          <div className="program-sheet shadow-room shadow-room--sheet">
-            <p className="text-body-m text-secondary">{t(`programs.list.${open.id}.body`)}</p>
-            {open.weeks.map((w, wi) => (
-              <GlassPanel key={wi} gap={8}>
-                <span className="text-mono-label text-brand">{t('programs.week', { n: wi + 1 })} · {weekName(open.id, wi)}</span>
-                {itemsOf(w.patch_ids).map((it) => (
-                  <span key={it.id} className="program-sheet__patch text-body-m text-primary"><IconTile glyph={it.glyph} size="M" /> {it.title}</span>
-                ))}
-              </GlassPanel>
-            ))}
-            <p className="text-body-s text-secondary">{t('programs.replaceNote')}</p>
-            <Button block label={active?.id === open.id ? t('programs.restart') : t('programs.start')} busy={busy} onClick={() => start(open)} />
+          <div className="program-sheet">
+            {/* Only the list scrolls. The button sits in a fixed footer, so it can't get lost under the list. */}
+            <div className="program-sheet__list shadow-room shadow-room--sheet">
+              <p className="text-body-m text-secondary">{t(`programs.list.${open.id}.body`)}</p>
+              {open.weeks.map((w, wi) => (
+                <GlassPanel key={wi} gap={8}>
+                  <span className="text-mono-label text-brand">{t('programs.week', { n: wi + 1 })} · {weekName(open.id, wi)}</span>
+                  {itemsOf(w.patch_ids).map((it) => (
+                    <span key={it.id} className="program-sheet__patch text-body-m text-primary"><IconTile glyph={it.glyph} size="M" /> {it.title}</span>
+                  ))}
+                </GlassPanel>
+              ))}
+              <p className="text-body-s text-secondary">{t('programs.replaceNote')}</p>
+            </div>
+            <div className="program-sheet__footer">
+              <Button block label={active?.id === open.id ? t('programs.restart') : t('programs.start')} busy={busy} onClick={() => start(open)} />
+            </div>
           </div>
         )}
       </BottomSheet>

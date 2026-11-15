@@ -19,5 +19,9 @@
 .program-card__badges { display: flex; align-items: center; gap: var(--space-8); }
 .program-badge { padding-block: 2px; padding-inline: var(--space-8); border-radius: var(--radius-pill); background: var(--color-status-success-bg); color: var(--color-status-success); }
 .program-badge--pro { background: var(--color-brand-soft); color: var(--color-text-brand); }
-.program-sheet { display: flex; flex-direction: column; gap: var(--space-12); max-block-size: 62dvh; overflow-y: auto; }
+.program-sheet { display: flex; flex-direction: column; gap: var(--space-12); min-block-size: 0; }
+/* The list is the only scroll area. The sheet itself has touch-action: none, so the list opts back in to vertical pan. */
+.program-sheet__list { display: flex; flex-direction: column; gap: var(--space-12); max-block-size: 52dvh; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+/* Fixed at the bottom of the sheet, always visible and tappable (44px+ button). */
+.program-sheet__footer { display: flex; flex-direction: column; gap: var(--space-8); padding-block-start: var(--space-4); }
 .program-sheet__patch { display: flex; align-items: center; gap: var(--space-12); }
