@@ -1,7 +1,7 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
 import type { LifeMode } from '../engine';
-import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminProRequest, type ProRequest, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminProRequest, type ProRequest, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type NudgeResult, type ReactionKind, type TribeNudge, type TribeReaction, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -197,13 +197,16 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       async detail(tribeId, sinceDay) {
         const tribe = check(await sb.from('tribes').select('id, name, code, created_by').eq('id', tribeId).single()) as Tribe;
         const members = (check(await sb.from('tribe_members').select('user_id').eq('tribe_id', tribeId)) as { user_id: string }[]).map((m) => m.user_id);
-        const [statuses, events] = await Promise.all([
+        const [statuses, events, reacts, nudged] = await Promise.all([
           sb.from('tribe_status').select('*').in('user_id', members),
-          sb.from('tribe_events').select('*').in('user_id', members).gte('day', sinceDay).order('created_at', { ascending: false }).limit(80),
+          sb.from('tribe_events').select('*').in('user_id', members).gte('day', sinceDay).order('created_at', { ascending: false }).limit(600),
+          sb.from('tribe_reactions').select('from_user, to_user, event_id, day, kind').in('to_user', members).gte('day', sinceDay).limit(1500),
+          sb.from('tribe_nudges').select('from_user, to_user, day, msg').gte('day', sinceDay).limit(200),
         ]);
-        const ev = check(events) as TribeEvent[];
-        const hf = ev.length ? (check(await sb.from('high_fives').select('event_id, from_user').in('event_id', ev.map((e) => e.id))) as HighFive[]) : [];
-        return { tribe, members, statuses: check(statuses) as TribeStatus[], events: ev, highFives: hf };
+        // The new tables exist after migrations-tribe-play.sql; until then there are just none.
+        const reactions = (reacts.error ? [] : reacts.data ?? []) as TribeReaction[];
+        const nudges = (nudged.error ? [] : nudged.data ?? []) as TribeNudge[];
+        return { tribe, members, statuses: check(statuses) as TribeStatus[], events: check(events) as TribeEvent[], reactions, nudges };
       },
       async create(name) {
         return check(await sb.rpc('create_tribe', { p_name: name })) as Tribe;
@@ -219,20 +222,34 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
         return check(await sb.from('tribe_status').select('*').eq('user_id', userId).maybeSingle()) as TribeStatus | null;
       },
       async publishStatus(status) {
-        check(await sb.from('tribe_status').upsert({ ...status, updated_at: new Date().toISOString() }));
+        const row = { ...status, updated_at: new Date().toISOString() };
+        const res = await sb.from('tribe_status').upsert(row);
+        // allow_nudges comes from migrations-tribe-play.sql; until then save without it.
+        if (res.error && /allow_nudges|share_nudges|column|schema/i.test(res.error.message)) {
+          const { allow_nudges: _a, share_nudges: _b, ...rest } = row;
+          check(await sb.from('tribe_status').upsert(rest));
+        } else check(res);
       },
       async logEvent(userId, kind, day, payload = {}) {
         // One of each kind per user per day; a repeat is ignored.
         const res = await sb.from('tribe_events').insert({ user_id: userId, kind, day, payload });
         if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
       },
-      async highFive(userId, eventId, on) {
+      async react(userId, to, target, kind: ReactionKind, on) {
         if (on) {
-          const res = await sb.from('high_fives').insert({ event_id: eventId, from_user: userId });
+          const res = await sb.from('tribe_reactions').insert({ from_user: userId, to_user: to, event_id: target.eventId ?? null, day: target.day, kind });
           if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
         } else {
-          check(await sb.from('high_fives').delete().eq('event_id', eventId).eq('from_user', userId));
+          let q = sb.from('tribe_reactions').delete().eq('from_user', userId).eq('to_user', to).eq('day', target.day).eq('kind', kind);
+          q = target.eventId != null ? q.eq('event_id', target.eventId) : q.is('event_id', null);
+          check(await q);
         }
+      },
+      async nudge(to, day, msg) {
+        const res = check(await sb.rpc('send_nudge', { p_to: to, p_day: day, p_msg: msg })) as NudgeResult;
+        // Instant push to the receiver (never blocks the sender).
+        if (res === 'ok') sb.functions.invoke('tribe-notify', { body: { type: 'nudge', to, day } }).catch(() => {});
+        return res;
       },
     },
   };

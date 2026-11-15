@@ -72,6 +72,10 @@ export interface TribeStatus {
   score: number | null;
   share_patches: boolean;
   share_score: boolean;
+  /** Friends may nudge me (off while sick or on vacation, or when I turn it off). */
+  allow_nudges?: boolean;
+  /** Just my choice (stays on when I'm only paused by sick or vacation mode). */
+  share_nudges?: boolean;
   updated_at?: string;
 }
 
@@ -84,14 +88,23 @@ export interface TribeEvent {
   payload: Record<string, unknown>;
   created_at: string;
 }
-export interface HighFive { event_id: number; from_user: string }
+/** Three reactions (owner decision): a high five, fire and power. */
+export type ReactionKind = 'five' | 'fire' | 'power';
+export const REACTIONS: ReactionKind[] = ['five', 'fire', 'power'];
+/** A reaction to a post (event_id set) or to a member's day (event_id null). */
+export interface TribeReaction { from_user: string; to_user: string; event_id: number | null; day: string; kind: ReactionKind }
+/** A friendly nudge for someone who hasn't started yet. `msg` picks a preset line. */
+export interface TribeNudge { from_user: string; to_user: string; day: string; msg: number }
+export type NudgeResult = 'ok' | 'already' | 'started' | 'off' | 'limit' | 'not_allowed';
 
 export interface TribeDetail {
   tribe: Tribe;
   members: string[];
   statuses: TribeStatus[];
   events: TribeEvent[];
-  highFives: HighFive[];
+  reactions: TribeReaction[];
+  /** Nudges I sent or got (RLS only shows me my own). */
+  nudges: TribeNudge[];
 }
 
 /** Error codes shown to the user via src/i18n/en.json -> auth.errors */
@@ -154,7 +167,10 @@ export interface TribeApi {
   myStatus(userId: string): Promise<TribeStatus | null>;
   publishStatus(status: TribeStatus): Promise<void>;
   logEvent(userId: string, kind: TribeEventKind, day: string, payload?: Record<string, unknown>): Promise<void>;
-  highFive(userId: string, eventId: number, on: boolean): Promise<void>;
+  /** Add or take back a reaction on a post (eventId) or on a member's day. */
+  react(userId: string, to: string, target: { eventId?: number; day: string }, kind: ReactionKind, on: boolean): Promise<void>;
+  /** Nudge someone who hasn't started. Also sends the instant push. */
+  nudge(to: string, day: string, msg: number): Promise<NudgeResult>;
 }
 
 /** One patch reminder for today: local time "HH:MM". `cutoff` = the time is a deadline (caffeine, alcohol). */

@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { backend, type Announcement, type Checkin, type Profile, type ProRequest, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
-import { REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type LifeMode, type ModeKind } from '../engine';
+import { PAUSING, REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type LifeMode, type ModeKind } from '../engine';
 import { getItem } from '../data';
 import { DEFAULT_BED, DEFAULT_WAKE, useOnboarding } from './onboarding';
 
@@ -77,7 +77,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const { state: draft } = useOnboarding();
   const [s, setS] = useState<SessionState>(EMPTY);
   const [tribeCount, setTribeCount] = useState(0);
-  const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
+  const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true, nudges: true });
   const [latest, setLatest] = useState<Announcement | null>(null);
   const [goals, setGoals] = useState<Record<string, number>>({});
   const [proRequest, setProRequest] = useState<ProRequest | null>(null);
@@ -117,7 +117,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
       backend.tribes.myTribes(user.id).then((t) => setTribeCount(t.length)).catch(() => {});
-      backend.tribes.myStatus(user.id).then((st) => { if (st) setShareState({ patches: st.share_patches, score: st.share_score }); }).catch(() => {});
+      backend.tribes.myStatus(user.id).then((st) => { if (st) setShareState({ patches: st.share_patches, score: st.share_score, nudges: st.share_nudges !== false }); }).catch(() => {});
     }
   }, []);
 
@@ -137,10 +137,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (!backend.tribes || !s.user || tribeCount === 0) return;
     const user = s.user;
     const id = setTimeout(() => {
-      backend.tribes!.publishStatus(buildStatus(user.id, s.profile, s.sprint, s.checkins, dayKey(new Date()), share)).catch(() => {});
+      const day = dayKey(new Date());
+      // Sick, on vacation or resting today: friends can't nudge you.
+      const mode = activeMode(modes, day)?.mode;
+      const paused = (!!mode && PAUSING.includes(mode)) || s.checkins.some((c) => c.day === day && c.item_id === REST_ID);
+      backend.tribes!.publishStatus(buildStatus(user.id, s.profile, s.sprint, s.checkins, day, share, paused)).catch(() => {});
     }, 800);
     return () => clearTimeout(id);
-  }, [s.user, s.profile, s.sprint, s.checkins, tribeCount, share]);
+  }, [s.user, s.profile, s.sprint, s.checkins, tribeCount, share, modes]);
 
   // Smart reminders: keep today's patch times on the server, so pushes arrive at each patch's own time.
   const wakeNow = s.profile?.wake_time ?? draft.wake_time ?? DEFAULT_WAKE;

@@ -4,7 +4,7 @@ import type { Area, ChecklistItem, Sprint } from '../data/types';
 import { AREAS } from '../data/types';
 import { REST_ID, areaScoresFromAnswers, currentStreak, overallScore, themeFor, type AnswerIndex } from '../engine';
 
-export interface ShareSettings { patches: boolean; score: boolean }
+export interface ShareSettings { patches: boolean; score: boolean; nudges: boolean }
 
 /** Daily patches of a Sprint (weekly ones are optional on any given day). */
 export function dailyPatches(sprint: Sprint | null): ChecklistItem[] {
@@ -14,7 +14,7 @@ export function dailyPatches(sprint: Sprint | null): ChecklistItem[] {
 }
 
 /** The snapshot a member shows their Tribes. Health answers and symptoms are never included. */
-export function buildStatus(userId: string, profile: Profile | null, sprint: Sprint | null, checkins: Checkin[], today: string, share: ShareSettings): TribeStatus {
+export function buildStatus(userId: string, profile: Profile | null, sprint: Sprint | null, checkins: Checkin[], today: string, share: ShareSettings, paused = false): TribeStatus {
   const daily = dailyPatches(sprint);
   const doneToday = new Set(checkins.filter((c) => c.day === today && c.item_id !== REST_ID).map((c) => c.item_id));
   const all = (sprint?.patch_ids ?? []).map(getItem).filter((x): x is ChecklistItem => !!x);
@@ -33,5 +33,8 @@ export function buildStatus(userId: string, profile: Profile | null, sprint: Spr
     score: share.score && full ? Math.round(overallScore(areaScoresFromAnswers(a as Record<Area, AnswerIndex>)) * 10) / 10 : null,
     share_patches: share.patches,
     share_score: share.score,
+    // Nobody gets nudged while sick or on vacation, or when they turned nudges off.
+    allow_nudges: share.nudges && !paused,
+    share_nudges: share.nudges,
   };
 }

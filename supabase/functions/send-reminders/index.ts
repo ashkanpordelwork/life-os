@@ -113,35 +113,28 @@ Deno.serve(async (req) => {
     }
   }
 
-  // 3. Tribe high fives not yet notified (last 24 h).
+  // 3. Tribe reactions not yet announced (last 24 h): one push per person, however many reactions.
   if (smart) {
     const since = new Date(Date.now() - 86_400_000).toISOString();
-    const { data: fives } = await sb.from('high_fives').select('event_id, from_user').eq('notified', false).gte('created_at', since);
-    if (fives && fives.length) {
-      const eventIds = [...new Set(fives.map((f) => f.event_id))];
-      const { data: events } = await sb.from('tribe_events').select('id, user_id').in('id', eventIds);
-      const owner = new Map((events ?? []).map((e) => [e.id, e.user_id as string]));
-      const fromIds = [...new Set(fives.map((f) => f.from_user))];
+    const { data: reacts } = await sb.from('tribe_reactions').select('id, from_user, to_user').eq('notified', false).gte('created_at', since);
+    if (reacts && reacts.length) {
+      const fromIds = [...new Set(reacts.map((f) => f.from_user))];
       const { data: names } = await sb.from('tribe_status').select('user_id, display_name').in('user_id', fromIds);
       const nameOf = new Map((names ?? []).map((n) => [n.user_id, n.display_name || 'Someone']));
       const byOwner = new Map<string, string[]>();
-      for (const f of fives) {
-        const o = owner.get(f.event_id);
-        if (!o) continue;
-        byOwner.set(o, [...(byOwner.get(o) ?? []), nameOf.get(f.from_user) ?? 'Someone']);
-      }
+      for (const f of reacts) byOwner.set(f.to_user, [...(byOwner.get(f.to_user) ?? []), nameOf.get(f.from_user) ?? 'Someone']);
       const prefs = new Map(rows.map((r) => [r.user_id, r.tribe_push !== false]));
       for (const [o, from] of byOwner) {
         if (!prefs.get(o)) continue; // push off, or Tribe pushes off
         const uniq = [...new Set(from)];
         await sendTo(o, {
-          title: 'High five',
-          body: uniq.length === 1 ? `${uniq[0]} sent you a high five.` : `${uniq[0]} and ${uniq.length - 1} more sent you high fives.`,
+          title: 'Your Tribe noticed you',
+          body: uniq.length === 1 ? `${uniq[0]} reacted to your day.` : `${uniq[0]} and ${uniq.length - 1} more reacted to your day.`,
           url: `${APP_URL}#/tribe`,
-          tag: 'high-five',
+          tag: 'tribe-reaction',
         });
       }
-      await sb.from('high_fives').update({ notified: true }).in('event_id', eventIds).eq('notified', false);
+      await sb.from('tribe_reactions').update({ notified: true }).in('id', reacts.map((f) => f.id));
     }
   }
 

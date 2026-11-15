@@ -791,7 +791,54 @@
       "last": "Last week {n}/{total}",
       "progressDone": "{n} of {total} active days."
     },
-    "weekN": "Week {n}"
+    "weekN": "Week {n}",
+    "react": {
+      "five": "High five",
+      "fire": "On fire",
+      "power": "Power"
+    },
+    "reactedToYou": "{n} reactions",
+    "nudge": {
+      "cta": "Nudge",
+      "sent": "Nudged",
+      "title": "Your Tribe is poking you",
+      "line": "{name}: {msg}",
+      "msgs": [
+        "Your habits are looking lonely.",
+        "Psst. The Tribe is waiting for you.",
+        "Just one tiny habit. We believe in you.",
+        "Everyone is moving. Are you?",
+        "Your streak says hi. Don’t leave it hanging.",
+        "Tick one habit and make my day.",
+        "I’m ahead of you today. Just saying.",
+        "Tiny mode exists. No excuses."
+      ]
+    },
+    "allowNudges": "Let friends nudge me",
+    "nudgesNote": "A nudge is a friendly poke if you haven’t started today. Off while you’re sick or away.",
+    "board": {
+      "title": "This week",
+      "days": "{n} active days",
+      "one": "1 active day",
+      "none": "No active days yet",
+      "empty": "Be the first this week.",
+      "leading": "Leading",
+      "titlesTitle": "Titles",
+      "titles": {
+        "earlyBird": {
+          "name": "Early bird",
+          "body": "Finished first most often"
+        },
+        "finisher": {
+          "name": "Finisher",
+          "body": "Most days with every habit done"
+        },
+        "comeback": {
+          "name": "Comeback",
+          "body": "Biggest rise since last week"
+        }
+      }
+    }
   },
   "admin": {
     "title": "Admin",
