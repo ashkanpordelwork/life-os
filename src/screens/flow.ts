@@ -46,7 +46,8 @@ export function formatMinutes(min: number, t: (k: string, v?: Record<string, num
   return t('time.minutes', { n: Math.round(min) });
 }
 
-export const pad2 = (n: number) => String(n).padStart(2, '0');
+/** Week and day numbers are shown plain ("Week 3 · Day 2"); the name stays for older call sites. */
+export const pad2 = (n: number) => String(n);
 
 /** When to do a patch: the personal clock time if it has one, else the part of the day. */
 export function whenLabel(item: ChecklistItem, wake: string, bed: string, t: (k: string, v?: Record<string, string | number>) => string): string {

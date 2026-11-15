@@ -298,7 +298,7 @@ function MemberRow({ id, me, today, name, hue, status }: { id: string; me: strin
         </div>
         {status?.sprint_number != null && (
           <span className="text-body-s text-secondary">
-            {[`Sprint ${String(status.sprint_number).padStart(2, '0')}`, status.sprint_theme, status.patch_titles?.join(', ')].filter(Boolean).join(' · ')}
+            {[t('tribe.weekN', { n: status.sprint_number }), status.sprint_theme, status.patch_titles?.join(', ')].filter(Boolean).join(' · ')}
           </span>
         )}
         {!status && id !== me && <span className="text-body-s text-secondary">{t('tribe.noStatus')}</span>}

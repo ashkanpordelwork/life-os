@@ -13,5 +13,7 @@
 - **Every habit has its own unit** (`measure` in items.json: time, count, amount, clock, check). Never show
   minutes for something that isn't timed (water is ml, steps are steps, a cutoff is a clock time).
 - Components use semantic tokens only; no raw hex outside `src/styles/tokens.css`.
-- UI text lives in `src/i18n/en.json`. Sprint, Patch, Release and Task stay in English.
+- UI text lives in `src/i18n/en.json`. Follow `docs/voice.md` (friendly, short, everyday words).
+- **No Scrum words in the UI** (owner decision, user feedback): say Week (not Sprint), Habit (not Patch),
+  Journey (not Roadmap), Weekly check-in (not Release/Review). Code and data keep the old names internally.
 - Logical CSS properties (inline/block), touch targets at least 44px, layout 375–430 wide.

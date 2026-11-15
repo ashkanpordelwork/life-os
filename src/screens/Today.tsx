@@ -202,7 +202,7 @@ export function Today() {
 
       <CoachTeaser onOpen={() => setSheet('coach')} />
 
-      <SprintStrip label={theme ? `Sprint ${pad2(sprint.number)} · ${theme}` : `Sprint ${pad2(sprint.number)}`} day={day} length={sprint.length_days} />
+      <SprintStrip label={theme ? t('today.stripTheme', { n: sprint.number, theme }) : t('today.strip', { n: sprint.number })} day={day} length={sprint.length_days} />
       {reviewDue(sprint, today) && <Button block label={reviewLabel(sprint)} onClick={() => navigate('/review')} />}
 
       <div className="today__chip" data-tour="tiny">

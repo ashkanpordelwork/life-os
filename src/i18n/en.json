@@ -36,9 +36,9 @@
   "welcome": {
     "brand": "Life OS",
     "title": "Great at your job. Now be great at your life.",
-    "subtitle": "Small daily patches. No pressure.",
-    "start": "Get started",
-    "account": "I have an account"
+    "subtitle": "Tiny daily habits. Zero pressure.",
+    "start": "Let's go",
+    "account": "I already have an account"
   },
   "symptomsScreen": {
     "topTitle": "About you",
@@ -85,18 +85,18 @@
     }
   },
   "score": {
-    "topTitle": "Starting score",
-    "subtitle": "A fair place to start.",
-    "cta": "See my patches"
+    "topTitle": "Where you're starting",
+    "subtitle": "Totally fine place to start.",
+    "cta": "Show me my habits"
   },
   "patches": {
-    "topTitle": "Pick patches",
+    "topTitle": "Pick habits",
     "trailing": "Pick 3",
-    "title": "Your first patches",
-    "subtitle": "Pick 3 to 5. Tiny, doable, backed by evidence.",
-    "cta": "Start Sprint {n}",
+    "title": "Your first habits",
+    "subtitle": "Pick 3 to 5. Small, doable, backed by science.",
+    "cta": "Start my first week",
     "trailingRange": "{n} / {max}",
-    "moreHint": "Fewer patches stick better. 3 is a great start.",
+    "moreHint": "Start small. Three is plenty.",
     "forTag": "For: {what}",
     "tapHint": "Tap a habit to see what it does. Tap the circle to pick it.",
     "pick": "Pick {title}",
@@ -104,15 +104,15 @@
     "unpick": "Remove from my picks"
   },
   "ready": {
-    "label": "Sprint {nn} · {days} days",
-    "title": "You're set.",
-    "subtitle": "{count} patches. About {minutes} minutes a day.",
-    "panelLabel": "Sprint {nn}",
-    "sprintDef": "Sprint: 7 days with the same patches.",
-    "patchDef": "Patch: one small habit you tick off each day.",
-    "releaseDef": "Release: at the end, you keep, swap or drop each patch.",
-    "cta": "Go to Today",
-    "ctaSignup": "Save my Sprint"
+    "label": "Week {nn} · {days} days",
+    "title": "You're all set.",
+    "subtitle": "{count} habits. About {minutes} min a day.",
+    "panelLabel": "Week {nn}",
+    "sprintDef": "Each week you stick with the same habits.",
+    "patchDef": "A habit is one small thing you tick off each day.",
+    "releaseDef": "At the end of the week, keep, swap or drop each one.",
+    "cta": "Let's start",
+    "ctaSignup": "Save my week"
   },
   "styleguide": {
     "title": "Life OS design system",
@@ -166,7 +166,7 @@
     }
   },
   "today": {
-    "label": "Sprint {nn} · Day {dd}",
+    "label": "Week {nn} · Day {dd}",
     "hi": "Hi, {name}",
     "hiNoName": "Hi there",
     "morning": "Morning, {name}",
@@ -177,48 +177,50 @@
     "eveningNoName": "Good evening",
     "streak": "Streak",
     "days": "Days",
-    "score": "Score",
+    "score": "This week",
     "section": "Today",
     "tiny": "Tiny mode",
     "tinyOn": "Tiny mode · on",
-    "allDone": "All done · see you tomorrow",
+    "allDone": "All done. See you tomorrow!",
     "notifications": "Reminders",
     "markDone": "Mark {title} done",
     "busyTitle": "Busy day?",
-    "busyBody": "Tiny versions. About 20 s each.",
-    "busyUse": "Use tiny versions",
-    "busyKeep": "Keep as planned",
+    "busyBody": "Do the tiny versions. About 20 seconds each.",
+    "busyUse": "Go tiny",
+    "busyKeep": "Nah, keep it",
     "rest": "Rest day",
-    "restTitle": "Take today off?",
-    "restBody": "Streak safe. Nothing owed.",
-    "restLog": "Log a rest day",
+    "restTitle": "Take the day off?",
+    "restBody": "Your streak is safe. You owe nothing.",
+    "restLog": "Yes, rest today",
     "restCancel": "Never mind",
     "resting": "Resting",
     "restOn": "Rest day · streak safe",
     "tools": "Library",
-    "thisWeek": "{n}/{total} this week"
+    "thisWeek": "{n}/{total} this week",
+    "strip": "Week {n}",
+    "stripTheme": "Week {n} · {theme}"
   },
   "nav": {
     "today": "Today",
-    "roadmap": "Roadmap",
+    "roadmap": "Journey",
     "progress": "Progress",
     "you": "You",
     "soon": "Coming soon",
     "tribe": "Tribe"
   },
   "patch": {
-    "topTitle": "Patch",
+    "topTitle": "Habit",
     "versions": {
       "tiny": "Tiny",
       "standard": "Standard",
       "stretch": "Stretch"
     },
-    "why": "Why this works",
+    "why": "Why it helps",
     "evidencePending": "Evidence not rated yet",
-    "safetyMove": "Stop if it hurts.",
+    "safetyMove": "If it hurts, stop.",
     "markDone": "Mark done",
     "undo": "Not done yet",
-    "notToday": "Not today"
+    "notToday": "Skip today"
   },
   "slots": {
     "ALL_DAY": "All day",
@@ -230,7 +232,7 @@
   },
   "done": {
     "streak": "Day streak",
-    "title": "Done.",
+    "title": "Nice one.",
     "week": "This week",
     "cta": "Back to Today",
     "weekdays": [
@@ -245,7 +247,7 @@
     "dayLabel": "{day}: {n} of {total} done"
   },
   "you": {
-    "label": "Sprint {nn}",
+    "label": "Week {nn}",
     "email": "Signed in as",
     "signOut": "Sign out",
     "reminders": "Reminders",
@@ -256,28 +258,28 @@
     "admin": "Admin"
   },
   "review": {
-    "cta": "Review Sprint {nn}",
-    "topTitle": "Sprint {n} review",
-    "title": "How did it go?",
-    "subtitle": "Keep, swap or drop each patch. A Sprint has 3 to 5.",
+    "cta": "Do your weekly check-in",
+    "topTitle": "Week {n} check-in",
+    "title": "How was your week?",
+    "subtitle": "Keep, swap or drop each habit. You can have 3 to 5.",
     "daysDone": "{n} / {total} days",
     "keep": "Keep",
     "swap": "Swap",
     "drop": "Drop",
     "seeSuggestions": "See suggestions",
     "continue": "Continue",
-    "nextTitle": "Sprint {n}",
+    "nextTitle": "Week {n}",
     "pickCount": "{n} of {total}",
     "suggestTitle": "Suggested for you",
-    "suggestSubtitle": "Based on what slipped in Sprint {n}.",
+    "suggestSubtitle": "Picked from what slipped last week.",
     "confirmPick": "Confirm pick",
-    "browse": "Browse all patches",
-    "browseTitle": "Browse patches",
+    "browse": "See all habits",
+    "browseTitle": "All habits",
     "all": "All",
-    "readyTitle": "Ready?",
+    "readyTitle": "Look good?",
     "startsToday": "Starts today",
-    "confirm": "Confirm Sprint {n}",
-    "empty": "No more patches to suggest right now. Keep one instead.",
+    "confirm": "Start week {n}",
+    "empty": "Nothing new to suggest right now. Keep one instead.",
     "areas": {
       "Movement": "Move",
       "Nutrition": "Nutrition",
@@ -285,18 +287,18 @@
       "Mind": "Mind"
     },
     "checkTitle": "Quick check-in",
-    "scoreTitle": "Your score now",
+    "scoreTitle": "Where you are now",
     "scoreUp": "Up {x} since you started",
-    "scoreDown": "Down {x} since you started. That's OK.",
+    "scoreDown": "Down {x} since you started. Happens to everyone.",
     "scoreSame": "Same as when you started.",
     "levelUp": "Level 2 unlocked",
-    "levelUpBody": "You did {p}% of days. New, bigger patches are in.",
+    "levelUpBody": "You showed up {p}% of days. Bigger habits are unlocked.",
     "levelLocked": "Level 2 locked",
-    "levelLockedBody": "You did {p}% of days. Reach {need}% to unlock bigger patches.",
-    "addPatch": "Add a patch",
-    "lockedTitle": "Sprint {n} shipped.",
-    "lockedBody": "Sprint {n} and every Sprint after it come with Pro. Or keep your patches for 7 more days.",
-    "keepGoing": "Keep my patches for 7 more days",
+    "levelLockedBody": "You showed up {p}% of days. Hit {need}% to unlock bigger habits.",
+    "addPatch": "Add a habit",
+    "lockedTitle": "Week {n} done!",
+    "lockedBody": "New weeks come with Pro. Or keep your habits for 7 more days.",
+    "keepGoing": "Keep my habits 7 more days",
     "seePro": "See Pro"
   },
   "progress": {
@@ -305,25 +307,25 @@
     "dayDone": "{n} of {total} done",
     "rest": "Rest day · streak safe",
     "nothing": "Nothing logged this day.",
-    "scoreLabel": "Score",
-    "scoreSubtitle": "Your starting score.",
+    "scoreLabel": "Where you started",
+    "scoreSubtitle": "From your first 4 answers.",
     "cellLabel": "{day}: {n} done",
-    "openScore": "See score by area",
+    "openScore": "See it by area",
     "scoreSubtitleNow": "Up {x} since you started",
     "scoreSubtitleDown": "Down {x} since you started",
     "scoreSubtitleSame": "Same as when you started"
   },
   "roadmap": {
-    "label": "Roadmap",
-    "title": "Sprints",
-    "sprint": "Sprint {nn}",
+    "label": "Journey",
+    "title": "Your weeks",
+    "sprint": "Week {nn}",
     "done": "Done",
     "now": "Now · Day {n}",
     "next": "Next",
-    "pastText": "Released",
-    "nextText": "You pick it at the end of this Sprint.",
-    "plan": "Plan Sprint {n}",
-    "nextPro": "Opens with Pro."
+    "pastText": "Done",
+    "nextText": "You'll pick it at the end of this week.",
+    "plan": "Plan week {n}",
+    "nextPro": "Unlocks with Pro."
   },
   "reminders": {
     "topTitle": "Reminders",
@@ -351,20 +353,20 @@
     "rowSubtitleInapp": "In-app · {time}",
     "rowSubtitleOff": "Off",
     "smartTitle": "Smart reminders",
-    "patchPush": "At each patch's time",
+    "patchPush": "At each habit's time",
     "tribePush": "Tribe high fives",
-    "smartHint": "A push at your patch's own time, from your wake and bed times. Skipped once it's done or on a rest day.",
+    "smartHint": "A push at your habit's own time, from your wake and bed times. Skipped once it's done or on a rest day.",
     "smartOff": "Turn on push notifications first."
   },
   "nudge": {
-    "text": "{n} patches left today. About {m} min.",
-    "one": "1 patch left today. About {m} min.",
+    "text": "{n} habits left today. About {m} min.",
+    "one": "1 habit left today. About {m} min.",
     "later": "Later"
   },
   "sleepTimes": {
     "topTitle": "Sleep times",
     "title": "When's your usual day?",
-    "subtitle": "We'll time your patches around it.",
+    "subtitle": "We'll time your habits around it.",
     "wake": "Wake up",
     "bed": "Bedtime",
     "total": "About {h} h of sleep",
@@ -375,37 +377,37 @@
     "title": "Insights",
     "open": "Insights",
     "openSubtitle": "Patterns from your days",
-    "sprintLabel": "Sprint {n} so far",
-    "sprintBody": "of days with a patch done",
+    "sprintLabel": "Week {n} so far",
+    "sprintBody": "of days with a habit done",
     "levelAria": "{p}% of days. Level 2 needs {need}%.",
     "levelOpen": "Level 2 is open",
     "levelOnTrack": "On track for Level 2",
     "levelNeed": "Level 2 at {need}%",
-    "patchesTitle": "Patch by patch",
+    "patchesTitle": "Habit by habit",
     "daysOf": "{n} / {total} days",
     "daysTitle": "Your best days",
     "dayValue": "{day}: {n} active days in the last {weeks} weeks",
-    "daysEmpty": "Tick a patch to start the chart.",
+    "daysEmpty": "Tick a habit to start the chart.",
     "longest": "Best streak",
     "notesTitle": "What we notice",
     "notEnough": "A few more days and patterns show up here. {n} to go.",
     "noteDay": "{day} is your strongest day.",
-    "noteSteady": "{title} is your steadiest patch this Sprint.",
+    "noteSteady": "{title} is your most steady habit this week.",
     "noteUp": "Your score is up {x} since you started.",
     "noteDown": "Your score is down {x} since you started. Small steps still count.",
     "daysTap": "Tap a day to see it.",
-    "levelLater": "Level 2 opens from Sprint 3 at {need}%"
+    "levelLater": "Level 2 opens from week 3 at {need}%"
   },
   "library": {
     "title": "Library",
     "tools": "Tools",
     "learn": "Learn",
     "toolsIntro": "Quick help for the moment you need it.",
-    "learnIntro": "Every patch and why it works.",
+    "learnIntro": "Every habit and why it works.",
     "level": "Level {n}",
-    "unlocks": "Unlocks in a later Sprint",
+    "unlocks": "Unlocks in a later week",
     "open": "Library",
-    "openSubtitle": "Tools and the science behind each patch",
+    "openSubtitle": "Tools and the science behind each habit",
     "calm": "Calm",
     "focusGroup": "Focus",
     "nutritionGroup": "Nutrition",
@@ -455,12 +457,12 @@
   "health": {
     "topTitle": "Health check",
     "title": "Anything we should know?",
-    "subtitle": "Tick what's true for you now. We'll leave out patches that aren't safe for you.",
+    "subtitle": "Tick what's true for you now. We'll leave out habits that aren't safe for you.",
     "pregnant": "Pregnant",
     "heart": "Heart condition",
     "ill": "Ill right now (cold or flu)",
     "insomnia": "Trouble falling asleep",
-    "private": "Only used to pick your patches."
+    "private": "Only used to pick your habits."
   },
   "safety": {
     "label": "Safety",
@@ -474,30 +476,30 @@
     "next": "Next",
     "start": "Let's start",
     "sprint": {
-      "label": "Sprint",
-      "title": "7 days, 3 patches.",
-      "body": "A Sprint is one week with the same small habits. About 12 minutes a day."
+      "label": "Week",
+      "title": "7 days, 3 habits.",
+      "body": "Each week you stick with the same few small habits. About 12 min a day."
     },
     "patch": {
-      "label": "Patch",
+      "label": "Habit",
       "title": "One small habit.",
       "body": "Tick it off each day. Busy? The tiny version takes about 20 seconds and still counts."
     },
     "release": {
-      "label": "Release",
+      "label": "Weekly check-in",
       "title": "Keep, swap or drop.",
-      "body": "At the end of a Sprint you review each patch and check your score again."
+      "body": "At the end of each week, look back, keep what works and swap the rest."
     },
     "levels": {
       "label": "Levels",
-      "title": "Bigger patches unlock.",
-      "body": "Do a patch on 70% of a Sprint's days, and Level 2 opens from Sprint 3."
+      "title": "Bigger habits unlock.",
+      "body": "Show up on 70% of days and bigger habits unlock from week 3."
     }
   },
   "pro": {
     "topTitle": "Pro",
     "title": "Go further, one week at a time.",
-    "subtitle": "Every Sprint, bigger patches and deeper tools.",
+    "subtitle": "Every week unlocked, bigger habits and deeper tools.",
     "status": {
       "founder": "Founding member",
       "pro": "Pro",
@@ -509,17 +511,17 @@
     "feature": "Feature",
     "free": "Free",
     "pro": "Pro",
-    "oneSprint": "{n} Sprint",
+    "oneSprint": "{n} week",
     "allSprints": "All",
     "included": "Included",
     "notIncluded": "Not included",
     "features": {
       "sprints": {
-        "title": "Every Sprint",
-        "body": "A new 7-day Sprint opens each time you finish one."
+        "title": "Every week",
+        "body": "A new 7-day week opens each time you finish one."
       },
       "levels": {
-        "title": "{n} bigger patches",
+        "title": "{n} bigger habits",
         "body": "Level 2 and 3: cardio, strength, cold, sleep and more."
       },
       "focus": {
@@ -540,9 +542,9 @@
       }
     },
     "compare": {
-      "sprints": "Sprints",
-      "level1": "Level 1 patches",
-      "levels": "Level 2–3 patches",
+      "sprints": "Weeks",
+      "level1": "Level 1 habits",
+      "levels": "Level 2–3 habits",
       "calm": "Calm tools",
       "insights": "Insights",
       "tools": "Focus, nutrition, travel tools",
@@ -559,7 +561,7 @@
       "founderSince": "Founding member since {date}. Thanks for being here early.",
       "pro": "Everything is open.",
       "beta": "Everything is open while Life OS is in beta.",
-      "free": "Your first Sprint is free. Paying for Pro is coming soon."
+      "free": "Your first week is free. Paying for Pro is coming soon."
     },
     "cta": "Back to Today",
     "soonCta": "Pro is coming soon"
@@ -723,7 +725,7 @@
       "omega": "Omega-3",
       "avoid": "Be careful"
     },
-    "footer": "Life OS never adds supplements to your Sprint. Habits come first."
+    "footer": "Life OS never adds supplements to your week. Habits come first."
   },
   "proBanner": {
     "founder": {
@@ -739,14 +741,14 @@
       "body": "See what's included."
     },
     "free": {
-      "title": "Unlock every Sprint.",
+      "title": "Unlock every week.",
       "body": "See Pro."
     }
   },
   "founderWelcome": {
     "eyebrow": "Founding member",
     "title": "You have Pro, for good.",
-    "body": "Thanks for being here early. Every Sprint, all patches and every tool are yours.",
+    "body": "Thanks for being here early. Every week, all habits and every tool are yours.",
     "cta": "Nice",
     "more": "See what's in Pro"
   },
@@ -768,7 +770,7 @@
     "wrongCode": "That code doesn't match a Tribe.",
     "failed": "Something went wrong. Try again.",
     "settingsTitle": "Tribe settings",
-    "sharePatches": "Show my patch names",
+    "sharePatches": "Show my habit names",
     "shareScore": "Show my score",
     "privacy": "Your Tribe never sees your health answers or symptoms.",
     "another": "Join another Tribe",
@@ -782,7 +784,7 @@
     "inviteText": "Join my Tribe “{name}” on Life OS. Code: {code}",
     "todayTitle": "Today",
     "feedTitle": "Activity",
-    "feedEmpty": "Nothing yet. Tick a patch to start the feed.",
+    "feedEmpty": "Nothing yet. Tick a habit to start the feed.",
     "you": "You",
     "someone": "Member",
     "noStatus": "Hasn't opened Life OS yet today.",
@@ -799,8 +801,8 @@
       "active": "{name} started today",
       "allDone": "{name} finished today",
       "joined": "{name} joined the Tribe",
-      "release": "{name} shipped Sprint {n}",
-      "releaseTheme": "{name} shipped Sprint {n} · {theme}"
+      "release": "{name} finished Week {n}",
+      "releaseTheme": "{name} finished Week {n} · {theme}"
     },
     "challenge": {
       "label": "This week's challenge",
@@ -809,7 +811,8 @@
       "progress": "{n} of {total} active days. {left} to go.",
       "last": "Last week {n}/{total}",
       "progressDone": "{n} of {total} active days."
-    }
+    },
+    "weekN": "Week {n}"
   },
   "admin": {
     "title": "Admin",
@@ -875,20 +878,20 @@
     "replaySubtitle": "A quick walk through the app",
     "steps": {
       "patches": {
-        "title": "Your patches for today",
+        "title": "Your habits for today",
         "body": "Tap the circle when one is done. Each tick counts toward your streak."
       },
       "tiny": {
         "title": "Busy day?",
-        "body": "Tiny mode gives you the 20-second version of each patch. It still counts."
+        "body": "Tiny mode gives you the 20-second version of each habit. It still counts."
       },
       "tools": {
         "title": "Need a moment?",
         "body": "Breathing, NSDR and focus tools live in Library, one tap away."
       },
       "roadmap": {
-        "title": "Your roadmap",
-        "body": "See this Sprint, the next one, and how far you've come."
+        "title": "Your journey",
+        "body": "This week, next week, and how far you've come."
       },
       "progress": {
         "title": "Your progress",
@@ -900,19 +903,19 @@
       },
       "intro": {
         "title": "Welcome to Life OS",
-        "body": "A 30-second tour of how small daily patches add up."
+        "body": "A 30-second tour of how small daily habits add up."
       },
       "check": {
         "title": "Try it now",
-        "body": "Tap the circle to tick your first patch. It's that simple."
+        "body": "Tap the circle to tick your first habit. It's that simple."
       },
       "checkDone": {
         "title": "Nice. Day 1 is on the board.",
-        "body": "Untick any time. Every day with one patch keeps your streak."
+        "body": "Untick any time. Every day with one habit keeps your streak."
       },
       "finale": {
         "title": "You're set.",
-        "body": "One patch at a time. See you tomorrow."
+        "body": "One habit at a time. See you tomorrow."
       }
     },
     "start": "Show me",
@@ -941,17 +944,17 @@
   },
   "works": {
     "title": "What works for you",
-    "empty": "Log how you feel on Today for about a week. Then we show which patches lift your energy, mood, sleep and focus. ({n} days logged)",
+    "empty": "Log how you feel on Today for about a week. Then we show which habits lift your energy, mood, sleep and focus. ({n} days logged)",
     "line": "Your {metric} on days you did it ({n} days)",
     "caveat": "A pattern from your own days, not proof."
   },
   "experiments": {
     "title": "Experiments",
-    "subtitle": "Test one patch on yourself",
+    "subtitle": "Test one habit on yourself",
     "topTitle": "Experiments",
-    "intro": "Pick one patch and one thing to watch. Do it for a week or two, keep logging, and see what changes compared to the days before.",
+    "intro": "Pick one habit and one thing to watch. Do it for a week or two, keep logging, and see what changes compared to the days before.",
     "newTitle": "New experiment",
-    "patch": "Patch",
+    "patch": "Habit",
     "metric": "Watch",
     "days": "Length",
     "daysN": "{n} days",
@@ -991,13 +994,13 @@
       },
       "travel": {
         "title": "Travel",
-        "body": "Jet-lag plan, smaller patches.",
+        "body": "Jet-lag plan, smaller habits.",
         "active": "Try the tiny versions. Your reminders follow your time zone."
       },
       "sick": {
         "title": "Sick",
         "body": "Gentle only. Streak safe.",
-        "active": "Movement patches are off. Your streak is safe and reminders are paused."
+        "active": "Movement habits are off. Your streak is safe and reminders are paused."
       },
       "vacation": {
         "title": "Vacation",
@@ -1008,7 +1011,7 @@
   },
   "programs": {
     "title": "Programs",
-    "intro": "Three-week paths with a clear goal. Each week is one Sprint with three patches, picked for you.",
+    "intro": "Three-week plans with a clear goal. Each week has three habits, picked for you.",
     "following": "You're following",
     "weekOf": "Week {n} of {total}",
     "week": "Week {n}",
@@ -1018,12 +1021,12 @@
     "leave": "Leave program",
     "start": "Start this program",
     "restart": "Start again from week 1",
-    "replaceNote": "Starting replaces this Sprint's patches with week 1 and starts a fresh 7 days. Your streak stays.",
+    "replaceNote": "This swaps this week's habits for week 1 and starts a fresh 7 days. Your streak stays.",
     "nextTitle": "Next in {program}",
     "nextBody": "Week {n}: {name}.",
     "nextCta": "Start week {n}",
     "doneTitle": "Program complete",
-    "doneBody": "You finished {program}. Pick your next patches below.",
+    "doneBody": "You finished {program}. Pick your next habits below.",
     "rowSubtitle": "Three-week paths with a goal",
     "rowActive": "{program} · week {n} of {total}",
     "list": {
@@ -1072,10 +1075,10 @@
     "subtitle": "A personal coach powered by AI. It learns your days.",
     "eyebrow": "Coming soon",
     "sheetTitle": "Your AI Coach is on the way",
-    "sheetBody": "Built on AI, trained on the science behind every patch. It reads your patches, streaks and check-ins to help you get better, week by week.",
+    "sheetBody": "Built on AI, trained on the science behind every habit. It reads your habits, streaks and check-ins to help you get better, week by week.",
     "points": [
-      "Ask anything: “Why do I keep missing evening patches?”",
-      "Personal Release notes at the end of every Sprint",
+      "Ask anything: “Why do I keep missing evening habits?”",
+      "A personal recap at the end of every week",
       "Smart swaps when life gets busy"
     ],
     "privacy": "It will never see your health answers.",
