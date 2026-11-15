@@ -4,6 +4,7 @@ import { haptic, motionTokens } from '../styles/motion';
 import { AnswerRow } from '../components/AnswerRow';
 import { Button } from '../components/Button';
 import { TextButton } from '../components/TextButton';
+import { ANSWER_ICONS } from './answerIcons';
 import { IconTile, type Glyph } from '../components/IconTile';
 import { Screen, Spacer } from '../components/Screen';
 import { SegmentedProgress } from '../components/SegmentedProgress';
@@ -33,7 +34,6 @@ export function Question() {
   const selected = state.answers[area];
   const back = index === 0 ? '/symptoms' : AREAS[index - 1] === 'Sleep' ? TIMES_ROUTE : QUESTION_ROUTES[AREAS[index - 1]];
   const next = area === 'Sleep' ? TIMES_ROUTE : index === AREAS.length - 1 ? HEALTH_ROUTE : QUESTION_ROUTES[AREAS[index + 1]];
-  const emoji = tList(`questions.${area}.emoji`);
   /** "Not sure": counts as the second answer, so we start with easy habits (app choice). */
   const notSure = () => { setAnswer(area, 1); navigate(next); };
 
@@ -47,7 +47,7 @@ export function Question() {
       <div className="answer-list" role="radiogroup" aria-label={t(`questions.${area}.question`)}>
         {tList(`questions.${area}.answers`).map((label, i) => (
           <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.06 + i * motionTokens.stagger }}>
-            <AnswerRow label={label} lead={emoji[i]} selected={selected === i} onSelect={() => { haptic(8); setAnswer(area, i as AnswerIndex); }} />
+            <AnswerRow label={label} lead={ANSWER_ICONS[area][i]} selected={selected === i} onSelect={() => { haptic(8); setAnswer(area, i as AnswerIndex); }} />
           </motion.div>
         ))}
       </div>

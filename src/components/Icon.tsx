@@ -5,6 +5,8 @@ import {
   InformationCircleIcon, LockIcon, Mail01Icon, Moon02Icon, Notification01Icon, Restaurant01Icon, Route01Icon,
   SecurityCheckIcon, SlidersHorizontalIcon, Sun03Icon, TaskDone01Icon, TestTube01Icon, Tick02Icon, Timer02Icon,
   TrendingUpIcon, UserIcon, WalkingIcon, Yoga02Icon, UserGroupIcon, AiMagicIcon, AiBrain01Icon, AiChat02Icon, BookOpen01Icon, Airplane01Icon, Medicine02Icon, HourglassIcon, Beach02Icon, Clapping01Icon, Share08Icon, Copy01Icon, Settings02Icon, PlusSignIcon, MinusSignIcon, Target02Icon,
+  OfficeChairIcon, RunningShoesIcon, WorkoutRunIcon, SkipForwardIcon, CookieIcon, SandwichIcon, SaladIcon,
+  SleepingIcon, NeutralIcon, SmileIcon, SunriseIcon, Alert02Icon,
 } from '@hugeicons/core-free-icons';
 import './Icon.css';
 
@@ -60,6 +62,18 @@ const icons = {
   add: PlusSignIcon,
   remove: MinusSignIcon,
   target: Target02Icon,
+  chair: OfficeChairIcon,
+  running_shoes: RunningShoesIcon,
+  workout_run: WorkoutRunIcon,
+  skip: SkipForwardIcon,
+  cookie: CookieIcon,
+  sandwich: SandwichIcon,
+  salad: SaladIcon,
+  sleeping: SleepingIcon,
+  face_neutral: NeutralIcon,
+  face_smile: SmileIcon,
+  sunrise: SunriseIcon,
+  alert: Alert02Icon,
 } as const;
 
 export type IconName = keyof typeof icons;

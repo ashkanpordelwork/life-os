@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import { motionTokens } from '../styles/motion';
 import './AnswerRow.css';
 
 type AnswerRowProps = {
   label: string;
-  /** Optional emoji in front of the label (onboarding questions). */
-  lead?: string;
+  /** Optional icon in front of the label (onboarding questions). */
+  lead?: IconName;
   /** Figma property `State`: Off | On */
   selected?: boolean;
   onSelect?: () => void;
@@ -30,7 +30,7 @@ export function AnswerRow({ label, lead, selected = false, onSelect }: AnswerRow
       whileTap={{ scale: 0.985 }}
       transition={motionTokens.press}
     >
-      {lead && <span className="answer-row__lead" aria-hidden="true">{lead}</span>}
+      {lead && <span className="answer-row__lead" aria-hidden="true"><Icon name={lead} size={20} /></span>}
       <span className="answer-row__label text-body-m-strong">{label}</span>
       <span className="answer-row__radio" aria-hidden="true">
         <AnimatePresence initial={false}>

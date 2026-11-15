@@ -55,12 +55,6 @@
         "A short walk here and there",
         "I walk a lot",
         "I work out most days"
-      ],
-      "emoji": [
-        "🪑",
-        "🚶",
-        "👟",
-        "🏃"
       ]
     },
     "Nutrition": {
@@ -71,12 +65,6 @@
         "Snacks and quick bites",
         "Mostly proper meals",
         "Real, home-style meals"
-      ],
-      "emoji": [
-        "⏭️",
-        "🍫",
-        "🥪",
-        "🥗"
       ]
     },
     "Sleep": {
@@ -87,12 +75,6 @@
         "Slow, but OK after a while",
         "Mostly fine",
         "Rested and ready"
-      ],
-      "emoji": [
-        "😵",
-        "😐",
-        "🙂",
-        "😄"
       ]
     },
     "Mind": {
@@ -103,12 +85,6 @@
         "Not often",
         "Most days",
         "Easily"
-      ],
-      "emoji": [
-        "🤯",
-        "😬",
-        "🙂",
-        "😌"
       ]
     }
   },

@@ -30,6 +30,7 @@ import { motionTokens } from '../styles/motion';
 import { cardMeta, pad2 } from './flow';
 import './onboarding.css';
 import './review.css';
+import { ANSWER_ICONS } from './answerIcons';
 
 /** Week names are a list in en.json: programs.list.<id>.weeks[i]. */
 const weekName = (id: string, i: number) => tList(`programs.list.${id}.weeks`)[i] ?? '';
@@ -187,7 +188,7 @@ export function Review() {
                 <h2 className="text-title-l text-primary">{q}</h2>
                 <div className="answer-list" role="radiogroup" aria-label={q}>
                   {tList(`questions.${area}.answers`).map((label, i) => (
-                    <AnswerRow key={label} label={label} lead={tList(`questions.${area}.emoji`)[i]} selected={answers[area] === i} onSelect={() => setAnswers({ ...answers, [area]: i as AnswerIndex })} />
+                    <AnswerRow key={label} label={label} lead={ANSWER_ICONS[area][i]} selected={answers[area] === i} onSelect={() => setAnswers({ ...answers, [area]: i as AnswerIndex })} />
                   ))}
                 </div>
                 <Spacer />

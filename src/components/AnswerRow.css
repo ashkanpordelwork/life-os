@@ -37,4 +37,4 @@
   background: var(--color-action-primary);
   color: var(--color-surface-card);
 }
-.answer-row__lead { flex-shrink: 0; font-size: 22px; line-height: 1; }
+.answer-row__lead { display: flex; align-items: center; justify-content: center; flex-shrink: 0; inline-size: 36px; block-size: 36px; border-radius: var(--radius-md); background: var(--color-brand-soft); color: var(--color-text-brand); }
