@@ -39,7 +39,7 @@ function dayTitle(key: string) {
 /** Progress (Figma 50:161) + Day detail sheet (59:891). */
 export function Progress() {
   const navigate = useNavigate();
-  const { checkins, sprint, profile, today, logs } = useSession();
+  const { checkins, sprint, profile, today, logs, goals } = useSession();
   const [filter, setFilter] = useState<Area | 'All'>('All');
   const [openDay, setOpenDay] = useState<string | null>(null);
 
@@ -153,7 +153,7 @@ export function Progress() {
         {detailIds.length === 0 && <p className="text-body-s text-secondary">{t('progress.nothing')}</p>}
         <div className="progress__detail shadow-room shadow-room--sheet">
           {detailIds.map(getItem).filter((x): x is ChecklistItem => !!x).map((item) => (
-            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={cardMeta(item, t)} done={detailDone.has(item.id)} />
+            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={cardMeta(item, t, goals)} done={detailDone.has(item.id)} />
           ))}
         </div>
       </BottomSheet>

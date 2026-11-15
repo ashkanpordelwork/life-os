@@ -1,7 +1,7 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
 import type { LifeMode } from '../engine';
-import { AuthError, type AuthErrorCode, type Backend, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -105,10 +105,19 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       check(await sb.from('sprints').upsert({ user_id: userId, ...s }, { onConflict: 'user_id,number' }));
     },
     async loadCheckins(userId) {
-      return check(await sb.from('checkins').select('day, item_id, version').eq('user_id', userId)) ?? [];
+      // amount comes from migrations-goals.sql; fall back if it hasn't been run yet.
+      let res: { data: unknown; error: { message: string } | null } = await sb.from('checkins').select('day, item_id, version, amount').eq('user_id', userId);
+      if (res.error) res = await sb.from('checkins').select('day, item_id, version').eq('user_id', userId);
+      return ((check(res) ?? []) as Checkin[]).map((c) => (c.amount == null ? { day: c.day, item_id: c.item_id, version: c.version } : { ...c, amount: Number(c.amount) }));
     },
     async setCheckin(userId, c, done) {
-      if (done) check(await sb.from('checkins').upsert({ user_id: userId, ...c }, { onConflict: 'user_id,day,item_id' }));
+      if (done) {
+        const res = await sb.from('checkins').upsert({ user_id: userId, ...c, amount: c.amount ?? null }, { onConflict: 'user_id,day,item_id' });
+        // Without the amount column (migration not run), save the tick alone.
+        if (res.error && /amount|column|schema/i.test(res.error.message)) {
+          check(await sb.from('checkins').upsert({ user_id: userId, day: c.day, item_id: c.item_id, version: c.version }, { onConflict: 'user_id,day,item_id' }));
+        } else check(res);
+      }
       else check(await sb.from('checkins').delete().match({ user_id: userId, day: c.day, item_id: c.item_id }));
     },
     async loadReminders(userId) {
@@ -129,6 +138,14 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async deletePushSubscription(_userId, endpoint) {
       check(await sb.from('push_subscriptions').delete().eq('endpoint', endpoint));
+    },
+    async loadGoals(userId) {
+      const res = await sb.from('habit_goals').select('item_id, goal').eq('user_id', userId);
+      if (res.error) return {}; // table missing until migrations-goals.sql is run
+      return Object.fromEntries((res.data ?? []).map((r: { item_id: string; goal: number }) => [r.item_id, Number(r.goal)]));
+    },
+    async saveGoal(userId, itemId, goal) {
+      check(await sb.from('habit_goals').upsert({ user_id: userId, item_id: itemId, goal }, { onConflict: 'user_id,item_id' }));
     },
     async loadLogs(userId) {
       const res = await sb.from('daily_logs').select('day, energy, mood, sleep, focus').eq('user_id', userId).order('day', { ascending: false }).limit(400);

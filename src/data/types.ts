@@ -61,6 +61,9 @@ export interface ChecklistItem {
   measure?: 'time' | 'count' | 'amount' | 'clock' | 'check';
   /** Label for count and amount habits, e.g. "7,000 steps", "500 ml". */
   amount?: string;
+  /** Personal goal the user can change (user feedback: "let me pick 5,000 steps").
+   *  `default` is the book's Standard number; min, max and step are app choices. */
+  goal?: HabitGoal;
   /** Raw numbers from docs/engine-spec.md. Display text is built from these. */
   params: Record<string, unknown>;
   safety_rules: string[];
@@ -99,4 +102,13 @@ export interface Sprint {
   length_days: number;
   patch_ids: string[];
   started_at: string;
+}
+
+export type GoalUnit = 'steps' | 'reps' | 'ml' | 'g';
+export interface HabitGoal {
+  unit: GoalUnit; default: number; min: number; max: number;
+  /** Step when picking the goal. */
+  step: number;
+  /** Step when logging today's amount (e.g. one glass = 250 ml). App choice. */
+  log_step: number;
 }

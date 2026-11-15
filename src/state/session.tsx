@@ -32,7 +32,11 @@ interface SessionApi extends SessionState {
   resetPassword: (email: string) => Promise<void>;
   saveSprint: (sprint: Sprint) => Promise<void>;
   /** Tick or untick a patch for today. Ticking on a rest day ends the rest day. */
-  setDone: (itemId: string, done: boolean, version?: VersionKey) => Promise<void>;
+  /** Tick a habit, or untick it. `amount` saves how much was done (habits with a goal). */
+  setDone: (itemId: string, done: boolean, version?: VersionKey, amount?: number) => Promise<void>;
+  /** Personal goals per habit, e.g. { EX01a: 5000 }. */
+  goals: Record<string, number>;
+  setGoal: (itemId: string, goal: number) => Promise<void>;
   /** Log (or remove) today's rest day. */
   setRest: (on: boolean) => Promise<void>;
   saveReminders: (prefs: Partial<ReminderPrefs>) => Promise<void>;
@@ -74,6 +78,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
   const [latest, setLatest] = useState<Announcement | null>(null);
   const [logs, setLogs] = useState<DailyLog[]>([]);
+  const [goals, setGoals] = useState<Record<string, number>>({});
   const [modes, setModes] = useState<LifeMode[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
@@ -105,6 +110,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setS({ ready: true, user, profile, sprint, checkins, reminders });
     backend.latestMessage().then(setLatest).catch(() => setLatest(null));
     backend.loadLogs(user.id).then(setLogs).catch(() => setLogs([]));
+    backend.loadGoals(user.id).then(setGoals).catch(() => setGoals({}));
     backend.loadModes(user.id).then(setModes).catch(() => setModes([]));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
@@ -198,6 +204,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
     plan: planState(s.profile),
     isAdmin: !!s.profile?.is_admin,
+    goals,
+    async setGoal(itemId, goal) {
+      if (!s.user) return;
+      setGoals((p) => ({ ...p, [itemId]: goal }));
+      await backend.saveGoal(s.user.id, itemId, goal).catch(() => {});
+    },
     logs,
     async logToday(patch) {
       if (!s.user) return;
@@ -248,9 +260,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (s.sprint && sprint.number > s.sprint.number) logTribe('release', { number: s.sprint.number, theme: s.sprint.theme ?? null });
       setS((p) => ({ ...p, sprint }));
     },
-    async setDone(itemId, done, version = 'standard') {
+    async setDone(itemId, done, version = 'standard', amount) {
       if (!s.user) return;
-      const c: Checkin = { day: dayKey(new Date()), item_id: itemId, version };
+      const c: Checkin = amount === undefined ? { day: dayKey(new Date()), item_id: itemId, version } : { day: dayKey(new Date()), item_id: itemId, version, amount };
       const before = s.checkins;
       // Update the screen first, then save. Undo if saving fails.
       setS((p) => ({
@@ -261,7 +273,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       }));
       const wasResting = done && before.some((x) => x.day === c.day && x.item_id === REST_ID);
       if (wasResting) setS((p) => ({ ...p, checkins: p.checkins.filter((x) => !(x.day === c.day && x.item_id === REST_ID)) }));
-      if (done && itemId !== REST_ID) {
+      const wasDone = before.some((x) => x.day === c.day && x.item_id === itemId);
+      if (done && !wasDone && itemId !== REST_ID) {
         const daily = dailyPatches(s.sprint).map((i) => i.id);
         const doneNow = new Set([...before.filter((x) => x.day === c.day && x.item_id !== REST_ID).map((x) => x.item_id), itemId]);
         logTribe('active');
@@ -291,7 +304,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, modes, checkinsWithPauses]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, logs, goals, modes, checkinsWithPauses]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

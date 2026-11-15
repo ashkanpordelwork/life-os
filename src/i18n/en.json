@@ -220,7 +220,21 @@
     "safetyMove": "If it hurts, stop.",
     "markDone": "Mark done",
     "undo": "Not done yet",
-    "notToday": "Skip today"
+    "notToday": "Skip today",
+    "goalLabel": "Your goal",
+    "goalDefault": "From the book. You can change it.",
+    "goalEdit": "Change goal",
+    "goalSheetTitle": "Pick your goal",
+    "goalSheetBody": "Start where you are. You can raise it later.",
+    "goalSave": "Save goal",
+    "goalReset": "Back to {n}",
+    "logTitle": "How much today?",
+    "logOf": "{done} of {goal}",
+    "logSave": "Save",
+    "logFull": "Hit my goal",
+    "logPartial": "Still counts for your streak.",
+    "less": "Less",
+    "more": "More"
   },
   "slots": {
     "ALL_DAY": "All day",
@@ -1049,5 +1063,12 @@
     "bestDay": "{day} is your best day.",
     "steady": "{title} is your most steady habit.",
     "helps": "{title} seems to lift your {metric}."
+  },
+  "units": {
+    "steps": "{n} steps",
+    "reps": "{n} reps",
+    "ml": "{n} ml",
+    "l": "{n} L",
+    "g": "{n} g"
   }
 }

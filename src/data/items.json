@@ -232,6 +232,14 @@
     "duration_min": 45,
     "measure": "count",
     "amount": "7,000 steps",
+    "goal": {
+      "unit": "steps",
+      "default": 7000,
+      "min": 1000,
+      "max": 30000,
+      "step": 500,
+      "log_step": 500
+    },
     "spread_over_day": true,
     "params": {
       "steps_per_day": [
@@ -334,6 +342,14 @@
     "duration_min": 1,
     "measure": "count",
     "amount": "10 squats",
+    "goal": {
+      "unit": "reps",
+      "default": 10,
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "log_step": 5
+    },
     "params": {
       "reps": 10,
       "every_min_sitting": 45
@@ -429,6 +445,14 @@
     "duration_min": 1,
     "measure": "amount",
     "amount": "500 ml",
+    "goal": {
+      "unit": "ml",
+      "default": 500,
+      "min": 100,
+      "max": 1500,
+      "step": 50,
+      "log_step": 100
+    },
     "params": {
       "ml": [
         500,
@@ -477,6 +501,14 @@
     "duration_min": 0,
     "measure": "amount",
     "amount": "2.4 L",
+    "goal": {
+      "unit": "ml",
+      "default": 2400,
+      "min": 500,
+      "max": 5000,
+      "step": 100,
+      "log_step": 250
+    },
     "params": {
       "liters": 2.4,
       "oz": 80,
@@ -526,6 +558,14 @@
     "duration_min": 5,
     "measure": "amount",
     "amount": "30–50 g protein",
+    "goal": {
+      "unit": "g",
+      "default": 30,
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "log_step": 10
+    },
     "params": {
       "g_per_meal": [
         30,

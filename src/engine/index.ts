@@ -12,3 +12,4 @@ export * from './jetlag';
 export * from './tribe';
 export * from './experiments';
 export * from './modes';
+export * from './goals';

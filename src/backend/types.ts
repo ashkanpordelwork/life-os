@@ -31,6 +31,8 @@ export interface Checkin {
   day: string;
   item_id: string;
   version: VersionKey;
+  /** How much was done (steps, ml, g, reps) for habits with a goal. Missing = a plain tick. */
+  amount?: number;
 }
 
 export interface ReminderPrefs {
@@ -129,6 +131,9 @@ export interface Backend {
   /** Admin dashboard (live app only). */
   admin: AdminApi | null;
   /** Daily check-in. */
+  /** Personal goals per habit, e.g. { EX01a: 5000 }. */
+  loadGoals(userId: string): Promise<Record<string, number>>;
+  saveGoal(userId: string, itemId: string, goal: number): Promise<void>;
   loadLogs(userId: string): Promise<DailyLog[]>;
   saveLog(userId: string, log: DailyLog): Promise<void>;
   /** Life modes (travel, sick, deadline, vacation). */

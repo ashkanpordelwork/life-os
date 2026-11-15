@@ -16,14 +16,15 @@ import { SegmentedProgress } from '../components/SegmentedProgress';
 import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
-import { REST_ID, canRestToday, currentStreak, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, weekPercent } from '../engine';
+import type { ChecklistItem } from '../data/types';
+import { REST_ID, canRestToday, currentStreak, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, weekPercent, goalProgress, goalValue } from '../engine';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
 import { openLibrary } from './Library';
 import { reviewDue, reviewLabel } from './Review';
-import { itemAmount, pad2, patchMeta, sprintTheme } from './flow';
+import { formatOf, itemAmount, pad2, patchMeta, sprintTheme } from './flow';
 import './today.css';
 import { ProBanner } from '../components/ProBanner';
 import { Collapse } from '../components/Collapse';
@@ -64,7 +65,7 @@ export function Today() {
   const { profile, sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
   // Founding members see a one-time thank-you sheet.
   const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
-  const { message, dismissMessage, user, logs, logToday } = useSession();
+  const { message, dismissMessage, user, logs, logToday, goals } = useSession();
   // The tour: once per account on this device, or when replayed from You (location state).
   const location = useLocation();
   const replay = !!(location.state as { tour?: boolean } | null)?.tour;
@@ -130,7 +131,27 @@ export function Today() {
   // Tiny mode off -> ask first (Busy day sheet). On -> one tap turns it off.
   const onTinyChip = () => (tiny ? saveTiny(false) : setSheet('busy'));
 
+  /** Share of today's goal for habits with a number (steps, water). A plain tick is full. */
+  const shareOf = (item: ChecklistItem) => {
+    const c = checkins.find((x) => x.day === today && x.item_id === item.id);
+    if (!c) return 0;
+    return item.goal ? goalProgress(c.amount, goalValue(item.goal, goals[item.id])) : 1;
+  };
+  const partialMeta = (item: ChecklistItem) => {
+    const c = checkins.find((x) => x.day === today && x.item_id === item.id);
+    if (!item.goal || c?.amount === undefined) return null;
+    const target = goalValue(item.goal, goals[item.id]);
+    return c.amount < target ? formatOf(c.amount, target, item.goal.unit, t) : null;
+  };
+
   const tick = async (id: string) => {
+    const item = getItem(id);
+    // Partly done (e.g. 3,000 of 7,000 steps): the circle fills it up to the goal.
+    if (item?.goal && doneToday.has(id) && shareOf(item) < 1) {
+      haptic();
+      await setDone(id, true, tiny ? 'tiny' : 'standard', goalValue(item.goal, goals[id]));
+      return;
+    }
     const done = !doneToday.has(id);
     if (done) haptic();
     await setDone(id, done, tiny ? 'tiny' : 'standard');
@@ -186,8 +207,9 @@ export function Today() {
           <PatchCard
             glyph={item.glyph}
             title={item.title}
-            meta={item.per_week ? `${t('today.thisWeek', { n: weekCount(item.id), total: item.per_week })} · ${tiny ? item.versions.tiny.time : itemAmount(item, t)}` : patchMeta(item, wake, bed, tiny, t)}
-            done={doneToday.has(item.id)}
+            meta={partialMeta(item) ?? (item.per_week ? `${t('today.thisWeek', { n: weekCount(item.id), total: item.per_week })} · ${tiny ? item.versions.tiny.time : itemAmount(item, t, goals)}` : patchMeta(item, wake, bed, tiny, t, goals))}
+            done={shareOf(item) >= 1}
+            progress={shareOf(item)}
             dimmed={resting}
             onOpen={() => navigate(`/patch/${item.id}`)}
             onToggle={() => tick(item.id)}

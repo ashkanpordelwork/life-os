@@ -26,6 +26,8 @@ type PatchCardProps = {
   note?: string;
   /** Optional small tag, e.g. "For: Always tired". */
   tag?: string;
+  /** 0–1. Between 0 and 1 (e.g. half the steps) shows a thin bar under the meta. */
+  progress?: number;
 };
 
 /**
@@ -37,13 +39,16 @@ type PatchCardProps = {
  * - Today: body opens the patch (`onOpen`), the circle ticks it (`onToggle`).
  * Motion: card shrinks a little while pressed; the check pops (CheckCircle).
  */
-export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed, hideCheck, note, tag }: PatchCardProps) {
+export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed, hideCheck, note, tag, progress }: PatchCardProps) {
   const body = (
     <>
       <IconTile glyph={glyph} size="M" />
       <span className="patch-card__content">
         <span className="text-title-s text-primary">{title}</span>
         <span className="text-mono-caption text-secondary">{meta}</span>
+        {progress !== undefined && progress > 0 && progress < 1 && (
+          <span className="patch-card__bar" aria-hidden="true"><span className="patch-card__fill" style={{ inlineSize: `${Math.round(progress * 100)}%` }} /></span>
+        )}
         {note && <span className="text-body-s text-secondary patch-card__note">{note}</span>}
         {tag && <span className="patch-card__tag text-mono-caption">{tag}</span>}
       </span>

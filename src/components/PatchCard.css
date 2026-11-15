@@ -15,3 +15,7 @@
 /* Onboarding: why line and "For: ..." tag */
 .patch-card__note { display: block; margin-block-start: var(--space-4); }
 .patch-card__tag { align-self: flex-start; margin-block-start: var(--space-8); padding-block: 2px; padding-inline: var(--space-8); border-radius: var(--radius-pill); background: var(--color-bg-subtle); color: var(--color-text-secondary); }
+
+/* Partly done (e.g. half the steps): thin bar under the meta */
+.patch-card__bar { display: block; block-size: 4px; inline-size: 100%; max-inline-size: 160px; margin-block-start: var(--space-4); border-radius: var(--radius-pill); background: var(--color-border-default); overflow: hidden; }
+.patch-card__fill { display: block; block-size: 100%; border-radius: var(--radius-pill); background: var(--color-action-primary); }

@@ -1,6 +1,6 @@
 import { getItem } from '../data';
-import type { Area, ChecklistItem, Sprint, SprintTheme } from '../data/types';
-import { themeFor, timeHint } from '../engine';
+import type { Area, ChecklistItem, GoalUnit, Sprint, SprintTheme } from '../data/types';
+import { goalValue, themeFor, timeHint } from '../engine';
 import { AREAS } from '../data/types';
 import type { OnboardingState } from '../state/onboarding';
 
@@ -32,15 +32,31 @@ export function firstMissingQuestion(state: OnboardingState): string | null {
 
 /** Card label in the habit's own unit: "5 min", "7,000 steps", "500 ml". Clock and done/not habits have none
  *  (their time or part of the day already says it). */
-export function itemAmount(item: ChecklistItem, t: (k: string, v?: Record<string, number>) => string): string {
+export function itemAmount(item: ChecklistItem, t: (k: string, v?: Record<string, string | number>) => string, goals?: Record<string, number>): string {
   const kind = item.measure ?? 'time';
+  // The user's own goal wins over the book's label (e.g. "5,000 steps").
+  const mine = goals?.[item.id];
+  if (item.goal && mine) return formatAmount(goalValue(item.goal, mine), item.goal.unit, t);
   if (kind === 'count' || kind === 'amount') return item.amount ?? '';
   if (kind === 'clock' || kind === 'check') return '';
   return item.amount ?? formatMinutes(item.duration_min, t);
 }
 
+/** A number in its unit: "5,000 steps", "750 ml", "2.4 L", "30 g". */
+export function formatAmount(n: number, unit: GoalUnit, t: (k: string, v?: Record<string, string | number>) => string): string {
+  if (unit === 'ml' && n >= 1000) return t('units.l', { n: (n / 1000).toLocaleString('en-US', { maximumFractionDigits: 2 }) });
+  return t(`units.${unit}`, { n: n.toLocaleString('en-US') });
+}
+
+/** "3,500 of 7,000 steps", "1.25 of 2 L": the unit once, at the end. */
+export function formatOf(done: number, goal: number, unit: GoalUnit, t: (k: string, v?: Record<string, string | number>) => string): string {
+  const big = unit === 'ml' && goal >= 1000;
+  const num = (n: number) => (big ? (n / 1000).toLocaleString('en-US', { maximumFractionDigits: 2 }) : n.toLocaleString('en-US'));
+  return t('patch.logOf', { done: num(done), goal: big ? t('units.l', { n: num(goal) }) : formatAmount(goal, unit, t) });
+}
+
 /** Duration label for cards, e.g. "5 min", "30 s", "No extra time". */
-export function formatMinutes(min: number, t: (k: string, v?: Record<string, number>) => string): string {
+export function formatMinutes(min: number, t: (k: string, v?: Record<string, string | number>) => string): string {
   if (min <= 0) return t('time.none');
   if (min < 1) return t('time.seconds', { n: Math.round(min * 60) });
   return t('time.minutes', { n: Math.round(min) });
@@ -57,8 +73,8 @@ export function whenLabel(item: ChecklistItem, wake: string, bed: string, t: (k:
 }
 
 /** Today card meta, e.g. "08:00–08:30 · No extra time" or "After a meal · 5 min". */
-export function patchMeta(item: ChecklistItem, wake: string, bed: string, tiny: boolean, t: (k: string, v?: Record<string, string | number>) => string): string {
-  const amount = tiny ? item.versions.tiny.time : itemAmount(item, t);
+export function patchMeta(item: ChecklistItem, wake: string, bed: string, tiny: boolean, t: (k: string, v?: Record<string, string | number>) => string, goals?: Record<string, number>): string {
+  const amount = tiny ? item.versions.tiny.time : itemAmount(item, t, goals);
   return amount ? `${whenLabel(item, wake, bed, t)} · ${amount}` : whenLabel(item, wake, bed, t);
 }
 
@@ -68,6 +84,6 @@ export function sprintTheme(sprint: Sprint): SprintTheme | null {
 }
 
 /** Short card line when there's no clock: the amount, or the part of the day for clock and done/not habits. */
-export function cardMeta(item: ChecklistItem, t: (k: string, v?: Record<string, number>) => string): string {
-  return itemAmount(item, t) || t(`slots.${item.slot}`);
+export function cardMeta(item: ChecklistItem, t: (k: string, v?: Record<string, string | number>) => string, goals?: Record<string, number>): string {
+  return itemAmount(item, t, goals) || t(`slots.${item.slot}`);
 }
