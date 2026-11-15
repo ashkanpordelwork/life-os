@@ -11,3 +11,4 @@
   background: var(--color-surface-card); color: var(--color-text-primary); font-family: var(--font-sans);
 }
 .admin__area:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
+.admin__decide { display: flex; gap: var(--space-8); }

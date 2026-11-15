@@ -24,6 +24,7 @@ export function NavItem({ label, icon, active = false, onClick, tour }: NavItemP
     <motion.button
       type="button"
       className={`nav-item${active ? ' nav-item--active' : ''}`}
+      aria-label={label}
       aria-current={active ? 'page' : undefined}
       onClick={onClick}
       data-tour={tour}
@@ -32,7 +33,7 @@ export function NavItem({ label, icon, active = false, onClick, tour }: NavItemP
     >
       {active && <motion.span layoutId="nav-active" className="nav-item__bg" transition={motionTokens.press} />}
       <Icon name={icon} size={24} />
-      <span className="text-caption">{label}</span>
+      <span className="nav-item__label text-caption">{label}</span>
     </motion.button>
   );
 }

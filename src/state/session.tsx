@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { backend, type Announcement, type Checkin, type Profile, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
+import { backend, type Announcement, type Checkin, type Profile, type ProRequest, type ReminderPrefs, type TribeEventKind, type UserInfo } from '../backend';
 import { localTimeZone } from './push';
 import { SPRINT_DAYS, type ChecklistItem, type Sprint, type VersionKey } from '../data/types';
 import { REST_ID, activeMode, addDays, dayKey, patchTimes, pausedDays, type LifeMode, type ModeKind } from '../engine';
@@ -56,6 +56,11 @@ interface SessionApi extends SessionState {
   refreshTribes: () => Promise<void>;
   /** Admin dashboard access (set in the database). */
   isAdmin: boolean;
+  /** The user's latest Pro request (null if none, or not live). */
+  proRequest: ProRequest | null;
+  askPro: () => Promise<void>;
+  /** Re-read the profile and request (e.g. after an admin approved). */
+  refreshPro: () => Promise<void>;
   /** Latest admin message the user hasn't dismissed yet. */
   message: Announcement | null;
   dismissMessage: () => void;
@@ -75,6 +80,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [share, setShareState] = useState<ShareSettings>({ patches: true, score: true });
   const [latest, setLatest] = useState<Announcement | null>(null);
   const [goals, setGoals] = useState<Record<string, number>>({});
+  const [proRequest, setProRequest] = useState<ProRequest | null>(null);
   const [modes, setModes] = useState<LifeMode[]>([]);
   const [seenId, setSeenId] = useState<number>(() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } });
   const draftRef = useRef(draft);
@@ -106,6 +112,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setS({ ready: true, user, profile, sprint, checkins, reminders });
     backend.latestMessage().then(setLatest).catch(() => setLatest(null));
     backend.loadGoals(user.id).then(setGoals).catch(() => setGoals({}));
+    backend.pro?.mine(user.id).then(setProRequest).catch(() => setProRequest(null));
     backend.loadModes(user.id).then(setModes).catch(() => setModes([]));
     // Tribes: how many, and this user's sharing choices. Never blocks loading.
     if (backend.tribes) {
@@ -200,6 +207,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     bed: s.profile?.bed_time ?? draft.bed_time ?? DEFAULT_BED,
     plan: planState(s.profile),
     isAdmin: !!s.profile?.is_admin,
+    proRequest,
+    async askPro() {
+      if (!s.user || !backend.pro) return;
+      setProRequest(await backend.pro.ask(s.user.id));
+    },
+    async refreshPro() {
+      if (!s.user || !backend.pro) return;
+      const [req, prof] = await Promise.all([backend.pro.mine(s.user.id).catch(() => null), backend.loadProfile(s.user.id).catch(() => null)]);
+      setProRequest(req);
+      if (prof) setS((p) => ({ ...p, profile: prof }));
+    },
     goals,
     async setGoal(itemId, goal) {
       if (!s.user) return;
@@ -292,7 +310,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setS((p) => ({ ...p, checkins: before }));
       }
     },
-  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, goals, modes, checkinsWithPauses]);
+  }), [s, load, draft.wake_time, draft.bed_time, tribeCount, share, logTribe, latest, seenId, goals, proRequest, modes, checkinsWithPauses]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

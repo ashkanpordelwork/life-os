@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { backend } from '../backend';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import { WeekStat } from '../components/WeekStat';
@@ -23,6 +24,12 @@ export function You() {
   const navigate = useNavigate();
   const { user, profile, sprint, checkins, today, signOut, reminders, wake, bed, isAdmin } = useSession();
   const [busy, setBusy] = useState(false);
+  // Admins: how many Pro requests are waiting.
+  const [waiting, setWaiting] = useState(0);
+  useEffect(() => {
+    if (!isAdmin || !backend.admin) return;
+    backend.admin.proRequests().then((l) => setWaiting(l.length)).catch(() => setWaiting(0));
+  }, [isAdmin]);
 
   const stats = useMemo(() => {
     return {
@@ -59,7 +66,7 @@ export function You() {
       />
       <ListRow icon="verified_user" title={t('you.pro')} subtitle={t('you.proSubtitle')} onClick={() => navigate('/pro')} />
       <ListRow icon="home" title={t('tour.replayTitle')} subtitle={t('tour.replaySubtitle')} onClick={() => navigate('/today', { state: { tour: true } })} />
-      {isAdmin && <ListRow icon="settings" title={t('you.admin')} subtitle={t('admin.title')} onClick={() => navigate('/admin')} />}
+      {isAdmin && <ListRow icon="settings" title={t('you.admin')} subtitle={waiting > 1 ? t('admin.requestsWaiting', { n: waiting }) : waiting === 1 ? t('admin.requestWaiting') : t('admin.title')} onClick={() => navigate('/admin')} />}
       <ListRow icon="book" title={t('you.library')} subtitle={t('library.openSubtitle')} onClick={() => openLibrary(navigate, '/you')} />
       <ListRow icon="bedtime" title={t('you.sleepTimes')} subtitle={`${wake} – ${bed}`} onClick={() => navigate('/sleep-times')} />
       <p className="text-body-s text-secondary text-center">{t('you.email')} {user?.email}</p>

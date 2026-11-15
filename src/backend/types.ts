@@ -130,6 +130,8 @@ export interface Backend {
   tribes: TribeApi | null;
   /** Admin dashboard (live app only). */
   admin: AdminApi | null;
+  /** Pro requests (live app only). */
+  pro: ProApi | null;
   /** Daily check-in. */
   /** Personal goals per habit, e.g. { EX01a: 5000 }. */
   loadGoals(userId: string): Promise<Record<string, number>>;
@@ -177,4 +179,19 @@ export interface AdminApi {
   deleteTribe(id: string): Promise<void>;
   removeMember(tribeId: string, userId: string): Promise<void>;
   publish(title: string, body: string): Promise<void>;
+  /** Open Pro requests (name and email only). */
+  proRequests(): Promise<AdminProRequest[]>;
+  /** Approve (gives Pro) or decline. Also pushes the answer to the user. */
+  decidePro(id: string, approve: boolean): Promise<'ok' | 'not_found'>;
+}
+
+export interface AdminProRequest { id: string; user_id: string; email: string; name: string | null; created_at: string }
+
+/** A user's own Pro request (owner decision: users ask, an admin approves). */
+export interface ProRequest { id: string; status: 'pending' | 'approved' | 'declined'; created_at: string; decided_at: string | null }
+export interface ProApi {
+  /** The user's latest request, if any. */
+  mine(userId: string): Promise<ProRequest | null>;
+  /** Ask for Pro. Pushes the admins right away. */
+  ask(userId: string): Promise<ProRequest>;
 }

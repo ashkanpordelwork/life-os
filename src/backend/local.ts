@@ -41,6 +41,7 @@ function data(id: string): StoredData {
 export const localBackend: Backend = {
   tribes: null,
   admin: null,
+  pro: null,
   async latestMessage() { return null; },
   async loadGoals(id) { return data(id).goals ?? {}; },
   async saveGoal(id, itemId, goal) { const d = data(id); write(dataKey(id), { ...d, goals: { ...(d.goals ?? {}), [itemId]: goal } }); },

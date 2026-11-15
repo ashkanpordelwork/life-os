@@ -48,7 +48,7 @@
 .pro-mark--brand { background: var(--color-brand-soft); color: var(--color-text-brand); }
 .pro-mark--off { background: none; }
 
-.pro-status { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
+.pro-status { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); background: var(--color-bg-subtle); }
 .pro__icon {
   display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   inline-size: 36px; block-size: 36px; border-radius: var(--radius-md);

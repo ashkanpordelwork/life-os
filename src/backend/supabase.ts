@@ -1,7 +1,7 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
 import type { LifeMode } from '../engine';
-import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
+import { AuthError, type AuthErrorCode, type Backend, type Checkin, type AdminProRequest, type ProRequest, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
 export function createSupabaseBackend(url: string, anonKey: string): Backend {
@@ -161,6 +161,19 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       const row = (res.data as Announcement[] | null)?.[0];
       return row ?? null;
     },
+    pro: {
+      async mine(userId) {
+        const res = await sb.from('pro_requests').select('id, status, created_at, decided_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle();
+        if (res.error) return null; // table missing until migrations-pro-requests.sql is run
+        return (res.data as ProRequest | null) ?? null;
+      },
+      async ask(userId) {
+        const row = check(await sb.from('pro_requests').insert({ user_id: userId }).select('id, status, created_at, decided_at').single()) as ProRequest;
+        // Instant push to the admins (never blocks the user).
+        sb.functions.invoke('pro-notify', { body: { type: 'request' } }).catch(() => {});
+        return row;
+      },
+    },
     admin: {
       async stats() { return check(await sb.rpc('admin_stats')) as AdminStats; },
       async users(search) { return check(await sb.rpc('admin_users', { p_search: search, p_limit: 50 })) as AdminUser[]; },
@@ -169,6 +182,12 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       async deleteTribe(id) { check(await sb.rpc('admin_delete_tribe', { p_id: id })); },
       async removeMember(tribeId, userId) { check(await sb.rpc('admin_remove_member', { p_tribe: tribeId, p_user: userId })); },
       async publish(title, body) { check(await sb.rpc('admin_publish_message', { p_title: title, p_body: body })); },
+      async proRequests() { return (check(await sb.rpc('admin_pro_requests')) ?? []) as AdminProRequest[]; },
+      async decidePro(id, approve) {
+        const res = check(await sb.rpc('admin_decide_pro', { p_id: id, p_approve: approve })) as 'ok' | 'not_found';
+        if (res === 'ok') sb.functions.invoke('pro-notify', { body: { type: 'decision', id } }).catch(() => {});
+        return res;
+      },
     },
     tribes: {
       async myTribes(userId) {

@@ -401,9 +401,9 @@ export function Styleguide() {
             <WeekStrip title="This week" days={(['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const).map((l, i) => ({ letter: l, level: ([3, 4, 2, 3, 4, 0, 3] as const)[i], label: l }))} />
           </div>
         </Spec>
-        <Spec name="ProBanner" desc="Slim bar on top of Today; one tap opens Pro. Text follows the plan (founder, pro, beta, free). Pro gradient keeps white text AA.">
+        <Spec name="ProBanner" desc="Slim bar on top of Today; one tap opens Pro. Text follows the plan (pro, free). Pro gradient keeps white text AA.">
           <div className="sg-stack sg-phone">
-            {(['founder', 'beta', 'free'] as const).map((p) => <ProBanner key={p} plan={p} onOpen={() => {}} />)}
+            {(['pro', 'free'] as const).map((p) => <ProBanner key={p} plan={p} onOpen={() => {}} />)}
           </div>
         </Spec>
         <Spec name="WheelPicker" desc="iPhone-style time drums: scroll-snap, tilted rows, brand highlight band, arrow keys. Value HH:MM, 5-min steps.">

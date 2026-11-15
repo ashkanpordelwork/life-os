@@ -1,5 +1,7 @@
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { backend } from '../backend';
 import { Button } from '../components/Button';
 import { GlassPanel } from '../components/GlassPanel';
 import { Icon, type IconName } from '../components/Icon';
@@ -36,12 +38,22 @@ const COMPARE: { key: string; free: boolean | 'one'; pro: boolean }[] = [
 
 /**
  * Life OS Pro (designed in code, owner decision).
- * Hero card, what you get, Free vs Pro, and the user's status. No payment yet:
- * founders keep Pro for good, everyone else has it free during the beta.
+ * Hero card, what you get, Free vs Pro, and the user's status. No payment:
+ * Free users ask for Pro here and an admin approves it (pushes both ways via the pro-notify function).
  */
 export function Pro() {
   const navigate = useNavigate();
-  const { plan, profile } = useSession();
+  const { plan, profile, proRequest, askPro } = useSession();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(false);
+  // Free users: none yet, waiting, or declined last time.
+  const state: 'pro' | 'free' | 'pending' | 'declined' = plan === 'pro' ? 'pro'
+    : proRequest?.status === 'pending' ? 'pending' : proRequest?.status === 'declined' ? 'declined' : 'free';
+  const ask = async () => {
+    setBusy(true); setError(false);
+    try { await askPro(); } catch { setError(true); }
+    setBusy(false);
+  };
   const l2 = ITEMS.filter((i) => i.kind === 'patch' && i.level >= 2).length;
   const since = profile?.pro_since ? new Date(profile.pro_since).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : null;
   const appear = (i: number) => ({ initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 }, transition: { ...motionTokens.page, delay: i * motionTokens.stagger } });
@@ -96,17 +108,21 @@ export function Pro() {
         </GlassPanel>
       </motion.section>
 
-      <motion.div {...appear(5)} className="pro-status glass-card">
-        <span className="pro__icon"><Icon name={plan === 'free' ? 'lock' : 'verified_user'} size={20} /></span>
+      {/* Status: plain facts, not tappable (flat block). */}
+      <motion.div {...appear(5)} className="pro-status">
+        <span className="pro__icon"><Icon name={state === 'pro' ? 'verified_user' : state === 'pending' ? 'hourglass' : 'lock'} size={20} /></span>
         <span className="pro__text">
-          <span className="text-body-m-strong text-primary">{t(`pro.statusTitle.${plan}`)}</span>
-          <span className="text-body-s text-secondary">{plan === 'founder' && since ? t('pro.statusBody.founderSince', { date: since }) : t(`pro.statusBody.${plan}`)}</span>
+          <span className="text-body-m-strong text-primary">{t(`pro.statusTitle.${state}`)}</span>
+          <span className="text-body-s text-secondary">{state === 'pro' && since ? t('pro.statusBody.proSince', { date: since }) : t(`pro.statusBody.${state}`)}</span>
         </span>
       </motion.div>
+      {error && <p className="text-body-s text-brand" role="alert">{t('pro.askError')}</p>}
       <Spacer />
-      {plan === 'free'
-        ? <Button block label={t('pro.soonCta')} disabled />
-        : <Button block label={t('pro.cta')} onClick={() => navigate('/today')} />}
+      {state === 'pro' && <Button block label={t('pro.cta')} onClick={() => navigate('/today')} />}
+      {state === 'pending' && <Button block label={t('pro.waiting')} disabled />}
+      {(state === 'free' || state === 'declined') && (
+        <Button block label={t(state === 'declined' ? 'pro.askAgain' : 'pro.ask')} busy={busy} disabled={!backend.pro} onClick={ask} />
+      )}
     </Screen>
   );
 }

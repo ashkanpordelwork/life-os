@@ -490,9 +490,7 @@
     "title": "Go further, one week at a time.",
     "subtitle": "Every week unlocked, bigger habits and deeper tools.",
     "status": {
-      "founder": "Founding member",
       "pro": "Pro",
-      "beta": "Free in beta",
       "free": "Free plan"
     },
     "getTitle": "What you get",
@@ -540,20 +538,23 @@
       "supplements": "Supplement guides"
     },
     "statusTitle": {
-      "founder": "You have Pro, for good",
       "pro": "You're Pro",
-      "beta": "You have Pro during the beta",
-      "free": "You're on the free plan"
+      "free": "You're on the free plan",
+      "pending": "Request sent",
+      "declined": "Not approved this time"
     },
     "statusBody": {
-      "founder": "Thanks for being here early.",
-      "founderSince": "Founding member since {date}. Thanks for being here early.",
       "pro": "Everything is open.",
-      "beta": "Everything is open while Life OS is in beta.",
-      "free": "Your first week is free. Paying for Pro is coming soon."
+      "proSince": "Pro since {date}. Everything is open.",
+      "free": "Your first week is free. Ask for Pro to open every week, habit and tool.",
+      "pending": "We'll tell you here and with a notification as soon as it's approved.",
+      "declined": "You can keep going on Free and ask again any time."
     },
     "cta": "Back to Today",
-    "soonCta": "Pro is coming soon"
+    "ask": "Ask for Pro",
+    "askAgain": "Ask again",
+    "waiting": "Waiting for approval",
+    "askError": "Couldn't send it. Try again."
   },
   "focus": {
     "title": "Focus session",
@@ -717,29 +718,18 @@
     "footer": "Life OS never adds supplements to your week. Habits come first."
   },
   "proBanner": {
-    "founder": {
-      "title": "You have Pro.",
-      "body": "Founding member."
-    },
     "pro": {
       "title": "You're Pro.",
       "body": "See what's included."
     },
-    "beta": {
-      "title": "Pro is free in beta.",
-      "body": "See what's included."
-    },
     "free": {
       "title": "Unlock every week.",
-      "body": "See Pro."
+      "body": "Ask for Pro."
+    },
+    "pending": {
+      "title": "Pro request sent.",
+      "body": "We'll let you know."
     }
-  },
-  "founderWelcome": {
-    "eyebrow": "Founding member",
-    "title": "You have Pro, for good.",
-    "body": "Thanks for being here early. Every week, all habits and every tool are yours.",
-    "cta": "Nice",
-    "more": "See what's in Pro"
   },
   "tribe": {
     "label": "Tribe",
@@ -809,7 +799,8 @@
       "stats": "Stats",
       "users": "People",
       "tribes": "Tribes",
-      "message": "Message"
+      "message": "Message",
+      "requests": "Pro requests"
     },
     "loading": "Loading…",
     "error": "Something went wrong. Try again.",
@@ -822,7 +813,6 @@
     "tribes": "Tribes",
     "plans": "Plans",
     "plan": {
-      "founder": "Founding member",
       "pro": "Pro",
       "free": "Free",
       "label": "Plan"
@@ -835,7 +825,6 @@
     "days": "{n} active days",
     "joined": "Joined",
     "privacy": "You see activity and plan only. Health answers and symptoms are never shown here.",
-    "founderNote": "Founding members keep Pro for good.",
     "grant": "Give Pro",
     "revoke": "Take back Pro",
     "planDone": "Done.",
@@ -852,7 +841,14 @@
     "msgTitle": "Title",
     "msgBody": "Message",
     "send": "Send",
-    "sent": "Sent. Everyone will see it next time they open Life OS."
+    "sent": "Sent. Everyone will see it next time they open Life OS.",
+    "noRequests": "No requests right now.",
+    "requestsError": "Couldn't load requests. Did you run migrations-pro-requests.sql?",
+    "asked": "Asked {date}",
+    "approve": "Approve",
+    "decline": "Decline",
+    "requestsWaiting": "{n} Pro requests waiting",
+    "requestWaiting": "1 Pro request waiting"
   },
   "message": {
     "ok": "Got it"
@@ -1070,5 +1066,12 @@
   "questionScreen": {
     "label": "{area} · {n} of 4",
     "notSure": "Not sure? Skip this one"
+  },
+  "proWelcome": {
+    "eyebrow": "Pro",
+    "title": "You're Pro now.",
+    "body": "Your request was approved. Every week, every habit and every tool are open.",
+    "cta": "Nice",
+    "more": "See what's in Pro"
   }
 }

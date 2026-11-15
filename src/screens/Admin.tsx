@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { backend, type AdminStats, type AdminTribe, type AdminUser } from '../backend';
+import { backend, type AdminProRequest, type AdminStats, type AdminTribe, type AdminUser } from '../backend';
 import { BottomSheet } from '../components/BottomSheet';
 import { Button } from '../components/Button';
 import { Chip } from '../components/Chip';
@@ -17,7 +17,7 @@ import { useSession } from '../state/session';
 import { motionTokens } from '../styles/motion';
 import './admin.css';
 
-type Tab = 'stats' | 'users' | 'tribes' | 'message';
+type Tab = 'requests' | 'stats' | 'users' | 'tribes' | 'message';
 
 /**
  * Admin dashboard (/admin, designed in code). Only for accounts with is_admin in the database.
@@ -27,18 +27,19 @@ type Tab = 'stats' | 'users' | 'tribes' | 'message';
 export function Admin() {
   const navigate = useNavigate();
   const { isAdmin } = useSession();
-  const [tab, setTab] = useState<Tab>('stats');
+  const [tab, setTab] = useState<Tab>('requests');
   if (!isAdmin || !backend.admin) return <Navigate to="/today" replace />;
 
   return (
     <Screen>
       <TopBar title={t('admin.title')} onBack={() => navigate('/you')} />
       <div className="chip-wrap" role="tablist">
-        {(['stats', 'users', 'tribes', 'message'] as const).map((k) => (
+        {(['requests', 'stats', 'users', 'tribes', 'message'] as const).map((k) => (
           <Chip key={k} label={t(`admin.tabs.${k}`)} selected={tab === k} onToggle={() => setTab(k)} />
         ))}
       </div>
       <motion.div key={tab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={motionTokens.page} className="admin__body">
+        {tab === 'requests' && <Requests />}
         {tab === 'stats' && <Stats />}
         {tab === 'users' && <Users />}
         {tab === 'tribes' && <Tribes />}
@@ -49,13 +50,49 @@ export function Admin() {
   );
 }
 
+/** Pro requests: approve or decline. The user gets a push with the answer. */
+function Requests() {
+  const [list, setList] = useState<AdminProRequest[] | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState(false);
+  const load = async () => { try { setList(await backend.admin!.proRequests()); setErr(false); } catch { setList([]); setErr(true); } };
+  useEffect(() => { load(); }, []);
+  const decide = async (r: AdminProRequest, approve: boolean) => {
+    setBusy(r.id + (approve ? ':y' : ':n'));
+    try { await backend.admin!.decidePro(r.id, approve); setList((l) => (l ?? []).filter((x) => x.id !== r.id)); } catch { setErr(true); }
+    setBusy(null);
+  };
+  if (list === null) return <p className="text-body-s text-secondary">{t('admin.loading')}</p>;
+  return (
+    <>
+      {err && <p className="text-body-s text-secondary">{t('admin.requestsError')}</p>}
+      {!err && list.length === 0 && <p className="text-body-s text-secondary">{t('admin.noRequests')}</p>}
+      {list.map((r) => (
+        <div key={r.id} className="admin__tribe glass-card">
+          <div className="admin__tribe-head">
+            <span className="text-body-m-strong text-primary">{r.name || t('admin.noName')}</span>
+            <span className="text-mono-caption text-secondary">{r.email}</span>
+          </div>
+          <span className="text-body-s text-secondary">{t('admin.asked', { date: new Date(r.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) })}</span>
+          <div className="admin__decide">
+            <Button block variant="Secondary" label={t('admin.decline')} busy={busy === r.id + ':n'} disabled={!!busy} onClick={() => decide(r, false)} />
+            <Button block label={t('admin.approve')} busy={busy === r.id + ':y'} disabled={!!busy} onClick={() => decide(r, true)} />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
 function Stats() {
   const [s, setS] = useState<AdminStats | null>(null);
   const [err, setErr] = useState(false);
   useEffect(() => { backend.admin!.stats().then(setS).catch(() => setErr(true)); }, []);
   if (err) return <p className="text-body-s text-secondary">{t('admin.error')}</p>;
   if (!s) return <p className="text-body-s text-secondary">{t('admin.loading')}</p>;
-  const plans = ['founder', 'pro', 'free'] as const;
+  // Old founders count as Pro (owner decision: no founder status any more).
+  const plans = ['pro', 'free'] as const;
+  const planCount = (p: 'pro' | 'free') => (p === 'pro' ? (s.plans.pro ?? 0) + (s.plans.founder ?? 0) : s.plans.free ?? 0);
   return (
     <>
       <div className="admin__grid">
@@ -71,7 +108,7 @@ function Stats() {
         {plans.map((p) => (
           <div key={p} className="admin__row">
             <span className="text-body-m text-primary">{t(`admin.plan.${p}`)}</span>
-            <span className="text-mono-value text-primary">{s.plans[p] ?? 0}</span>
+            <span className="text-mono-value text-primary">{planCount(p)}</span>
           </div>
         ))}
       </GlassPanel>
@@ -118,9 +155,9 @@ function Users() {
       {list?.map((u) => (
         <ListRow
           key={u.id}
-          icon={u.founder ? 'verified_user' : u.plan === 'pro' ? 'trending_up' : 'person'}
+          icon={u.founder || u.plan === 'pro' ? 'verified_user' : 'person'}
           title={u.name || u.email}
-          subtitle={`${u.email} · ${t(u.founder ? 'admin.plan.founder' : `admin.plan.${u.plan === 'pro' ? 'pro' : 'free'}`)} · ${u.last_active ? t('admin.lastActive', { date: u.last_active }) : t('admin.neverActive')} · ${t('admin.days', { n: u.active_days })}`}
+          subtitle={`${u.email} · ${t(`admin.plan.${u.founder || u.plan === 'pro' ? 'pro' : 'free'}`)} · ${u.last_active ? t('admin.lastActive', { date: u.last_active }) : t('admin.neverActive')} · ${t('admin.days', { n: u.active_days })}`}
           onClick={() => { setMsg(''); setOpen(u); }}
         />
       ))}
@@ -130,13 +167,11 @@ function Users() {
           <>
             <GlassPanel gap={8}>
               <div className="admin__row"><span className="text-body-s text-secondary">{t('admin.joined')}</span><span className="text-body-m text-primary">{open.created_at.slice(0, 10)}</span></div>
-              <div className="admin__row"><span className="text-body-s text-secondary">{t('admin.plan.label')}</span><span className="text-body-m text-primary">{t(open.founder ? 'admin.plan.founder' : `admin.plan.${open.plan === 'pro' ? 'pro' : 'free'}`)}</span></div>
+              <div className="admin__row"><span className="text-body-s text-secondary">{t('admin.plan.label')}</span><span className="text-body-m text-primary">{t(`admin.plan.${open.founder || open.plan === 'pro' ? 'pro' : 'free'}`)}</span></div>
               <div className="admin__row"><span className="text-body-s text-secondary">{t('admin.days', { n: open.active_days })}</span><span className="text-body-m text-primary">{open.last_active ?? t('admin.neverActive')}</span></div>
             </GlassPanel>
             <p className="text-body-s text-secondary">{t('admin.privacy')}</p>
-            {open.founder ? (
-              <p className="text-body-s text-secondary">{t('admin.founderNote')}</p>
-            ) : open.plan === 'pro' ? (
+            {open.founder || open.plan === 'pro' ? (
               <Button block variant="Secondary" label={t('admin.revoke')} busy={busy} onClick={() => setPlan('free')} />
             ) : (
               <Button block label={t('admin.grant')} busy={busy} onClick={() => setPlan('pro')} />

@@ -2,21 +2,18 @@ import type { Profile } from '../backend/types';
 
 /**
  * Plans (owner decisions):
- * - Free: the first Sprint only. After it, the same patches can go on, but no new Sprint.
- * - Pro: each finished Sprint opens the next one. Also Level 2–3 patches and the Pro tools.
- * - Everyone who had an account before plans existed is Pro for good ("Founding member").
- * - No payment yet, so the lock is OFF: new users get Pro during the beta.
- *   Turn PRO_LOCK_ENABLED on once paying for Pro is possible.
+ * - Free: the first week only. After it, the same habits can go on, but no new week.
+ * - Pro: each finished week opens the next one. Also Level 2–3 habits and the Pro tools.
+ * - New sign-ups start on Free. They ask for Pro on the Pro page; an admin approves it.
+ * - Everyone who had an account when requests started was made Pro (migrations-pro-requests.sql).
+ * - No more "founding member" in the app (the founder column stays in the database and counts as Pro).
  */
-export const PRO_LOCK_ENABLED = false;
 export const FREE_SPRINTS = 1;
 
-export type PlanState = 'founder' | 'pro' | 'beta' | 'free';
+export type PlanState = 'pro' | 'free';
 
 export function planState(profile: Profile | null | undefined): PlanState {
-  if (profile?.founder) return 'founder';
-  if (profile?.plan === 'pro') return 'pro';
-  return PRO_LOCK_ENABLED ? 'free' : 'beta';
+  return profile?.founder || profile?.plan === 'pro' ? 'pro' : 'free';
 }
 
 export const hasPro = (s: PlanState) => s !== 'free';

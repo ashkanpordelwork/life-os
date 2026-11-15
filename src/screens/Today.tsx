@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { Icon } from '../components/Icon';
 import { TextButton } from '../components/TextButton';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import { WeekStat } from '../components/WeekStat';
@@ -44,7 +44,7 @@ const TOUR_STEPS: TourStep[] = [
 ];
 const tourKey = (uid: string) => `lifeos.tour.v1.${uid}`;
 
-const WELCOME_KEY = 'lifeos.founderWelcome.v1';
+const WELCOME_KEY = 'lifeos.proWelcome';
 
 const TINY_KEY = 'lifeos.tinyMode';
 const NUDGE_KEY = 'lifeos.nudge.dismissed';
@@ -54,8 +54,20 @@ export function Today() {
   const navigate = useNavigate();
   const { sprint, checkins, today, setDone, setRest, reminders, wake, bed, plan, lifeMode, startMode, endMode } = useSession();
   // Founding members see a one-time thank-you sheet.
-  const [welcome, setWelcome] = useState(() => { try { return plan === 'founder' && localStorage.getItem(WELCOME_KEY) !== '1'; } catch { return false; } });
-  const { message, dismissMessage, user, goals } = useSession();
+  const { message, dismissMessage, user, goals, proRequest, refreshPro } = useSession();
+  // "You're Pro now" once, after an admin approved this user's request.
+  const approvedId = proRequest?.status === 'approved' && plan === 'pro' ? proRequest.id : null;
+  const [seenWelcome, setSeenWelcome] = useState(() => { try { return localStorage.getItem(WELCOME_KEY) ?? ''; } catch { return ''; } });
+  const welcome = !!approvedId && seenWelcome !== approvedId;
+  // Waiting for an answer: check again when the app comes back to the front.
+  useEffect(() => {
+    if (proRequest?.status !== 'pending') return;
+    void refreshPro();
+    const onShow = () => { if (document.visibilityState === 'visible') void refreshPro(); };
+    document.addEventListener('visibilitychange', onShow);
+    return () => document.removeEventListener('visibilitychange', onShow);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proRequest?.status]);
   // The tour: once per account on this device, or when replayed from You (location state).
   const location = useLocation();
   const replay = !!(location.state as { tour?: boolean } | null)?.tour;
@@ -66,7 +78,7 @@ export function Today() {
     setTourOn(false);
     try { if (user) localStorage.setItem(tourKey(user.id), '1'); } catch { /* ignore */ }
   }, [user]);
-  const closeWelcome = () => { setWelcome(false); try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* ignore */ } };
+  const closeWelcome = () => { if (!approvedId) return; setSeenWelcome(approvedId); try { localStorage.setItem(WELCOME_KEY, approvedId); } catch { /* ignore */ } };
   const [nudgeHidden, setNudgeHidden] = useState(() => { try { return localStorage.getItem(NUDGE_KEY) === dayKey(new Date()); } catch { return false; } });
   const [sheet, setSheet] = useState<'busy' | 'rest' | 'mode' | 'coach' | null>(null);
   const [tinyPref, setTiny] = useState(() => { try { return localStorage.getItem(TINY_KEY) === '1'; } catch { return false; } });
@@ -150,7 +162,7 @@ export function Today() {
   return (
     <Screen>
       {tourOn && <GuidedTour steps={TOUR_STEPS} onDone={endTour} />}
-      <ProBanner plan={plan} onOpen={() => navigate('/pro')} />
+      <ProBanner plan={plan} pending={proRequest?.status === 'pending'} onOpen={() => navigate('/pro')} />
       {lifeMode && <ModeBanner mode={lifeMode} onEnd={endMode} onJetLag={() => navigate('/tool/jet-lag')} />}
       <header className="today__header">
         {/* Owner decision: no greeting. The week sits here instead (plain text + bar, not a card). */}
@@ -249,10 +261,10 @@ export function Today() {
         <Button block label={t('message.ok')} onClick={dismissMessage} />
       </BottomSheet>
 
-      <BottomSheet open={welcome && plan === 'founder'} onClose={closeWelcome} eyebrow={t('founderWelcome.eyebrow').toUpperCase()} title={t('founderWelcome.title')} decoration={<Mascot name="milestone-small-win" size={120} />}>
-        <p className="text-body-m text-secondary">{t('founderWelcome.body')}</p>
-        <Button block label={t('founderWelcome.cta')} onClick={closeWelcome} />
-        <Button block variant="Ghost" label={t('founderWelcome.more')} onClick={() => { closeWelcome(); navigate('/pro'); }} />
+      <BottomSheet open={welcome} onClose={closeWelcome} eyebrow={t('proWelcome.eyebrow').toUpperCase()} title={t('proWelcome.title')} decoration={<Mascot name="milestone-small-win" size={120} />}>
+        <p className="text-body-m text-secondary">{t('proWelcome.body')}</p>
+        <Button block label={t('proWelcome.cta')} onClick={closeWelcome} />
+        <Button block variant="Ghost" label={t('proWelcome.more')} onClick={() => { closeWelcome(); navigate('/pro'); }} />
       </BottomSheet>
 
       <BottomSheet open={sheet === 'busy'} onClose={() => setSheet(null)} title={t('today.busyTitle')} decoration={<Mascot name="rest-busy-day" size={136} />}>

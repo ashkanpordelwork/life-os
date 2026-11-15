@@ -14,3 +14,12 @@
 }
 .nav-item--active { color: var(--color-text-brand); }
 .nav-item__bg { position: absolute; inset: 0; z-index: -1; border-radius: var(--radius-lg); background: var(--color-brand-soft); }
+
+/* Label folds away when the bar is compact (aria-label keeps the name for screen readers). */
+.nav-item { min-block-size: var(--size-touch); transition: color 0.2s ease, padding 0.42s cubic-bezier(0.34, 1.4, 0.64, 1), gap 0.3s ease; }
+.nav-item__label { display: block; max-block-size: 16px; opacity: 1; overflow: hidden; transition: max-block-size 0.3s ease, opacity 0.2s ease; }
+.nav-bar--compact .nav-item { gap: 0; padding-block: 10px; }
+.nav-bar--compact .nav-item__label { max-block-size: 0; opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-item, .nav-item__label { transition: none; }
+}
