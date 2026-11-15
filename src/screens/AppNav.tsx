@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavBar } from '../components/NavBar';
@@ -31,11 +31,11 @@ export function TabBar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const active = TABS.find((x) => x.path === pathname)?.key;
-  const { compact, raised } = useScrollNav(pathname);
+  const { compact } = useScrollNav(pathname);
   if (!active) return null;
   return createPortal(
     <div className="app-nav">
-      <NavBar compact={compact} raised={raised}>
+      <NavBar compact={compact}>
         {TABS.map((x) => (
           <NavItem
             key={x.key}
@@ -52,45 +52,50 @@ export function TabBar() {
   );
 }
 
-/** Scroll distances for the bar (app choice). */
-const COMPACT_AFTER = 80; // px from the top before the bar may shrink
-const TURN = 8; // px of movement before a direction change counts
-const NEAR_END = 24; // px from the bottom: show the full bar again
+/** Scroll rules for the bar (app choices). */
+const MIN_ROOM = 320; // px: pages with less to scroll never change the bar (it would just flicker)
+const SHRINK_AFTER = 48; // px scrolled down in one go before the bar shrinks
+const GROW_AFTER = 24; // px scrolled up in one go before it grows back
+const TOP_ZONE = 64; // px from the top: always full size
 
 /**
- * Bottom bar reacts to scrolling (owner request):
- * - scroll down: compact (icons only); scroll up, top or end of page: full size again
- * - raised: stronger glass once anything is under the bar
- * Reduced motion: the bar never shrinks.
+ * Bottom bar reacts to scrolling (owner request): scroll down = compact (icons only),
+ * scroll up or near the top = full size. It only changes after a clear move in one direction,
+ * ignores the iPhone rubber-band at the ends, and never changes on short pages.
+ * Reduced motion: the bar never changes.
  */
 function useScrollNav(pathname: string) {
   const [compact, setCompact] = useState(false);
-  const [raised, setRaised] = useState(false);
-  const last = useRef(0);
   useEffect(() => {
     setCompact(false);
-    last.current = window.scrollY;
-    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    let anchor = window.scrollY; // where the current direction started
+    let lastY = anchor; // where we were at the previous scroll event
+    let dir = 0;
+    let state = false;
     let frame = 0;
+    const set = (v: boolean) => { if (v !== state) { state = v; setCompact(v); } };
     const onScroll = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const y = window.scrollY;
         const room = document.documentElement.scrollHeight - window.innerHeight;
-        setRaised(room > 0 && y < room - 2);
-        const dy = y - last.current;
-        if (Math.abs(dy) < TURN) return;
-        last.current = y;
-        if (still || y < COMPACT_AFTER || y > room - NEAR_END) setCompact(false);
-        else setCompact(dy > 0);
+        if (room < MIN_ROOM) { set(false); return; }
+        const y = Math.min(Math.max(window.scrollY, 0), room); // no rubber-band values
+        if (y < TOP_ZONE) { set(false); anchor = y; lastY = y; dir = 0; return; }
+        const d = y > lastY ? 1 : y < lastY ? -1 : 0;
+        const prev = lastY;
+        lastY = y;
+        if (d === 0) return;
+        if (d !== dir) { dir = d; anchor = prev; } // direction changed: it started where we just were
+        if (dir === 1 && y - anchor >= SHRINK_AFTER) set(true);
+        if (dir === -1 && anchor - y >= GROW_AFTER) set(false);
       });
     };
-    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, [pathname]);
-  return { compact, raised };
+  return { compact };
 }
 
 /** A new screen starts at the top (fixes landing half-way down after a long page). */
