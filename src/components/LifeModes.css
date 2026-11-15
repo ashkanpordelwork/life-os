@@ -25,3 +25,9 @@
   background: var(--color-brand-soft); color: var(--color-text-brand);
 }
 .mode-banner__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; align-items: flex-start; gap: 2px; }
+
+/* What changes (flat facts) */
+.modes__effects { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-12) var(--space-16); border-radius: var(--radius-md); background: var(--color-bg-subtle); }
+.modes__effect { display: grid; grid-template-columns: 18px 84px minmax(0, 1fr); align-items: start; gap: var(--space-8); color: var(--color-text-secondary); }
+.modes__effect-label { padding-block-start: 1px; }
+.modes__effect-value { font-weight: 600; }

@@ -16,6 +16,7 @@ const SLIDES: { key: string; mascot: MascotName }[] = [
   { key: 'patch', mascot: 'morning-morning-light' },
   { key: 'release', mascot: 'milestone-release-shipped' },
   { key: 'levels', mascot: 'milestone-small-win' },
+  { key: 'life', mascot: 'rest-busy-day' },
 ];
 
 /**

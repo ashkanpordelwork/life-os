@@ -11,6 +11,11 @@ import './LifeModes.css';
 
 export const MODE_ICON: Record<ModeKind, IconName> = { deadline: 'hourglass', travel: 'airplane', sick: 'medicine', vacation: 'beach' };
 const LENGTHS = [3, 7, 14] as const;
+const EFFECT_ROWS: { key: 'habits' | 'streak' | 'reminders'; label: string; icon: IconName }[] = [
+  { key: 'habits', label: 'rowHabits', icon: 'task_alt' },
+  { key: 'streak', label: 'rowStreak', icon: 'local_fire_department' },
+  { key: 'reminders', label: 'rowReminders', icon: 'notifications' },
+];
 
 /** Mode picker (designed in code; Figma has a "Mode picker" frame idea). Pick a mode and how long. */
 export function ModePicker({ current, onStart }: { current: LifeMode | null; onStart: (kind: ModeKind, days: number) => void }) {
@@ -18,6 +23,7 @@ export function ModePicker({ current, onStart }: { current: LifeMode | null; onS
   const [days, setDays] = useState<number>(7);
   return (
     <div className="modes">
+      <p className="text-body-m text-secondary">{t('modes.why')}</p>
       <div className="modes__grid" role="radiogroup" aria-label={t('modes.title')}>
         {MODE_KINDS.map((k, i) => (
           <motion.button
@@ -38,6 +44,17 @@ export function ModePicker({ current, onStart }: { current: LifeMode | null; onS
           </motion.button>
         ))}
       </div>
+      {/* What the picked mode changes: plain facts (flat block, not tappable). */}
+      <section className="modes__effects" aria-label={t('modes.changes')}>
+        <span className="text-mono-label text-secondary">{t('modes.changes')}</span>
+        {EFFECT_ROWS.map((r) => (
+          <div key={r.key} className="modes__effect">
+            <Icon name={r.icon} size={18} />
+            <span className="text-body-s text-secondary modes__effect-label">{t(`modes.${r.label}`)}</span>
+            <span className="text-body-s text-primary modes__effect-value">{t(`modes.kinds.${kind}.${r.key}`)}</span>
+          </div>
+        ))}
+      </section>
       <span className="text-mono-label text-secondary">{t('modes.length')}</span>
       <div className="chip-wrap">
         {LENGTHS.map((n) => <Chip key={n} label={t(n === 7 ? 'modes.week' : n === 14 ? 'modes.twoWeeks' : 'modes.days', { n })} selected={days === n} onToggle={() => setDays(n)} />)}

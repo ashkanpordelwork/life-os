@@ -478,6 +478,11 @@
       "label": "Levels",
       "title": "Bigger habits unlock.",
       "body": "Show up on 70% of days and bigger habits unlock from week 3."
+    },
+    "life": {
+      "label": "Life mode",
+      "title": "Busy, sick or away?",
+      "body": "Tap “Busy, sick or away?” on Today. We shrink or pause your plan, so a bad week doesn’t break your streak."
     }
   },
   "pro": {
@@ -866,8 +871,8 @@
         "body": "Tap the circle when one is done. Each tick counts toward your streak."
       },
       "tiny": {
-        "title": "Busy day?",
-        "body": "Tiny mode gives you the 20-second version of each habit. It still counts."
+        "title": "Busy day? Sick? Away?",
+        "body": "Tiny mode gives you the 20-second version. Sick or away for a few days? Tap the button next to it and your streak stays safe."
       },
       "tools": {
         "title": "Why it works",
@@ -913,8 +918,8 @@
     "caveat": "A pattern from your own days, not proof."
   },
   "modes": {
-    "title": "Life mode",
-    "chip": "Mode",
+    "title": "Life happens",
+    "chip": "Busy, sick or away?",
     "length": "For how long",
     "days": "{n} days",
     "week": "1 week",
@@ -923,29 +928,46 @@
     "until": "until {date}",
     "end": "End",
     "jetLag": "Open jet-lag plan",
-    "intro": "Life changes. Your plan can too.",
+    "intro": "Life mode",
     "kinds": {
       "deadline": {
         "title": "Deadline week",
         "body": "Tiny versions only.",
-        "active": "Tiny versions are on. Streak counts as usual."
+        "active": "Tiny versions are on. Streak counts as usual.",
+        "habits": "Tiny versions only (about 20 s each)",
+        "streak": "Counts as usual",
+        "reminders": "As usual"
       },
       "travel": {
         "title": "Travel",
         "body": "Jet-lag plan, smaller habits.",
-        "active": "Try the tiny versions. Your reminders follow your time zone."
+        "active": "Try the tiny versions. Your reminders follow your time zone.",
+        "habits": "Smaller habits + a jet-lag plan",
+        "streak": "Counts as usual",
+        "reminders": "Move to your new time zone"
       },
       "sick": {
         "title": "Sick",
         "body": "Gentle only. Streak safe.",
-        "active": "Movement habits are off. Your streak is safe and reminders are paused."
+        "active": "Movement habits are off. Your streak is safe and reminders are paused.",
+        "habits": "Movement and hard habits are off",
+        "streak": "Safe: missed days don’t break it",
+        "reminders": "Paused"
       },
       "vacation": {
         "title": "Vacation",
         "body": "Pause everything.",
-        "active": "Everything is paused. Your streak is safe and reminders are off."
+        "active": "Everything is paused. Your streak is safe and reminders are off.",
+        "habits": "All paused",
+        "streak": "Safe: missed days don’t break it",
+        "reminders": "Off"
       }
-    }
+    },
+    "why": "A busy week, a trip or a cold? Tell us. We change your plan so you don’t lose your streak.",
+    "changes": "What changes",
+    "rowHabits": "Habits",
+    "rowStreak": "Streak",
+    "rowReminders": "Reminders"
   },
   "programs": {
     "title": "Programs",
