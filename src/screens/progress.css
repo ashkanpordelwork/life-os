@@ -2,8 +2,6 @@
 .progress__grid { display: flex; justify-content: center; gap: 3px; padding: var(--space-12); border-radius: var(--radius-lg); }
 .progress__week { display: flex; flex-direction: column; gap: 3px; }
 .progress__stats { display: flex; gap: var(--space-8); }
-.progress__score { display: flex; flex: 1 0 0; min-inline-size: 0; text-align: start; }
-.progress__score .stat-chip { inline-size: 100%; }
 .progress__detail { display: flex; flex-direction: column; gap: var(--space-8); max-block-size: 50dvh; overflow-y: auto; }
 .score-card { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
 .score-card__mid { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-8); }
@@ -11,3 +9,8 @@
 /* Change since the start (added in code) */
 .score-up { color: var(--color-status-success); }
 .score-card__value { display: inline-flex; align-items: center; gap: var(--space-8); }
+
+/* What we notice */
+.notice { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-16); border-radius: var(--radius-lg); background: var(--color-bg-subtle); }
+.notice__line { display: flex; align-items: flex-start; gap: var(--space-8); margin: 0; }
+.notice__line .icon { color: var(--color-status-success); margin-block-start: 3px; flex-shrink: 0; }

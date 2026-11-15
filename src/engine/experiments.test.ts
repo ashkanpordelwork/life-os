@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { effectOf, experimentResult, topEffects, type DailyLog } from './experiments';
+import { effectOf, topEffects, type DailyLog } from './experiments';
 import { REST_ID, addDays } from './streak';
 
 const start = '2026-03-01';
@@ -29,13 +29,3 @@ describe('effectOf', () => {
   });
 });
 
-describe('experimentResult', () => {
-  it('compares the experiment with the days before it', () => {
-    const logs: DailyLog[] = [
-      ...[0, 1, 2, 3, 4, 5, 6].map((i) => ({ day: day(i), sleep: 2 })),
-      ...[7, 8, 9, 10, 11, 12, 13].map((i) => ({ day: day(i), sleep: 4 })),
-    ];
-    const r = experimentResult({ id: 'x', item_id: 'SL14', metric: 'sleep', start_day: day(7), days: 7 }, [{ day: day(8), item_id: 'SL14' }], logs, day(14));
-    expect(r).toMatchObject({ finished: true, elapsed: 7, doneDays: 1, during: 4, before: 2, change: 1 });
-  });
-});

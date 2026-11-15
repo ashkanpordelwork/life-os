@@ -64,3 +64,34 @@ export function bestIndex(values: number[]): number {
   const at = values.flatMap((v, i) => (v === top ? [i] : []));
   return at.length === 1 ? at[0] : -1;
 }
+
+export interface WeekPercent {
+  /** Habit-days done this week (weekly habits count up to their target). */
+  done: number;
+  /** Habit-days expected so far this week. */
+  target: number;
+  /** 0–100, rounded. */
+  percent: number;
+}
+
+/**
+ * "This week" on Today (user feedback: the old score never moved and nobody knew what it meant).
+ * Daily habits: one per day that has started. Weekly habits (e.g. 3× a week): their weekly target.
+ * Rest days don't count against you.
+ */
+export function weekPercent(sprint: Sprint, checkins: DayCheckin[], today: string, perWeek: (id: string) => number | undefined): WeekPercent {
+  const start = dayKey(new Date(sprint.started_at));
+  const elapsed = Math.max(1, Math.min(sprint.length_days, daysBetween(start, today) + 1));
+  const end = addDays(start, elapsed - 1);
+  const rest = [...restDays(checkins)].filter((d) => d >= start && d <= end && !activeDays(checkins).has(d)).length;
+  const days = Math.max(0, elapsed - rest);
+  let done = 0;
+  let target = 0;
+  for (const id of sprint.patch_ids) {
+    const n = new Set(checkins.filter((c) => c.item_id === id && c.day >= start && c.day <= end).map((c) => c.day)).size;
+    const pw = perWeek(id);
+    if (pw) { target += pw; done += Math.min(n, pw); }
+    else { target += days; done += Math.min(n, days); }
+  }
+  return { done, target, percent: target ? Math.round((done / target) * 100) : 0 };
+}

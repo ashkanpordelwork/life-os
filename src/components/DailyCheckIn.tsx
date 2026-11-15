@@ -12,7 +12,7 @@ import './DailyCheckIn.css';
 /**
  * DailyCheckIn (added in code, owner decision). One tap per row, 1–5:
  * energy, mood, last night's sleep, focus. When all four are in, it folds into a summary.
- * Feeds "What works for you" in Insights and self-experiments.
+ * Feeds "What we notice" on Progress.
  */
 export function DailyCheckIn({ log, onLog }: { log: DailyLog | undefined; onLog: (patch: Partial<Record<Metric, number>>) => void }) {
   const complete = METRICS.every((m) => typeof log?.[m] === 'number');

@@ -1,5 +1,5 @@
 import type { Area, HealthAnswers, NeedTag, Sprint, VersionKey } from '../data/types';
-import type { AnswerIndex, DailyLog, Experiment, LifeMode } from '../engine';
+import type { AnswerIndex, DailyLog, LifeMode } from '../engine';
 
 export interface UserInfo {
   id: string;
@@ -128,12 +128,9 @@ export interface Backend {
   tribes: TribeApi | null;
   /** Admin dashboard (live app only). */
   admin: AdminApi | null;
-  /** Daily check-in and self-experiments. */
+  /** Daily check-in. */
   loadLogs(userId: string): Promise<DailyLog[]>;
   saveLog(userId: string, log: DailyLog): Promise<void>;
-  loadExperiments(userId: string): Promise<Experiment[]>;
-  saveExperiment(userId: string, e: Experiment): Promise<void>;
-  deleteExperiment(userId: string, id: string): Promise<void>;
   /** Life modes (travel, sick, deadline, vacation). */
   loadModes(userId: string): Promise<LifeMode[]>;
   saveMode(userId: string, mode: LifeMode): Promise<void>;

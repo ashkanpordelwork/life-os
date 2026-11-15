@@ -23,8 +23,6 @@ import { You } from './screens/You';
 import { Review } from './screens/Review';
 import { Progress } from './screens/Progress';
 import { ScoreByArea } from './screens/ScoreByArea';
-import { Insights } from './screens/Insights';
-import { Experiments } from './screens/Experiments';
 import { Programs } from './screens/Programs';
 import { Library } from './screens/Library';
 import { Pro } from './screens/Pro';
@@ -95,8 +93,6 @@ function AnimatedRoutes() {
         <Route path="/roadmap" element={page(<RequireUser><Roadmap /></RequireUser>)} />
         <Route path="/progress" element={page(<RequireUser><Progress /></RequireUser>)} />
         <Route path="/programs" element={page(<RequireUser><Programs /></RequireUser>)} />
-        <Route path="/experiments" element={page(<RequireUser><Experiments /></RequireUser>)} />
-        <Route path="/progress/insights" element={page(<RequireUser><Insights /></RequireUser>)} />
         <Route path="/progress/score" element={page(<RequireUser><ScoreByArea /></RequireUser>)} />
         <Route path="/reminders" element={page(<RequireUser><Reminders /></RequireUser>)} />
         <Route path="/sleep-times" element={page(<RequireUser><SleepTimesEdit /></RequireUser>)} />

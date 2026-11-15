@@ -5,15 +5,17 @@ import { AnimatedNumber } from '../components/AnimatedNumber';
 import { BottomSheet } from '../components/BottomSheet';
 import { Chip } from '../components/Chip';
 import { HeatCell } from '../components/HeatCell';
+import { Icon } from '../components/Icon';
 import { ListRow } from '../components/ListRow';
 import { PatchCard } from '../components/PatchCard';
 import { Screen, Spacer } from '../components/Screen';
 import { StatChip } from '../components/StatChip';
+import { WeekStat } from '../components/WeekStat';
 import { getItem } from '../data';
 import { AREAS, type Area, type ChecklistItem } from '../data/types';
 import {
   REST_ID, addDays, areaScoresFromAnswers, currentStreak, heatLevel, overallScore,
-  totalActiveDays, weekDays, type AnswerIndex,
+  totalActiveDays, weekDays, weekPercent, bestIndex, weekdayCounts, patchRates, topEffects, type AnswerIndex,
 } from '../engine';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
@@ -24,6 +26,9 @@ import './onboarding.css';
 import './progress.css';
 
 const WEEKS = 14;
+/** Notes show up once there's enough to go on (app choice). */
+const NOTES_AFTER_DAYS = 7;
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 function dayTitle(key: string) {
   const [y, m, d] = key.split('-').map(Number);
@@ -34,7 +39,7 @@ function dayTitle(key: string) {
 /** Progress (Figma 50:161) + Day detail sheet (59:891). */
 export function Progress() {
   const navigate = useNavigate();
-  const { checkins, sprint, profile, today } = useSession();
+  const { checkins, sprint, profile, today, logs } = useSession();
   const [filter, setFilter] = useState<Area | 'All'>('All');
   const [openDay, setOpenDay] = useState<string | null>(null);
 
@@ -65,7 +70,31 @@ export function Progress() {
 
   const answers = profile?.answers ?? {};
   const complete = AREAS.every((a) => answers[a] !== undefined);
-  const score = complete ? overallScore(areaScoresFromAnswers(answers as Record<Area, AnswerIndex>)) : 0;
+  const score = complete ? overallScore(areaScoresFromAnswers(answers as Record<Area, AnswerIndex>)) : null;
+  const start = profile?.start_answers;
+  const startScore = start && AREAS.every((a) => start[a] !== undefined) ? overallScore(areaScoresFromAnswers(start as Record<Area, AnswerIndex>)) : null;
+  const diff = score !== null && startScore !== null ? score - startScore : null;
+  const scoreLine = diff === null ? t('progress.scoreSubtitle')
+    : Math.abs(diff) < 0.05 ? t('progress.scoreSubtitleSame')
+    : t(diff > 0 ? 'progress.scoreSubtitleNow' : 'progress.scoreSubtitleDown', { x: Math.abs(diff).toFixed(1) });
+  const week = useMemo(() => sprint ? weekPercent(sprint, checkins, today, (id) => getItem(id)?.per_week) : { done: 0, target: 0, percent: 0 }, [sprint, checkins, today]);
+
+  // Up to three plain notes: best weekday, steadiest habit, and one pattern from the daily check-in.
+  const notes = useMemo(() => {
+    const out: string[] = [];
+    if (totalActiveDays(checkins) < NOTES_AFTER_DAYS) return out;
+    const best = bestIndex(weekdayCounts(checkins, today, 8));
+    if (best >= 0) out.push(t('notice.bestDay', { day: WEEKDAYS[best] }));
+    if (sprint) {
+      const rates = patchRates(sprint, checkins, today, (id) => getItem(id)?.per_week);
+      const top = rates.reduce<(typeof rates)[number] | null>((b, r) => (r.done > 0 && (!b || r.done / r.target > b.done / b.target) ? r : b), null);
+      const item = top ? getItem(top.id) : undefined;
+      if (item) out.push(t('notice.steady', { title: item.title }));
+    }
+    const effect = topEffects([...new Set(checkins.map((c) => c.item_id))].filter((id) => !!getItem(id)), checkins, logs, 1)[0];
+    if (effect && effect.change > 0) out.push(t('notice.helps', { title: getItem(effect.itemId)!.title, metric: t(`checkin.short.${effect.metric}`).toLowerCase() }));
+    return out;
+  }, [checkins, sprint, today, logs]);
 
   // Day detail: the Sprint's patches (done or not) plus anything else ticked that day.
   const detailIds = openDay ? Array.from(new Set([...sprintItems.map((i) => i.id), ...(byDay.get(openDay) ?? [])])) : [];
@@ -99,11 +128,19 @@ export function Progress() {
       <div className="progress__stats">
         <StatChip fill icon="local_fire_department" value={<AnimatedNumber value={currentStreak(checkins, today)} />} label={t('today.streak')} />
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={totalActiveDays(checkins)} />} label={t('today.days')} />
-        <button type="button" className="progress__score" aria-label={t('progress.openScore')} onClick={() => navigate('/progress/score')}>
-          <StatChip fill icon="trending_up" value={<AnimatedNumber value={score} decimals={1} />} label={t('today.score')} />
-        </button>
+        <WeekStat percent={week.percent} done={week.done} target={week.target} />
       </div>
-      <ListRow icon="insights" title={t('insights.open')} subtitle={t('insights.openSubtitle')} onClick={() => navigate('/progress/insights')} />
+      <ListRow icon="trending_up" title={t('progress.byArea')} subtitle={scoreLine} onClick={() => navigate('/progress/score')} />
+      {/* What we notice: three plain lines instead of a separate Insights screen (user feedback). */}
+      <section className="notice" aria-labelledby="notice-title">
+        <h2 id="notice-title" className="text-title-s text-primary">{t('notice.title')}</h2>
+        {notes.length === 0 && <p className="text-body-s text-secondary">{t('notice.empty')}</p>}
+        {notes.map((n, i) => (
+          <motion.p key={n} className="notice__line text-body-m text-primary" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ ...motionTokens.page, delay: 0.1 + i * motionTokens.stagger }}>
+            <Icon name="check" size={16} />{n}
+          </motion.p>
+        ))}
+      </section>
       <Spacer />
       <AppNav active="progress" />
 

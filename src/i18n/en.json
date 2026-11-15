@@ -307,13 +307,13 @@
     "dayDone": "{n} of {total} done",
     "rest": "Rest day · streak safe",
     "nothing": "Nothing logged this day.",
-    "scoreLabel": "Where you started",
     "scoreSubtitle": "From your first 4 answers.",
     "cellLabel": "{day}: {n} done",
-    "openScore": "See it by area",
     "scoreSubtitleNow": "Up {x} since you started",
     "scoreSubtitleDown": "Down {x} since you started",
-    "scoreSubtitleSame": "Same as when you started"
+    "scoreSubtitleSame": "Same as when you started",
+    "byArea": "How you feel, by area",
+    "scoreLabel": "By area"
   },
   "roadmap": {
     "label": "Journey",
@@ -372,31 +372,6 @@
     "total": "About {h} h of sleep",
     "editTitle": "Sleep times",
     "save": "Save"
-  },
-  "insights": {
-    "title": "Insights",
-    "open": "Insights",
-    "openSubtitle": "Patterns from your days",
-    "sprintLabel": "Week {n} so far",
-    "sprintBody": "of days with a habit done",
-    "levelAria": "{p}% of days. Level 2 needs {need}%.",
-    "levelOpen": "Level 2 is open",
-    "levelOnTrack": "On track for Level 2",
-    "levelNeed": "Level 2 at {need}%",
-    "patchesTitle": "Habit by habit",
-    "daysOf": "{n} / {total} days",
-    "daysTitle": "Your best days",
-    "dayValue": "{day}: {n} active days in the last {weeks} weeks",
-    "daysEmpty": "Tick a habit to start the chart.",
-    "longest": "Best streak",
-    "notesTitle": "What we notice",
-    "notEnough": "A few more days and patterns show up here. {n} to go.",
-    "noteDay": "{day} is your strongest day.",
-    "noteSteady": "{title} is your most steady habit this week.",
-    "noteUp": "Your score is up {x} since you started.",
-    "noteDown": "Your score is down {x} since you started. Small steps still count.",
-    "daysTap": "Tap a day to see it.",
-    "levelLater": "Level 2 opens from week 3 at {need}%"
   },
   "library": {
     "title": "Library",
@@ -546,7 +521,7 @@
       "level1": "Level 1 habits",
       "levels": "Level 2–3 habits",
       "calm": "Calm tools",
-      "insights": "Insights",
+      "insights": "Progress and notes",
       "tools": "Focus, nutrition, travel tools",
       "supplements": "Supplement guides"
     },
@@ -895,7 +870,7 @@
       },
       "progress": {
         "title": "Your progress",
-        "body": "Heatmap, streaks and Insights. Patterns show up after a few days."
+        "body": "Your days at a glance, streaks, and what's working for you."
       },
       "tribe": {
         "title": "Better with a Tribe",
@@ -947,32 +922,6 @@
     "empty": "Log how you feel on Today for about a week. Then we show which habits lift your energy, mood, sleep and focus. ({n} days logged)",
     "line": "Your {metric} on days you did it ({n} days)",
     "caveat": "A pattern from your own days, not proof."
-  },
-  "experiments": {
-    "title": "Experiments",
-    "subtitle": "Test one habit on yourself",
-    "topTitle": "Experiments",
-    "intro": "Pick one habit and one thing to watch. Do it for a week or two, keep logging, and see what changes compared to the days before.",
-    "newTitle": "New experiment",
-    "patch": "Habit",
-    "metric": "Watch",
-    "days": "Length",
-    "daysN": "{n} days",
-    "start": "Start experiment",
-    "active": "Running",
-    "finished": "Finished",
-    "dayOf": "Day {n} of {total}",
-    "doneDays": "Done on {n} days",
-    "result": {
-      "up": "Your {metric} went up {p}% compared to the {days} days before.",
-      "down": "Your {metric} went down {p}% compared to the {days} days before.",
-      "same": "No real change in your {metric}.",
-      "wait": "Keep logging. We need at least 3 logged days during and before."
-    },
-    "stop": "Stop",
-    "remove": "Remove",
-    "none": "No experiments yet.",
-    "oneAtATime": "One experiment at a time keeps the result clear."
   },
   "modes": {
     "title": "Life mode",
@@ -1083,5 +1032,22 @@
     ],
     "privacy": "It will never see your health answers.",
     "ok": "Can't wait"
+  },
+  "week": {
+    "aria": "This week {p}%. Tap to see how it's worked out.",
+    "title": "{p}% this week",
+    "body": "You've done {n} of {total} habit-days so far this week.",
+    "daily": "Daily habits: one for each day that has started.",
+    "weekly": "Weekly ones (like strength 3× a week) count up to their goal.",
+    "rest": "Rest days don't count against you.",
+    "reset": "Starts fresh every week.",
+    "ok": "Got it"
+  },
+  "notice": {
+    "title": "What we notice",
+    "empty": "Give it about a week. Then we'll point out what's working for you.",
+    "bestDay": "{day} is your best day.",
+    "steady": "{title} is your most steady habit.",
+    "helps": "{title} seems to lift your {metric}."
   }
 }

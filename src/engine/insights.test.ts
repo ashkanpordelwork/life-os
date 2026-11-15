@@ -37,3 +37,13 @@ describe('bestIndex', () => {
     expect(bestIndex([0, 0])).toBe(-1);
   });
 });
+
+describe('weekPercent', () => {
+  it('daily habits per started day, weekly habits up to their target', async () => {
+    const { weekPercent } = await import('./insights');
+    const sprint: Sprint = { number: 1, theme: null, length_days: 7, patch_ids: ['SL01', 'EX02'], started_at: new Date(2026, 2, 2, 9).toISOString() };
+    const list = [c('2026-03-02'), c('2026-03-03'), c('2026-03-02', 'EX02')];
+    // 3 days started: SL01 2/3, EX02 1/3 (weekly target 3) → 3 of 6 = 50%
+    expect(weekPercent(sprint, list, '2026-03-04', (id) => (id === 'EX02' ? 3 : undefined))).toEqual({ done: 3, target: 6, percent: 50 });
+  });
+});

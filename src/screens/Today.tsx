@@ -4,6 +4,7 @@ import { TextButton } from '../components/TextButton';
 import { useCallback, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
+import { WeekStat } from '../components/WeekStat';
 import { BottomSheet } from '../components/BottomSheet';
 import { Button } from '../components/Button';
 import { Mascot } from '../components/Mascot';
@@ -15,8 +16,7 @@ import { SegmentedProgress } from '../components/SegmentedProgress';
 import { SprintStrip } from '../components/SprintStrip';
 import { StatChip } from '../components/StatChip';
 import { getItem } from '../data';
-import type { Area } from '../data/types';
-import { REST_ID, areaScoresFromAnswers, canRestToday, currentStreak, overallScore, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, type AnswerIndex } from '../engine';
+import { REST_ID, canRestToday, currentStreak, sprintDay, totalActiveDays, dayKey, dayOrder, capMinutes, weekDays, weekPercent } from '../engine';
 import { t, tList } from '../i18n';
 import { useSession } from '../state/session';
 import { haptic, motionTokens } from '../styles/motion';
@@ -82,14 +82,12 @@ export function Today() {
   const tiny = tinyPref || lifeMode?.mode === 'deadline';
 
   const stats = useMemo(() => {
-    const answers = profile?.answers ?? {};
-    const complete = (['Movement', 'Nutrition', 'Sleep', 'Mind'] as Area[]).every((a) => answers[a] !== undefined);
     return {
       streak: currentStreak(checkins, today),
       days: totalActiveDays(checkins),
-      score: complete ? overallScore(areaScoresFromAnswers(answers as Record<Area, AnswerIndex>)) : 0,
+      week: sprint ? weekPercent(sprint, checkins, today, (id) => getItem(id)?.per_week) : { done: 0, target: 0, percent: 0 },
     };
-  }, [checkins, profile, today]);
+  }, [checkins, sprint, today]);
 
   if (!sprint) return <Navigate to="/symptoms" replace />;
 
@@ -158,7 +156,7 @@ export function Today() {
       <div className="today__stats">
         <StatChip fill icon="local_fire_department" value={<AnimatedNumber value={stats.streak} />} label={t('today.streak')} />
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={stats.days} />} label={t('today.days')} />
-        <StatChip fill icon="insights" value={<AnimatedNumber value={stats.score} decimals={1} />} label={t('today.score')} />
+        <WeekStat percent={stats.week.percent} done={stats.week.done} target={stats.week.target} />
       </div>
 
       <AnimatePresence initial={false}>

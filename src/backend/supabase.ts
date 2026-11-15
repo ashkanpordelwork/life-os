@@ -1,6 +1,6 @@
 import { createClient, type AuthError as SbAuthError, type User } from '@supabase/supabase-js';
 import type { Sprint } from '../data/types';
-import type { Experiment, LifeMode } from '../engine';
+import type { LifeMode } from '../engine';
 import { AuthError, type AuthErrorCode, type Backend, type AdminStats, type AdminUser, type AdminTribe, type Announcement, type HighFive, type ReminderPrefs, type Tribe, type TribeEvent, type TribeStatus, type UserInfo } from './types';
 
 /** Supabase backend. Tables and security rules: supabase/schema.sql */
@@ -137,17 +137,6 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
     },
     async saveLog(userId, log) {
       check(await sb.from('daily_logs').upsert({ user_id: userId, day: log.day, energy: log.energy ?? null, mood: log.mood ?? null, sleep: log.sleep ?? null, focus: log.focus ?? null, updated_at: new Date().toISOString() }));
-    },
-    async loadExperiments(userId) {
-      const res = await sb.from('experiments').select('id, item_id, metric, start_day, days').eq('user_id', userId).order('created_at', { ascending: false });
-      if (res.error) return [];
-      return res.data as Experiment[];
-    },
-    async saveExperiment(userId, e) {
-      check(await sb.from('experiments').upsert({ ...e, user_id: userId }));
-    },
-    async deleteExperiment(userId, id) {
-      check(await sb.from('experiments').delete().eq('id', id).eq('user_id', userId));
     },
     async loadModes(userId) {
       const res = await sb.from('life_modes').select('id, mode, start_day, end_day').eq('user_id', userId).order('start_day', { ascending: false }).limit(60);

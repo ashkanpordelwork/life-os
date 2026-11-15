@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedNumber } from '../components/AnimatedNumber';
+import { WeekStat } from '../components/WeekStat';
 import { Button } from '../components/Button';
 import { ListRow } from '../components/ListRow';
 import { Screen, Spacer } from '../components/Screen';
 import { StatChip } from '../components/StatChip';
-import type { Area } from '../data/types';
-import { areaScoresFromAnswers, currentStreak, overallScore, totalActiveDays, type AnswerIndex } from '../engine';
+import { currentStreak, totalActiveDays, weekPercent } from '../engine';
+import { getItem } from '../data';
 import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { AppNav } from './AppNav';
@@ -24,14 +25,12 @@ export function You() {
   const [busy, setBusy] = useState(false);
 
   const stats = useMemo(() => {
-    const a = profile?.answers ?? {};
-    const complete = (['Movement', 'Nutrition', 'Sleep', 'Mind'] as Area[]).every((k) => a[k] !== undefined);
     return {
       streak: currentStreak(checkins, today),
       days: totalActiveDays(checkins),
-      score: complete ? overallScore(areaScoresFromAnswers(a as Record<Area, AnswerIndex>)) : 0,
+      week: sprint ? weekPercent(sprint, checkins, today, (id) => getItem(id)?.per_week) : { done: 0, target: 0, percent: 0 },
     };
-  }, [checkins, profile, today]);
+  }, [checkins, sprint, today]);
 
   const out = async () => {
     setBusy(true);
@@ -50,7 +49,7 @@ export function You() {
       <div className="today__stats">
         <StatChip fill icon="local_fire_department" value={<AnimatedNumber value={stats.streak} />} label={t('today.streak')} />
         <StatChip fill icon="calendar_today" value={<AnimatedNumber value={stats.days} />} label={t('today.days')} />
-        <StatChip fill icon="insights" value={<AnimatedNumber value={stats.score} decimals={1} />} label={t('today.score')} />
+        <WeekStat percent={stats.week.percent} done={stats.week.done} target={stats.week.target} />
       </div>
       <ListRow
         icon="notifications"
