@@ -74,6 +74,27 @@ interface SessionApi extends SessionState {
 }
 
 const Ctx = createContext<SessionApi | null>(null);
+
+/** Private feed keys (habit names hidden): a random key per habit per day, kept on this phone only. */
+const PRIVATE_KEYS = 'lifeos.tribe.privateKeys';
+function privateKey(uid: string, day: string, itemId: string, create: boolean): string | null {
+  try {
+    const all = JSON.parse(localStorage.getItem(PRIVATE_KEYS) ?? '{}') as Record<string, string>;
+    const k = `${uid}|${day}|${itemId}`;
+    if (all[k] || !create) return all[k] ?? null;
+    all[k] = crypto.randomUUID();
+    // Keep only the last few days.
+    const keep = Object.fromEntries(Object.entries(all).filter(([key]) => key.split('|')[1] >= addDays(day, -3)));
+    localStorage.setItem(PRIVATE_KEYS, JSON.stringify(keep));
+    return all[k];
+  } catch {
+    return create ? crypto.randomUUID() : null;
+  }
+}
+/** The post key: the habit id when names are shared (anyone could see it anyway), else a private key. */
+function habitPostKey(uid: string, day: string, itemId: string, shared: boolean): string {
+  return shared ? itemId : privateKey(uid, day, itemId, true)!;
+}
 const EMPTY: SessionState = { ready: false, user: null, profile: null, sprint: null, checkins: [], reminders: DEFAULT_REMINDERS };
 
 export function SessionProvider({ children }: { children: ReactNode }) {
@@ -296,6 +317,18 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const doneNow = new Set([...before.filter((x) => x.day === c.day && x.item_id !== REST_ID).map((x) => x.item_id), itemId]);
         logTribe('active');
         if (daily.length && daily.every((id) => doneNow.has(id))) logTribe('all_done');
+      }
+      // Tribe feed: one post per habit done; unticking removes it.
+      if (itemId !== REST_ID && backend.tribes && tribeCountRef.current > 0) {
+        const uid = s.user.id;
+        if (done && !wasDone) {
+          backend.tribes.postHabit(uid, c.day, habitPostKey(uid, c.day, itemId, share.patches), share.patches ? itemId : null).catch(() => {});
+        } else if (!done && wasDone) {
+          // Try both keys: the habit id (names shared) and the private one (names hidden).
+          for (const key of new Set([itemId, privateKey(uid, c.day, itemId, false)].filter((k): k is string => !!k))) {
+            backend.tribes.removeHabit(uid, c.day, key).catch(() => {});
+          }
+        }
       }
       try {
         await backend.setCheckin(s.user.id, c, done);

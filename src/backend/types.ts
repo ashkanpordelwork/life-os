@@ -79,7 +79,8 @@ export interface TribeStatus {
   updated_at?: string;
 }
 
-export type TribeEventKind = 'active' | 'all_done' | 'release' | 'joined';
+/** 'habit' = one feed post per habit done (payload: key, and item_id when the person shares habit names). */
+export type TribeEventKind = 'active' | 'all_done' | 'release' | 'joined' | 'habit';
 export interface TribeEvent {
   id: number;
   user_id: string;
@@ -170,6 +171,10 @@ export interface TribeApi {
   myStatus(userId: string): Promise<TribeStatus | null>;
   publishStatus(status: TribeStatus): Promise<void>;
   logEvent(userId: string, kind: TribeEventKind, day: string, payload?: Record<string, unknown>): Promise<void>;
+  /** A feed post for a habit just done. itemId is null when the person hides habit names. */
+  postHabit(userId: string, day: string, key: string, itemId: string | null): Promise<void>;
+  /** Remove the post when the habit is unticked. */
+  removeHabit(userId: string, day: string, key: string): Promise<void>;
   /** Add or take back a reaction on a post (eventId) or on a member's day. */
   react(userId: string, to: string, target: { eventId?: number; day: string }, kind: ReactionKind, on: boolean): Promise<void>;
   /** Nudge someone who hasn't started. Also sends the instant push. */

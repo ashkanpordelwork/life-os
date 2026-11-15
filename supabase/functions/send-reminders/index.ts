@@ -113,7 +113,7 @@ Deno.serve(async (req) => {
     }
   }
 
-  // 3. Tribe reactions not yet announced (last 24 h): one push per person, however many reactions.
+  // 3. High fives on feed posts not yet announced (last 24 h): one push per person, however many.
   if (smart) {
     const since = new Date(Date.now() - 86_400_000).toISOString();
     const { data: reacts } = await sb.from('tribe_reactions').select('id, from_user, to_user').eq('notified', false).gte('created_at', since);
@@ -128,8 +128,8 @@ Deno.serve(async (req) => {
         if (!prefs.get(o)) continue; // push off, or Tribe pushes off
         const uniq = [...new Set(from)];
         await sendTo(o, {
-          title: 'Your Tribe noticed you',
-          body: uniq.length === 1 ? `${uniq[0]} reacted to your day.` : `${uniq[0]} and ${uniq.length - 1} more reacted to your day.`,
+          title: 'High five',
+          body: uniq.length === 1 ? `${uniq[0]} gave you a high five.` : `${uniq[0]} and ${uniq.length - 1} more gave you high fives.`,
           url: `${APP_URL}#/tribe`,
           tag: 'tribe-reaction',
         });

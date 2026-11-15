@@ -1,0 +1,16 @@
+.drawer-layer { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: flex-end; }
+.drawer-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--color-text-primary) 45%, transparent); }
+.drawer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  inline-size: min(320px, 86vw);
+  block-size: 100%;
+  padding-block: calc(var(--space-24) + env(safe-area-inset-top)) calc(var(--space-24) + env(safe-area-inset-bottom));
+  padding-inline: var(--space-16);
+  background: var(--color-bg-app);
+  box-shadow: var(--shadow-floating);
+}
+/* Rows are cards with shadows: the scroll box gives them room (shadow rule). */
+.drawer__body { display: flex; flex: 1; min-block-size: 0; flex-direction: column; gap: var(--space-8); overflow-y: auto; margin-inline: calc(-1 * var(--shadow-room-inline)); }

@@ -767,9 +767,7 @@
     "invite": "Invite",
     "copied": "Link copied",
     "inviteText": "Join my Tribe “{name}” on Life OS. Code: {code}",
-    "todayTitle": "Today",
     "feedTitle": "Activity",
-    "feedEmpty": "Nothing yet. Tick a habit to start the feed.",
     "you": "You",
     "someone": "Member",
     "noStatus": "Hasn't opened Life OS yet today.",
@@ -782,13 +780,6 @@
       "h": "{n} h ago",
       "d": "{n} d ago"
     },
-    "ev": {
-      "active": "{name} started today",
-      "allDone": "{name} finished today",
-      "joined": "{name} joined the Tribe",
-      "release": "{name} finished Week {n}",
-      "releaseTheme": "{name} finished Week {n} · {theme}"
-    },
     "challenge": {
       "label": "This week's challenge",
       "title": "{goal} active days, together",
@@ -798,12 +789,6 @@
       "progressDone": "{n} of {total} active days."
     },
     "weekN": "Week {n}",
-    "react": {
-      "five": "High five",
-      "fire": "On fire",
-      "power": "Power"
-    },
-    "reactedToYou": "{n} reactions",
     "nudge": {
       "cta": "Poke",
       "sent": "Nudged",
@@ -845,17 +830,38 @@
         }
       }
     },
-    "tabFeed": "Feed",
-    "tabWeek": "This week",
-    "cheer": "Cheer",
-    "moreTitle": "More reactions",
-    "noCheers": "No cheers yet",
-    "cheers": "{n} cheers",
-    "waiting": "{name} hasn’t started today",
-    "waitingYou": "You haven’t started today",
-    "notStartedHint": "Tick one habit to show up.",
     "summaryStreak": "{n} day Tribe streak",
-    "summaryWeek": "{n} of {total} active days this week"
+    "summaryWeek": "{n} of {total} active days this week",
+    "menu": {
+      "title": "Menu",
+      "members": "Members",
+      "membersSub": "{n} of {total} active today",
+      "week": "This week",
+      "weekSub": "{n} day Tribe streak",
+      "invite": "Invite friends",
+      "inviteSub": "Code {code}",
+      "tribes": "My Tribes",
+      "tribesSub": "{n} Tribes · join or switch",
+      "settings": "Settings",
+      "settingsSub": "What your Tribe sees",
+      "leave": "Leave this Tribe",
+      "tribesSubOne": "Join or start another"
+    },
+    "feedEmptyHabits": "Nothing yet. Tick a habit and it shows up here for your Tribe.",
+    "memberLine": "{done}/{total} today · {streak} day streak",
+    "inviteBody": "Share this code or send the link. Friends join with it.",
+    "likesTitle": "High fives",
+    "post": {
+      "private": "Did a habit"
+    },
+    "hiFive": "High five",
+    "oneHiFive": "1 high five",
+    "hiFives": "{n} high fives",
+    "noHiFivesYet": "No high fives yet",
+    "beFirst": "Be the first to high five",
+    "leaveTitle": "Leave {name}?",
+    "leaveBody": "Your posts stay, but you won’t see this Tribe any more. You can join again with the code.",
+    "namesNote": "Habit names off: your posts say “Did a habit” instead of the habit."
   },
   "admin": {
     "title": "Admin",

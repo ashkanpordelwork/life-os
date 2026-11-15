@@ -236,16 +236,18 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
       async detail(tribeId, sinceDay) {
         const tribe = check(await sb.from('tribes').select('id, name, code, created_by').eq('id', tribeId).single()) as Tribe;
         const members = (check(await sb.from('tribe_members').select('user_id').eq('tribe_id', tribeId)) as { user_id: string }[]).map((m) => m.user_id);
-        const [statuses, events, reacts, nudged] = await Promise.all([
+        const [statuses, events, posts, reacts, nudged] = await Promise.all([
           sb.from('tribe_status').select('*').in('user_id', members),
-          sb.from('tribe_events').select('*').in('user_id', members).gte('day', sinceDay).order('created_at', { ascending: false }).limit(600),
+          sb.from('tribe_events').select('*').in('user_id', members).gte('day', sinceDay).neq('kind', 'habit').order('created_at', { ascending: false }).limit(600),
+          // Feed posts: the newest habit posts only.
+          sb.from('tribe_events').select('*').in('user_id', members).eq('kind', 'habit').gte('day', sinceDay).order('created_at', { ascending: false }).limit(120),
           sb.from('tribe_reactions').select('from_user, to_user, event_id, day, kind').in('to_user', members).gte('day', sinceDay).limit(1500),
           sb.from('tribe_nudges').select('from_user, to_user, day, msg').gte('day', sinceDay).limit(200),
         ]);
         // The new tables exist after migrations-tribe-play.sql; until then there are just none.
         const reactions = (reacts.error ? [] : reacts.data ?? []) as TribeReaction[];
         const nudges = (nudged.error ? [] : nudged.data ?? []) as TribeNudge[];
-        return { tribe, members, statuses: check(statuses) as TribeStatus[], events: check(events) as TribeEvent[], reactions, nudges };
+        return { tribe, members, statuses: check(statuses) as TribeStatus[], events: [...(check(events) as TribeEvent[]), ...((posts.error ? [] : posts.data ?? []) as TribeEvent[])], reactions, nudges };
       },
       async create(name) {
         return check(await sb.rpc('create_tribe', { p_name: name })) as Tribe;
@@ -273,6 +275,13 @@ export function createSupabaseBackend(url: string, anonKey: string): Backend {
         // One of each kind per user per day; a repeat is ignored.
         const res = await sb.from('tribe_events').insert({ user_id: userId, kind, day, payload });
         if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
+      },
+      async postHabit(userId, day, key, itemId) {
+        const res = await sb.from('tribe_events').insert({ user_id: userId, kind: 'habit', day, payload: itemId ? { key, item_id: itemId } : { key } });
+        if (res.error && !/duplicate|unique/i.test(res.error.message)) throw new Error(res.error.message);
+      },
+      async removeHabit(userId, day, key) {
+        check(await sb.from('tribe_events').delete().eq('user_id', userId).eq('kind', 'habit').eq('day', day).eq('payload->>key', key));
       },
       async react(userId, to, target, kind: ReactionKind, on) {
         if (on) {

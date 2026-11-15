@@ -37,16 +37,6 @@
 .tribe-member__streak { display: inline-flex; align-items: center; gap: 2px; color: var(--color-text-brand); }
 .tribe-member__progress { display: flex; align-items: center; gap: var(--space-8); }
 
-.tribe-event { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-12) var(--space-16); border-radius: var(--radius-lg); }
-.tribe-event__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: 2px; }
-.tribe-five {
-  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-4); flex-shrink: 0;
-  min-inline-size: var(--size-touch); block-size: var(--size-touch); padding-inline: var(--space-8);
-  border-radius: var(--radius-pill); border: 1px solid var(--color-border-default);
-  background: var(--color-surface-card); color: var(--color-text-secondary); cursor: pointer;
-}
-.tribe-five--on { background: var(--color-brand-soft); border-color: var(--color-border-focus); color: var(--color-text-brand); }
-.tribe-five--count { border: 0; background: none; cursor: default; color: var(--color-text-brand); }
 
 /* Weekly Tribe challenge */
 .tribe-challenge { display: flex; flex-direction: column; gap: var(--space-8); padding: var(--space-16); border-radius: var(--radius-lg); }
@@ -57,10 +47,6 @@
 .tribe-challenge--done .tribe-challenge__fill { background: var(--color-status-success); }
 
 /* Reactions, nudges and the weekly board */
-.tribe-event { flex-wrap: wrap; }
-.tribe-reacts { display: inline-flex; flex-wrap: wrap; gap: var(--space-8); }
-.tribe-event .tribe-reacts { flex-basis: 100%; }
-.tribe-member__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-8); }
 .tribe-nudge {
   display: inline-flex; align-items: center; gap: var(--space-4); flex-shrink: 0;
   min-block-size: var(--size-touch); padding-inline: var(--space-16);
@@ -81,28 +67,34 @@
 /* Social feed layout */
 .tribe-stories { display: flex; gap: var(--space-16); overflow-x: auto; padding-block: var(--space-4); scrollbar-width: none; }
 .tribe-stories::-webkit-scrollbar { display: none; }
-.tribe-story { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; min-inline-size: 64px; }
 .tribe-story__ring { display: inline-flex; padding: 3px; border-radius: var(--radius-pill); border: 2.5px solid var(--color-border-default); }
 .tribe-story__ring--done { border-color: var(--color-status-success); }
 .tribe-story__ring--started { border-color: var(--color-border-focus); }
-.tribe-story__name { max-inline-size: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tribe-story__count { margin: 0; }
-.tribe-summary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8) var(--space-16); }
 .tribe-summary__item { display: inline-flex; align-items: center; gap: var(--space-4); color: var(--color-text-brand); }
 .tribe-feed { display: flex; flex-direction: column; gap: var(--space-12); }
 .tribe-post { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16); border-radius: var(--radius-lg); }
-.tribe-post--quiet { background: var(--color-bg-subtle); box-shadow: none; border: 0; }
 .tribe-post__head { display: flex; align-items: center; gap: var(--space-12); }
 .tribe-post__who { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: 2px; }
-.tribe-post__actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); }
-.tribe-post__stats { margin: 0; }
-.tribe-cheer {
-  display: inline-flex; align-items: center; gap: var(--space-8); min-block-size: var(--size-touch); padding-inline: var(--space-16);
-  border-radius: var(--radius-pill); border: 1px solid var(--color-border-default); background: var(--color-surface-card); color: var(--color-text-secondary); cursor: pointer;
-}
-.tribe-cheer--on { background: var(--color-brand-soft); border-color: var(--color-border-focus); color: var(--color-text-brand); }
-.tribe-more-btn {
+
+/* Feed: stories, habit posts and the high five */
+.tribe-story { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; min-inline-size: 64px; }
+.tribe-story__name { max-inline-size: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tribe-feed__empty { text-align: center; padding-block: var(--space-24); }
+.tribe-post__body { position: relative; display: flex; align-items: center; gap: var(--space-12); padding: var(--space-12); border-radius: var(--radius-md); background: var(--color-bg-subtle); user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.tribe-post__private { display: inline-flex; align-items: center; justify-content: center; inline-size: 48px; block-size: 48px; border-radius: var(--radius-md); background: var(--color-surface-card); color: var(--color-text-secondary); }
+.tribe-post__burst { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text-brand); pointer-events: none; }
+.tribe-post__actions { display: flex; align-items: center; justify-content: flex-start; gap: var(--space-4); }
+.tribe-hi {
   display: inline-flex; align-items: center; justify-content: center; inline-size: var(--size-touch); block-size: var(--size-touch);
   border-radius: var(--radius-pill); color: var(--color-text-secondary); cursor: pointer;
 }
-.tribe-more { display: flex; flex-direction: column; gap: var(--space-8); }
+.tribe-hi--on { color: var(--color-text-brand); background: var(--color-brand-soft); }
+.tribe-hi--static { cursor: default; color: var(--color-text-brand); }
+.tribe-hi-count { min-block-size: var(--size-touch); padding-inline: var(--space-4); font-weight: 600; cursor: pointer; }
+/* Menu sheets */
+.tribe-sheet { display: flex; flex-direction: column; gap: var(--space-12); max-block-size: 60dvh; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+.tribe-person { display: flex; align-items: center; gap: var(--space-12); }
+.tribe-person__text { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: 2px; }
+.tribe-code { font-size: 32px; letter-spacing: 0.12em; text-align: center; margin: 0; }
+.tribe-week-goal { display: flex; flex-direction: column; gap: var(--space-8); }
+.tribe-summary__item { display: inline-flex; align-items: center; gap: var(--space-8); margin: 0; color: var(--color-text-brand); }
