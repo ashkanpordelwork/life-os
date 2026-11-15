@@ -19,7 +19,7 @@ import { t } from '../i18n';
 import { useSession } from '../state/session';
 import { motionTokens } from '../styles/motion';
 import { AppNav } from './AppNav';
-import { itemAmount } from './flow';
+import { cardMeta } from './flow';
 import './onboarding.css';
 import './progress.css';
 
@@ -116,7 +116,7 @@ export function Progress() {
         {detailIds.length === 0 && <p className="text-body-s text-secondary">{t('progress.nothing')}</p>}
         <div className="progress__detail shadow-room shadow-room--sheet">
           {detailIds.map(getItem).filter((x): x is ChecklistItem => !!x).map((item) => (
-            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={detailDone.has(item.id)} />
+            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={cardMeta(item, t)} done={detailDone.has(item.id)} />
           ))}
         </div>
       </BottomSheet>

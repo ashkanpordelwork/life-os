@@ -96,7 +96,12 @@
     "subtitle": "Pick 3 to 5. Tiny, doable, backed by evidence.",
     "cta": "Start Sprint {n}",
     "trailingRange": "{n} / {max}",
-    "moreHint": "Fewer patches stick better. 3 is a great start."
+    "moreHint": "Fewer patches stick better. 3 is a great start.",
+    "forTag": "For: {what}",
+    "tapHint": "Tap a habit to see what it does. Tap the circle to pick it.",
+    "pick": "Pick {title}",
+    "pickThis": "Pick this one",
+    "unpick": "Remove from my picks"
   },
   "ready": {
     "label": "Sprint {nn} · {days} days",
@@ -190,7 +195,7 @@
     "restCancel": "Never mind",
     "resting": "Resting",
     "restOn": "Rest day · streak safe",
-    "tools": "Tools",
+    "tools": "Library",
     "thisWeek": "{n}/{total} this week"
   },
   "nav": {

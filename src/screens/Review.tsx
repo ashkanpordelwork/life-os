@@ -27,7 +27,7 @@ import { getProgram } from '../data/programs';
 import { Mascot } from '../components/Mascot';
 import { MAX_PATCHES, MIN_PATCHES } from '../state/onboarding';
 import { motionTokens } from '../styles/motion';
-import { itemAmount, pad2 } from './flow';
+import { cardMeta, pad2 } from './flow';
 import './onboarding.css';
 import './review.css';
 
@@ -163,7 +163,7 @@ export function Review() {
 
   const pickTrailing = t('review.pickCount', { n: picked.length, total: maxPick });
   const card = (item: ChecklistItem) => (
-    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= maxPick} />
+    <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={cardMeta(item, t)} done={picked.includes(item.id)} onToggle={() => togglePick(item.id)} disabled={!picked.includes(item.id) && picked.length >= maxPick} />
   );
 
   return (
@@ -313,7 +313,7 @@ export function Review() {
               <TopBar title={t('review.nextTitle', { n: nextNumber })} onBack={back} />
               <h2 className="text-title-l text-primary">{t('review.readyTitle')}</h2>
               {[...kept, ...picked].map(getItem).filter((x): x is ChecklistItem => !!x).map((item) => (
-                <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={itemAmount(item, t)} done />
+                <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={cardMeta(item, t)} done />
               ))}
               <GlassPanel>
                 <div><MetaChip icon="calendar_today" label={t('review.startsToday')} /></div>

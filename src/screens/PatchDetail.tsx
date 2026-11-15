@@ -2,11 +2,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { GlassPanel } from '../components/GlassPanel';
 import { Icon, type IconName } from '../components/Icon';
 import { IconTile } from '../components/IconTile';
-import { ListRow } from '../components/ListRow';
-import { MetaChip } from '../components/MetaChip';
 import { Screen, Spacer } from '../components/Screen';
 import { TopBar } from '../components/TopBar';
 import { VersionTab } from '../components/VersionTab';
@@ -59,24 +56,29 @@ export function PatchDetail() {
           <h2 className="text-title-l text-primary">{item.title}</h2>
         </div>
       </div>
-      <div className="patch__facts">
-        <MetaChip icon="timer" label={itemAmount(item, t)} />
-        <MetaChip icon="event" label={whenLabel(item, wake, bed, t)} />
-        <MetaChip icon="science" label={t('patch.evidencePending')} />
-      </div>
+      {/* Plain facts, not chips: nothing here is tappable, so nothing looks like a button. */}
+      <ul className="patch__facts">
+        {itemAmount(item, t) && <li className="patch__fact text-body-s text-secondary"><Icon name="timer" size={16} />{itemAmount(item, t)}</li>}
+        <li className="patch__fact text-body-s text-secondary"><Icon name="event" size={16} />{whenLabel(item, wake, bed, t)}</li>
+        <li className="patch__fact text-body-s text-secondary"><Icon name="science" size={16} />{t('patch.evidencePending')}</li>
+      </ul>
       <div className="patch__versions" role="tablist">
         {VERSIONS.map((v) => (
           <VersionTab key={v.key} icon={v.icon} label={t(`patch.versions.${v.key}`)} time={item.versions[v.key].time} selected={version === v.key} onSelect={() => setVersion(v.key)} />
         ))}
       </div>
-      <GlassPanel>
+      {/* Flat tinted block: content, not a card (no border, no shadow). */}
+      <div className="patch__copy">
         <AnimatePresence mode="wait" initial={false}>
           <motion.p key={version} className="text-body-m-strong text-primary" role="tabpanel" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.18 }}>
             {item.versions[version].text}
           </motion.p>
         </AnimatePresence>
-      </GlassPanel>
-      <ListRow icon="science" title={t('patch.why')} subtitle={item.science_note} />
+      </div>
+      <section className="patch__why" aria-labelledby="patch-why">
+        <h3 id="patch-why" className="text-mono-label text-secondary"><Icon name="science" size={14} />{t('patch.why')}</h3>
+        <p className="text-body-m text-primary">{item.science_note}</p>
+      </section>
       {item.area === 'Movement' && (
         <p className="patch__safety text-caption text-primary"><Icon name="info" size={16} />{t('patch.safetyMove')}</p>
       )}

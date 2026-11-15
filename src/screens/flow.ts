@@ -30,8 +30,12 @@ export function firstMissingQuestion(state: OnboardingState): string | null {
   return missing ? QUESTION_ROUTES[missing] : null;
 }
 
-/** Card label for how much a patch takes: an amount like "7,000 steps", or minutes. */
+/** Card label in the habit's own unit: "5 min", "7,000 steps", "500 ml". Clock and done/not habits have none
+ *  (their time or part of the day already says it). */
 export function itemAmount(item: ChecklistItem, t: (k: string, v?: Record<string, number>) => string): string {
+  const kind = item.measure ?? 'time';
+  if (kind === 'count' || kind === 'amount') return item.amount ?? '';
+  if (kind === 'clock' || kind === 'check') return '';
   return item.amount ?? formatMinutes(item.duration_min, t);
 }
 
@@ -53,10 +57,16 @@ export function whenLabel(item: ChecklistItem, wake: string, bed: string, t: (k:
 
 /** Today card meta, e.g. "08:00–08:30 · No extra time" or "After a meal · 5 min". */
 export function patchMeta(item: ChecklistItem, wake: string, bed: string, tiny: boolean, t: (k: string, v?: Record<string, string | number>) => string): string {
-  return `${whenLabel(item, wake, bed, t)} · ${tiny ? item.versions.tiny.time : itemAmount(item, t)}`;
+  const amount = tiny ? item.versions.tiny.time : itemAmount(item, t);
+  return amount ? `${whenLabel(item, wake, bed, t)} · ${amount}` : whenLabel(item, wake, bed, t);
 }
 
 /** The Sprint's theme; older Sprints without one get it from their patches. */
 export function sprintTheme(sprint: Sprint): SprintTheme | null {
   return sprint.theme ?? themeFor(sprint.patch_ids.map(getItem).filter((x): x is ChecklistItem => !!x));
+}
+
+/** Short card line when there's no clock: the amount, or the part of the day for clock and done/not habits. */
+export function cardMeta(item: ChecklistItem, t: (k: string, v?: Record<string, number>) => string): string {
+  return itemAmount(item, t) || t(`slots.${item.slot}`);
 }

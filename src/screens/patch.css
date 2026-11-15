@@ -1,6 +1,10 @@
 .patch__hero { display: flex; align-items: center; gap: var(--space-12); }
 .patch__title { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
-.patch__facts { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.patch__facts { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-16); margin: 0; padding: 0; list-style: none; }
+.patch__fact { display: inline-flex; align-items: center; gap: var(--space-4); }
+.patch__copy { padding: var(--space-16); border-radius: var(--radius-md); background: var(--color-bg-subtle); }
+.patch__why { display: flex; flex-direction: column; gap: var(--space-8); }
+.patch__why h3 { display: inline-flex; align-items: center; gap: var(--space-4); margin: 0; }
 .patch__versions { display: flex; gap: var(--space-8); }
 .patch__safety { display: flex; align-items: center; gap: var(--space-8); }
 .patch__actions { display: flex; flex-direction: column; gap: var(--space-8); }

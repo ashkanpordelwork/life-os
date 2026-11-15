@@ -70,6 +70,7 @@
     "tier": "free",
     "slot": "BEDTIME",
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "tolerance_min": 30
     },
@@ -82,15 +83,15 @@
     "glyph": "Sleep",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Set an alarm",
         "text": "Set tomorrow's wake alarm to your usual time."
       },
       "standard": {
-        "time": "0 min",
+        "time": "Within 30 min",
         "text": "Go to bed and wake up at the same time, within 30 min."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "Weekends too",
         "text": "Keep the same times on weekends too."
       }
     },
@@ -115,6 +116,7 @@
     "tier": "free",
     "slot": "DESK",
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "cutoff_before_bed_h": [
         8,
@@ -136,15 +138,15 @@
     "glyph": "Coffee",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Decaf",
         "text": "Pick a decaf drink for your afternoon cup."
       },
       "standard": {
-        "time": "0 min",
+        "time": "10 h before bed",
         "text": "No caffeine in the 10 hours before bed. Best: none after 14:00."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "12 h before bed",
         "text": "No caffeine in the 12 hours before bed. Stay under 400 mg a day."
       }
     },
@@ -172,6 +174,7 @@
     "tier": "free",
     "slot": "MORNING",
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "delay_after_wake_min": [
         60,
@@ -189,15 +192,15 @@
     "glyph": "Coffee",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Water first",
         "text": "Drink a glass of water first. Coffee can wait."
       },
       "standard": {
-        "time": "0 min",
+        "time": "60 min after waking",
         "text": "Have your first coffee 60 min after waking."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "90 min after waking",
         "text": "Have your first coffee 90 min after waking."
       }
     },
@@ -227,8 +230,9 @@
     "tier": "free",
     "slot": "ALL_DAY",
     "duration_min": 45,
-    "spread_over_day": true,
+    "measure": "count",
     "amount": "7,000 steps",
+    "spread_over_day": true,
     "params": {
       "steps_per_day": [
         7000,
@@ -248,7 +252,7 @@
     "glyph": "Walk",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "A few steps",
         "text": "Stand up and walk to the nearest window."
       },
       "standard": {
@@ -328,6 +332,8 @@
     "tier": "free",
     "slot": "DESK",
     "duration_min": 1,
+    "measure": "count",
+    "amount": "10 squats",
     "params": {
       "reps": 10,
       "every_min_sitting": 45
@@ -341,15 +347,15 @@
     "glyph": "Move",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 squat",
         "text": "Stand up from your chair once, slowly."
       },
       "standard": {
-        "time": "1 min",
+        "time": "10 squats",
         "text": "10 air squats (no weights)."
       },
       "stretch": {
-        "time": "1 min",
+        "time": "10 every 45 min",
         "text": "10 air squats every 45 min of sitting."
       }
     },
@@ -421,6 +427,8 @@
     "tier": "free",
     "slot": "MORNING",
     "duration_min": 1,
+    "measure": "amount",
+    "amount": "500 ml",
     "params": {
       "ml": [
         500,
@@ -436,15 +444,15 @@
     "glyph": "Water",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 glass",
         "text": "Drink one glass of water."
       },
       "standard": {
-        "time": "1 min",
+        "time": "500 ml",
         "text": "Drink 500 ml of water after waking, before coffee or breakfast."
       },
       "stretch": {
-        "time": "1 min",
+        "time": "700 ml",
         "text": "Drink 700 ml of water after waking, before coffee or breakfast."
       }
     },
@@ -467,6 +475,8 @@
     "tier": "free",
     "slot": "DESK",
     "duration_min": 0,
+    "measure": "amount",
+    "amount": "2.4 L",
     "params": {
       "liters": 2.4,
       "oz": 80,
@@ -481,15 +491,15 @@
     "glyph": "Water",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 bottle",
         "text": "Fill a water bottle and put it on your desk."
       },
       "standard": {
-        "time": "0 min",
+        "time": "2.4 L",
         "text": "Drink 2.4 L of water in your first 10 hours awake."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "A glass an hour",
         "text": "2.4 L in 10 hours, spread out: a glass every hour."
       }
     },
@@ -514,6 +524,8 @@
     "tier": "free",
     "slot": "LUNCH",
     "duration_min": 5,
+    "measure": "amount",
+    "amount": "30–50 g protein",
     "params": {
       "g_per_meal": [
         30,
@@ -534,15 +546,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 yogurt",
         "text": "Add one protein food, like a yogurt."
       },
       "standard": {
-        "time": "5 min",
+        "time": "30–50 g",
         "text": "Eat 30–50 g of protein at this meal."
       },
       "stretch": {
-        "time": "5 min",
+        "time": "Every meal",
         "text": "30–50 g of protein at every full meal today."
       }
     },
@@ -762,6 +774,7 @@
       "offset_min": -60
     },
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "before_bed_h": 1,
       "options": [
@@ -781,15 +794,15 @@
     "glyph": "Sleep",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 lamp",
         "text": "Turn off the ceiling light. Use one low lamp."
       },
       "standard": {
-        "time": "0 min",
+        "time": "Last hour",
         "text": "In your last hour before bed, keep lights dim and low: lamps, not ceiling lights."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "From sunset",
         "text": "Dim lights from sunset. Use red or amber bulbs at night, e.g. on the way to the bathroom."
       }
     },
@@ -812,6 +825,7 @@
       "cutoff": true
     },
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "cutoff_before_bed_h": 8
     },
@@ -826,15 +840,15 @@
     "glyph": "Sleep",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Tonight",
         "text": "Pick a non-alcoholic drink tonight."
       },
       "standard": {
-        "time": "0 min",
+        "time": "8 h before bed",
         "text": "No alcohol in the 8 hours before bed."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "None today",
         "text": "No alcohol today. Don’t use it to fall asleep."
       }
     },
@@ -857,6 +871,7 @@
       "offset_min": -60
     },
     "duration_min": 0,
+    "measure": "clock",
     "params": {
       "before_bed_h": 1,
       "phone_out_of_bedroom": true
@@ -870,15 +885,15 @@
     "glyph": "Sleep",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Night Shift",
         "text": "Turn on Night Shift and lower screen brightness."
       },
       "standard": {
-        "time": "0 min",
+        "time": "1 h before bed",
         "text": "No screens in the last hour before bed."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "Phone out",
         "text": "No screens for the last hour, and charge your phone outside the bedroom."
       }
     },
@@ -954,6 +969,7 @@
       "offset_min": 0
     },
     "duration_min": 0,
+    "measure": "check",
     "params": {
       "unprocessed_share": 0.9
     },
@@ -966,15 +982,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 swap",
         "text": "Swap one packaged snack for fruit or plain yogurt."
       },
       "standard": {
-        "time": "0 min",
+        "time": "This meal",
         "text": "Make this meal from whole, single-ingredient foods."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "90% today",
         "text": "About 90% of today’s food unprocessed or minimally processed."
       }
     },
@@ -997,6 +1013,8 @@
       "offset_min": 0
     },
     "duration_min": 0,
+    "measure": "amount",
+    "amount": "⅓ plate veg",
     "params": {
       "plate_share_veg": 0.33,
       "fruit_per_day": [
@@ -1017,15 +1035,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 handful",
         "text": "Add one handful of vegetables to this meal."
       },
       "standard": {
-        "time": "0 min",
+        "time": "⅓ plate",
         "text": "Fill a third of your plate with fibrous vegetables."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "Every meal",
         "text": "Vegetables at every meal plus 2–3 whole fruits. Aim for 25–35 g fiber a day."
       }
     },
@@ -1047,6 +1065,8 @@
       "offset_min": 0
     },
     "duration_min": 0,
+    "measure": "amount",
+    "amount": "2 servings",
     "params": {
       "servings_per_day": [
         2,
@@ -1064,15 +1084,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 spoon",
         "text": "Eat one spoon of plain yogurt, kimchi or sauerkraut."
       },
       "standard": {
-        "time": "0 min",
+        "time": "2 servings",
         "text": "Have 2 servings of low-sugar fermented food today."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "2–4 servings",
         "text": "Have 2–4 servings today. Buy them from the fridge shelf, no added sugar."
       }
     },
@@ -1090,6 +1110,7 @@
     "tier": "pro",
     "slot": "DESK",
     "duration_min": 1,
+    "measure": "check",
     "params": {
       "checks_per_day": "several"
     },
@@ -1102,15 +1123,15 @@
     "glyph": "Mind",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Ask once",
         "text": "Ask: “Is my mind on what I’m doing right now?”"
       },
       "standard": {
-        "time": "1 min",
+        "time": "When you drift",
         "text": "If not, ask one present-only question: what’s the room temperature? What do I smell?"
       },
       "stretch": {
-        "time": "1 min",
+        "time": "A few times",
         "text": "Check in like this a few times through the day."
       }
     },
@@ -1217,6 +1238,7 @@
     "tier": "pro",
     "slot": "DESK",
     "duration_min": 0,
+    "measure": "check",
     "params": {
       "options": [
         "3_long_exhales",
@@ -1234,15 +1256,15 @@
     "glyph": "Breathe",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "3 breaths",
         "text": "Before switching tasks, take 3 breaths with long exhales."
       },
       "standard": {
-        "time": "20 s",
+        "time": "Each switch",
         "text": "Each time you switch roles (work to home, home to gym), do the same short ritual."
       },
       "stretch": {
-        "time": "20 s",
+        "time": "Every switch",
         "text": "Do your ritual at every switch today, and skip the phone in between."
       }
     },
@@ -1610,6 +1632,7 @@
       "offset_min": 0
     },
     "duration_min": 0,
+    "measure": "check",
     "params": {
       "fat_pct_calories": [
         30,
@@ -1626,15 +1649,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "1 add",
         "text": "Add olive oil, avocado or a few raw nuts to this meal."
       },
       "standard": {
-        "time": "0 min",
+        "time": "Most meals",
         "text": "Include a healthy fat in most meals: olive oil, avocado, olives or raw nuts."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "All day",
         "text": "Cook with olive or avocado oil. Skip seed oils and trans fats today."
       }
     },
@@ -1656,6 +1679,8 @@
       "offset_min": 0
     },
     "duration_min": 0,
+    "measure": "amount",
+    "amount": "1 fish meal",
     "per_week": 2,
     "params": {
       "times_per_week": [
@@ -1678,15 +1703,15 @@
     "glyph": "Nutrition",
     "versions": {
       "tiny": {
-        "time": "20 s",
+        "time": "Plan it",
         "text": "Plan one fish meal for this week."
       },
       "standard": {
-        "time": "0 min",
+        "time": "1 meal",
         "text": "Eat salmon, sardines, mackerel or herring at this meal."
       },
       "stretch": {
-        "time": "0 min",
+        "time": "2 this week",
         "text": "Two fatty fish meals this week. Pick low-mercury fish."
       }
     },

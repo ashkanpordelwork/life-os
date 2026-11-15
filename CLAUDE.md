@@ -7,6 +7,11 @@
   - A scroll box that holds cards gets the `shadow-room` class (inside a BottomSheet: `shadow-room shadow-room--sheet`).
   - `overflow: hidden` on a card itself is fine (it doesn't clip its own shadow).
   - `src/styles/shadowRules.test.ts` fails the build if an inline `overflow: 'hidden'` comes back in a screen.
+- **Only tappable things look tappable.** Borders, shadows, chip/pill shapes, chevrons and press effects are for
+  buttons, links and rows that do something. Plain facts are text with a small icon; content blocks are flat
+  (tinted background, no border, no shadow). A `ListRow` without `onClick` should not be used for content.
+- **Every habit has its own unit** (`measure` in items.json: time, count, amount, clock, check). Never show
+  minutes for something that isn't timed (water is ml, steps are steps, a cutoff is a clock time).
 - Components use semantic tokens only; no raw hex outside `src/styles/tokens.css`.
 - UI text lives in `src/i18n/en.json`. Sprint, Patch, Release and Task stay in English.
 - Logical CSS properties (inline/block), touch targets at least 44px, layout 375–430 wide.

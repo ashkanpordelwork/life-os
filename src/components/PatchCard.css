@@ -11,3 +11,7 @@
 .patch-card__content { display: flex; flex: 1; min-inline-size: 0; flex-direction: column; gap: var(--space-4); }
 .patch-card__open { display: flex; flex: 1; min-inline-size: 0; align-items: center; gap: var(--space-12); text-align: start; }
 .patch-card__check { display: flex; border-radius: var(--radius-pill); }
+
+/* Onboarding: why line and "For: ..." tag */
+.patch-card__note { display: block; margin-block-start: var(--space-4); }
+.patch-card__tag { align-self: flex-start; margin-block-start: var(--space-8); padding-block: 2px; padding-inline: var(--space-8); border-radius: var(--radius-pill); background: var(--color-bg-subtle); color: var(--color-text-secondary); }

@@ -150,7 +150,7 @@ export function Today() {
           <h1 className="text-title-l text-primary">{greeting(profile?.name ?? '', firstDay)}</h1>
         </div>
         <div className="today__actions" data-tour="tools">
-          <IconButton icon="air" label={t('today.tools')} onClick={() => openLibrary(navigate, '/today')} />
+          <IconButton icon="book" label={t('today.tools')} onClick={() => openLibrary(navigate, '/today')} />
           <IconButton icon="notifications" label={t('today.notifications')} onClick={() => navigate('/reminders')} />
         </div>
       </header>

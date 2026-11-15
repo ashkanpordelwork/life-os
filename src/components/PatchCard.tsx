@@ -22,6 +22,10 @@ type PatchCardProps = {
   dimmed?: boolean;
   /** No check circle (Sprint review: the decision chips sit below instead). */
   hideCheck?: boolean;
+  /** Optional one-line why (onboarding), shown under the meta. */
+  note?: string;
+  /** Optional small tag, e.g. "For: Always tired". */
+  tag?: string;
 };
 
 /**
@@ -33,13 +37,15 @@ type PatchCardProps = {
  * - Today: body opens the patch (`onOpen`), the circle ticks it (`onToggle`).
  * Motion: card shrinks a little while pressed; the check pops (CheckCircle).
  */
-export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed, hideCheck }: PatchCardProps) {
+export function PatchCard({ glyph, title, meta, done = false, onToggle, onOpen, disabled, checkLabel, dimmed, hideCheck, note, tag }: PatchCardProps) {
   const body = (
     <>
       <IconTile glyph={glyph} size="M" />
       <span className="patch-card__content">
         <span className="text-title-s text-primary">{title}</span>
         <span className="text-mono-caption text-secondary">{meta}</span>
+        {note && <span className="text-body-s text-secondary patch-card__note">{note}</span>}
+        {tag && <span className="patch-card__tag text-mono-caption">{tag}</span>}
       </span>
     </>
   );

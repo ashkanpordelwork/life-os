@@ -97,7 +97,7 @@ export function Library() {
             ))}
           </div>
           {patches.map((item) => (
-            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={`${t('library.level', { n: item.level })} · ${itemAmount(item, t)}`} onOpen={() => setOpen(item)} hideCheck />
+            <PatchCard key={item.id} glyph={item.glyph} title={item.title} meta={[t('library.level', { n: item.level }), itemAmount(item, t)].filter(Boolean).join(' · ')} onOpen={() => setOpen(item)} hideCheck />
           ))}
         </>
       )}

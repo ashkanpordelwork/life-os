@@ -56,7 +56,10 @@ export interface ChecklistItem {
   per_week?: number;
   /** Done in bits through the day (e.g. steps): left out of the ~12 min/day cap. Owner decision. */
   spread_over_day?: boolean;
-  /** Shown instead of minutes on cards, e.g. "7,000 steps". */
+  /** How this habit is measured (user feedback: not everything is minutes). Default: time.
+   *  count = steps, reps · amount = ml, g, servings · clock = by or until a time · check = done or not. */
+  measure?: 'time' | 'count' | 'amount' | 'clock' | 'check';
+  /** Label for count and amount habits, e.g. "7,000 steps", "500 ml". */
   amount?: string;
   /** Raw numbers from docs/engine-spec.md. Display text is built from these. */
   params: Record<string, unknown>;
