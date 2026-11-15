@@ -142,7 +142,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (!s.user || !s.reminders.push_enabled) return;
     const items = (s.sprint?.patch_ids ?? []).map(getItem).filter((x): x is ChecklistItem => !!x);
     const times = patchTimes(items, wakeNow, bedNow);
-    if (JSON.stringify(times) === JSON.stringify(s.reminders.patch_times ?? [])) return;
+    // Also re-save when the phone's time zone changed (travel), so pushes follow local time.
+    if (JSON.stringify(times) === JSON.stringify(s.reminders.patch_times ?? []) && s.reminders.tz === localTimeZone()) return;
     const next = { ...s.reminders, patch_times: times, tz: localTimeZone() };
     setS((p) => ({ ...p, reminders: next }));
     backend.saveReminders(s.user.id, next).catch(() => {});
