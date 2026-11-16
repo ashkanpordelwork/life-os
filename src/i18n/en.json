@@ -1175,5 +1175,220 @@
     "body": "Your request was approved. Every week, every habit and every tool are open.",
     "cta": "Nice",
     "more": "See what's in Pro"
+  },
+  "now": {
+    "title": "Right now",
+    "ask": "What’s going on?",
+    "soft": {
+      "moderate": "Research suggests this can help.",
+      "low": "Some research suggests this may help. It’s still early.",
+      "indirect": "Based on related research. It may help."
+    },
+    "minutes": "{n} min",
+    "tryIt": "Try it",
+    "another": "Try something else",
+    "didItHelp": "Did it help?",
+    "helped": {
+      "yes": "Yes",
+      "a_bit": "A bit",
+      "no": "Not really"
+    },
+    "habitOffer": "This helped you {n} times. Want it as a daily habit?",
+    "talkToPro": "Talk to a professional",
+    "redFlagsTitle": "Does any of this fit?",
+    "noneYet": "Nothing to suggest right now.",
+    "stop": {
+      "title": "Please talk to a doctor",
+      "body": "What you described needs a person, not an app. If it’s urgent, call your local emergency number."
+    },
+    "gate": {
+      "eating_screen": {
+        "title": "Let’s start somewhere gentler",
+        "body": "Food tips aren’t right for everyone. If eating feels hard, a doctor or dietitian can help. Here’s something calmer:"
+      },
+      "food_excluded": {
+        "title": "Ask your doctor first",
+        "body": "Food tips need a doctor’s okay for you. Please ask your doctor or dietitian. Here’s something calmer:"
+      }
+    },
+    "states": {
+      "neck_back": {
+        "title": "My neck or back hurts",
+        "redFlags": [
+          "Pain after a fall or injury",
+          "Numbness, tingling or weakness in an arm or leg",
+          "Fever with the pain",
+          "Trouble controlling your bladder or bowels"
+        ]
+      },
+      "eyes": {
+        "title": "My eyes are tired",
+        "redFlags": [
+          "Sudden vision loss or flashes of light",
+          "Eye pain with redness",
+          "Double vision"
+        ]
+      },
+      "stress": {
+        "title": "I feel stressed or anxious",
+        "redFlags": [
+          "Chest pain or trouble breathing",
+          "Thoughts of harming yourself"
+        ]
+      },
+      "headache": {
+        "title": "I have a headache",
+        "redFlags": [
+          "A sudden, very bad headache",
+          "A headache after a hit to the head",
+          "Fever and a stiff neck",
+          "Weakness, or trouble speaking or seeing"
+        ]
+      },
+      "stiff": {
+        "title": "I’m stiff from sitting",
+        "redFlags": [
+          "Swelling or pain in one leg",
+          "Chest pain"
+        ]
+      },
+      "focus": {
+        "title": "I can’t focus",
+        "redFlags": [
+          "Sudden confusion or trouble speaking"
+        ]
+      },
+      "low_mood": {
+        "title": "I feel low or unmotivated",
+        "redFlags": [
+          "Feeling low for more than two weeks",
+          "Feeling hopeless",
+          "Thoughts of harming yourself"
+        ]
+      },
+      "cant_sleep": {
+        "title": "I can’t fall asleep",
+        "redFlags": [
+          "Trouble sleeping for weeks",
+          "Chest pain at night"
+        ]
+      },
+      "low_energy": {
+        "title": "I’m low on energy",
+        "redFlags": [
+          "Tired for weeks for no reason",
+          "Chest pain or fainting"
+        ]
+      },
+      "craving": {
+        "title": "I’m craving something",
+        "redFlags": [
+          "Eating a lot and feeling you can’t stop",
+          "Making yourself throw up, or skipping meals to make up for eating"
+        ]
+      },
+      "stress_eating": {
+        "title": "I want to eat because I’m stressed",
+        "redFlags": [
+          "Eating a lot and feeling you can’t stop",
+          "Making yourself throw up, or skipping meals to make up for eating"
+        ]
+      },
+      "weight_on_mind": {
+        "title": "My weight is on my mind",
+        "redFlags": [
+          "Eating a lot and feeling you can’t stop",
+          "Making yourself throw up, or skipping meals to make up for eating"
+        ]
+      }
+    },
+    "actions": {
+      "shoulder_neck_reset": {
+        "title": "Loosen your neck and shoulders",
+        "steps": [
+          "Sit tall. Roll your shoulders back 5 times.",
+          "Slowly tilt one ear toward your shoulder. Hold 10 seconds. Switch sides.",
+          "Stand up and take a few steps."
+        ]
+      },
+      "walk_break": {
+        "title": "Take a short walk",
+        "steps": [
+          "Stand up.",
+          "Walk at an easy pace for 2 to 3 minutes.",
+          "Breathe slowly as you go."
+        ]
+      },
+      "screen_break": {
+        "title": "Rest your eyes",
+        "steps": [
+          "Look away from the screen.",
+          "Blink slowly a few times.",
+          "Rest for a minute."
+        ]
+      },
+      "slow_breathing": {
+        "title": "Breathe slowly for 3 minutes",
+        "steps": [
+          "Sit comfortably. Put a hand on your belly.",
+          "Breathe in slowly through your nose.",
+          "Breathe out a little longer than you breathed in. Keep going for 3 minutes."
+        ]
+      },
+      "physiological_sigh": {
+        "title": "A quick calming sigh",
+        "steps": [
+          "Breathe in deeply through your nose.",
+          "Add a short second sip of air.",
+          "Breathe out slowly through your mouth."
+        ]
+      },
+      "neck_shoulder_relax": {
+        "title": "Relax your neck and shoulders",
+        "steps": [
+          "Drop your shoulders away from your ears.",
+          "Slowly tilt your head from side to side.",
+          "Breathe out slowly with each move."
+        ]
+      },
+      "daylight_break": {
+        "title": "Get some daylight",
+        "steps": [
+          "Go outside, or stand by a bright window.",
+          "Stay for 5 to 10 minutes.",
+          "Look at the sky, not at the sun."
+        ]
+      },
+      "drink_water": {
+        "title": "Have a glass of water",
+        "steps": [
+          "Drink a glass of water if you haven’t had any for a while."
+        ]
+      },
+      "mood_walk": {
+        "title": "Go for a walk",
+        "steps": [
+          "Walk at an easy to medium pace.",
+          "Keep going for about 10 minutes.",
+          "No goal. Just move."
+        ]
+      },
+      "warm_shower": {
+        "title": "A warm shower before bed",
+        "steps": [
+          "About 1 to 2 hours before bed, take a warm shower or bath. Warm, not hot.",
+          "10 minutes is enough.",
+          "Then keep the lights low."
+        ]
+      },
+      "mindful_pause": {
+        "title": "Pause before you eat",
+        "steps": [
+          "Stop for a moment. Put a hand on your belly.",
+          "Notice what you feel: hungry, stressed, bored or tired.",
+          "Take 3 slow breaths, then decide."
+        ]
+      }
+    }
   }
 }
