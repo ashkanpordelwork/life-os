@@ -1196,21 +1196,6 @@
     "habitOffer": "This helped you {n} times. Want it as a daily habit?",
     "talkToPro": "Talk to a professional",
     "redFlagsTitle": "Does any of this fit?",
-    "noneYet": "Nothing to suggest right now.",
-    "stop": {
-      "title": "Please talk to a doctor",
-      "body": "What you described needs a person, not an app. If it’s urgent, call your local emergency number."
-    },
-    "gate": {
-      "eating_screen": {
-        "title": "Let’s start somewhere gentler",
-        "body": "Food tips aren’t right for everyone. If eating feels hard, a doctor or dietitian can help. Here’s something calmer:"
-      },
-      "food_excluded": {
-        "title": "Ask your doctor first",
-        "body": "Food tips need a doctor’s okay for you. Please ask your doctor or dietitian. Here’s something calmer:"
-      }
-    },
     "states": {
       "neck_back": {
         "title": "My neck or back hurts",
@@ -1389,6 +1374,10 @@
           "Take 3 slow breaths, then decide."
         ]
       }
+    },
+    "advice": {
+      "hint": "A professional can help with this too.",
+      "note": "This is worth checking with a doctor. Here’s something small to try meanwhile."
     }
   }
 }

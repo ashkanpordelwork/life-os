@@ -17,11 +17,14 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 
 ## Safety rules (apply to every row)
 
-1. Red-flag symptoms never get a "try this" suggestion. They get "talk to a doctor now" and stop. Examples: sudden severe headache, chest pain, new numbness or weakness, pain after an injury, thoughts of harming yourself.
-2. No claims about treating a disease, losing weight, or curing anxiety or depression.
-3. Never diagnose. Never say a user "has" a condition.
-4. Weight and mood wording: no shame words, no "should".
-5. A doctor must approve the red-flag list and the wording before anything ships.
+**Owner decision (2026-11-16): the app never blocks the user.** There is no "stop", no gate and no empty answer. A red flag, a food topic or a health group only adds a **small, gentle note** next to the suggestion ("a professional can help with this too"). Doctors supervise the rows; nobody waits for them.
+
+1. **Never block, only note.** A "yes" to a red-flag question keeps the suggestion and adds one gentle sentence to check with a doctor. Food topics and low mood get a quieter line.
+2. **Each action stays safe for the person.** Where one action may not suit a group (for example a warm bath with a heart condition or pregnancy), the app picks a different action. It does not close the app.
+3. No claims about treating a disease, losing weight, or curing anxiety or depression.
+4. Never diagnose. Never say a user "has" a condition.
+5. Weight and mood wording: no shame words, no "should".
+6. Doctors review the rows and the red-flag questions as supervisors. A doctor's word can change a row; it never freezes the app.
 
 ---
 
@@ -58,7 +61,7 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 - Diaphragmatic breathing: all 3 included studies showed lower stress, from a single 20-minute session up to 9 months. Very small evidence base. [JBI 2019](https://doi.org/10.11124/JBISRIR-2017-003848)
 - Brief interventions with deep breathing and gratitude "may be beneficial"; mindfulness and CBT-based programmes reduced stress, anxiety and depression in physicians and nurses. [Am J Health Promot 2020](https://doi.org/10.1177/0890117120920451)
 
-**Strength:** `low`. **Not verified yet:** the "physiological sigh" (double inhale, long exhale) is in the app from the Huberman source; this search found no review of it. **Safety:** panic with chest pain, or thoughts of self-harm, go to "get help now", not to breathing.
+**Strength:** `low`. **Not verified yet:** the "physiological sigh" (double inhale, long exhale) is in the app from the Huberman source; this search found no review of it. **Safety:** if the user ticks chest pain or thoughts of self-harm, breathing still shows, with a gentle sentence to check with a doctor.
 **Doctor review:** draft
 
 ## 4. Tension headache
@@ -70,7 +73,7 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 - In chronic tension-type headache, neck-shoulder strengthening and muscle relaxation reduced intensity, duration and frequency. [J Oral Facial Pain Headache 2025](https://doi.org/10.22514/jofph.2025.003)
 - Myofascial release reduced tension-type headache pain (SMD −0.86); quality of evidence low to very low. [Pain Res Manag 2024](https://doi.org/10.1155/2024/2042069)
 
-**Strength:** `low` and `indirect`. **Red flags (must show):** sudden "worst ever" headache, after a head injury, with fever and stiff neck, with weakness, speech or vision problems.
+**Strength:** `low` and `indirect`. **Red flags (a small note appears if ticked):** sudden "worst ever" headache, after a head injury, with fever and stiff neck, with weakness, speech or vision problems.
 **Doctor review:** draft
 
 ## 5. Stiff and heavy from sitting too long
@@ -105,7 +108,7 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 - 73 trials: exercise lowered depressive symptoms vs control (SMD −0.67, low certainty); no clear difference from psychological therapy (moderate certainty) or from medication (low certainty). [Cochrane 2026](https://doi.org/10.1002/14651858.CD004366.pub7)
 - 41 trials: large effect (SMD −0.95), moderate (−0.67) when only low-risk-of-bias studies were kept. Authors point to supervised, moderate-intensity, aerobic exercise. [Br J Sports Med 2023](https://doi.org/10.1136/bjsports-2022-106282)
 
-**Strength:** `moderate` for ongoing exercise and depressive symptoms; `indirect` for "right now". **Pending:** the acute effect of one short walk on mood. **Safety (hard rule):** low mood for more than about two weeks, hopelessness, or any thought of self-harm → "talk to a professional now". The app does not treat depression.
+**Strength:** `moderate` for ongoing exercise and depressive symptoms; `indirect` for "right now". **Pending:** the acute effect of one short walk on mood. **Safety:** low mood for more than about two weeks, hopelessness, or any thought of self-harm: the suggestion stays and a gentle sentence points to a professional. The app does not treat depression.
 **Doctor review:** draft
 
 ## 8. Can't fall asleep tonight
@@ -151,16 +154,16 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 
 This is the most sensitive area. The app helps with **habits and feelings around food**, never with a weight number. Weight-loss claims are not made anywhere.
 
-### Hard rules (draft, for doctor approval)
+### Hard rules (draft, for doctor supervision)
+
+Content rules stay. The app helps with **habits and feelings around food**, never with a weight number. Nothing below blocks the user; where a topic is sensitive, a small note appears instead.
 
 1. **No weight, BMI, body measurements or calories**: the app never asks for them, shows them, or sets a goal on them. No "lose X kg", no before/after.
 2. **No food logging with numbers, no streaks or points on eating.** Reason: a review of 38 articles found diet and fitness apps are linked to more disordered-eating symptoms and body-image concerns, more so with more frequent use, and users described pressure to meet goals and guilt. It is cross-sectional, so cause is not proven. [Body Image 2024](https://doi.org/10.1016/j.bodyim.2024.101836)
 3. **No shame words.** Do not use "fat", "overweight", "obese", "cheat", "bad food", "guilt", "clean eating". Use people-first, neutral wording. Reason: a review of Canadian evidence links obesity with poorer mental health, and says the way care providers talk can add to bias and stigma. It is observational, and its authors are partly from a drug company, so treat it as a caution, not proof. [Adv Ther 2026](https://doi.org/10.1007/s12325-026-03736-8)
-4. **Screen first, then show food suggestions.** Before any food-related suggestion, the app asks in a kind way about past or present eating problems and past dieting. If the answer is yes or unsure, the user sees only "talk to a professional" plus habits that don't involve food or weight (sleep, movement for mood). Trials of weight programmes track exactly these areas as relevant to eating-disorder risk: dieting and weight-loss history, mental health, eating behaviours, sleep, and weight stigma. This is a consensus mapping, not a tested screening tool. [Eat Weight Disord 2026](https://doi.org/10.1007/s40519-026-01866-0) **A doctor must pick the real screening questions.**
-5. **Do not show food-change suggestions at all** (doctor to confirm the list) to: under 18, pregnant or breastfeeding, with diabetes or on blood-sugar medicine, with kidney or heart disease, or on weight-loss medicine. They get "ask your doctor or dietitian".
-6. **No fasting, diets, detoxes, supplements or "fat-burning" tips** in the "right now" mode.
-7. **Never tie mood or self-worth to weight** in any text.
-8. **"Binge" or "loss of control" is a stop sign:** if a user says they have episodes of eating a lot and can't stop, show "talk to a professional" first.
+4. **A quiet note, not a gate.** Food topics always show a small "a professional can help too" line. If the optional eating-problem check says "risk", or the user is in a group a doctor flags (under 18, pregnancy, diabetes, kidney or heart disease, weight medicine), the note stays and the suggestion stays too. The food suggestions are only a walk and a mindful pause: no diet, fasting, supplement or "fat-burning" advice, ever. Trials of weight programmes track these areas as relevant to eating-disorder risk: dieting and weight-loss history, mental health, eating behaviours, sleep, and weight stigma. This is a consensus mapping, not a tested tool. [Eat Weight Disord 2026](https://doi.org/10.1007/s40519-026-01866-0) **A doctor writes the real check questions.**
+5. **Never tie mood or self-worth to weight** in any text.
+6. **"Binge" or "loss of control":** if a user ticks it, the suggestion still shows, with the gentle sentence to check with a doctor.
 
 ### Rows
 
@@ -182,7 +185,7 @@ This is the most sensitive area. The app helps with **habits and feelings around
 **Evidence**
 - Mindfulness-based digital programmes (10 studies, 902 people) reduced emotional eating (SMD −0.23) and binge eating (SMD −0.59). BMI did not change significantly (MD −0.44, CI −1.70 to 0.82). [Front Nutr 2026](https://doi.org/10.3389/fnut.2026.1874656)
 
-**Strength:** `low` (small studies, wide ranges). Note the win is in the behaviour, not in weight. **Safety:** binge eating can be a clinical sign: see hard rule 8.
+**Strength:** `low` (small studies, wide ranges). Note the win is in the behaviour, not in weight. **Safety:** binge eating can be a clinical sign: see hard rule 6.
 **Doctor review:** draft
 
 ### Still unresearched for weight and food
@@ -201,7 +204,7 @@ This is the most sensitive area. The app helps with **habits and feelings around
 3. **Some of the current app ideas are not supported as a fix:** sleep-hygiene education and relaxation for insomnia; sit-stand desks for pain. Doctors should review the sleep habits.
 4. **Most evidence is in clinical groups** (diagnosed headache, depression, chronic insomnia). Using it for "I feel it right now" is an **extrapolation** that doctors must sign off.
 5. **All 35 current habits have `evidence_level: null`.** This matrix is the first source to fill that in, for the matching habits only.
-6. **Food and weight need a gate, not a score.** The engine should not suggest food habits until the eating-problem screen is passed, and should hide them for the excluded groups. This is a safety filter that runs before scoring.
+6. **Food and weight need a quiet note, not a gate.** The engine keeps suggesting (a walk, a mindful pause) and adds a small professional hint. The risk is in the wording and in tracking, not in these two actions.
 7. **Tracking can harm here.** The streak, points, goals and logging that work for movement must be switched off for food habits. The current app counts food habits like any other (for example, protein and water amounts); doctors should decide which of those stay.
 8. **The 35 habits are not enough for "right now".** Several actions with some support are not habits in the app: bright daytime light (only "morning light" exists), a warm shower 1–2 hours before bed, a sitting break about every 30 minutes, slow breathing for stress (the sigh is there, but not tested here), and a mindful pause before eating. "Right now" needs its own small set of actions, separate from the weekly habits.
 
@@ -209,7 +212,7 @@ This is the most sensitive area. The app helps with **habits and feelings around
 
 - Gaps: exercise for fatigue and attention in healthy adults, naps, caffeine for sleepiness. Several queries returned unrelated results (brain stimulation, older adults, adolescent sleep, cancer care) or nothing.
 - Weight and food: a first pass is above (rules and two rows). The unresearched parts are listed there.
-- Eating-disorder and mental-health screening wording (a doctor must write it).
+- Eating-disorder and mental-health check wording (a doctor writes it; it only changes the small note).
 - Check each claim against the full text, not only the abstract (done here for abstracts only).
 - Doctor review of every row, and the red-flag list in simple English (owner decision: the app stays in plain English for now).
 

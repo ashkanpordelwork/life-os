@@ -11,52 +11,58 @@ const run = (state: Parameters<typeof rightNow>[0], ctx: Parameters<typeof right
   rightNow(state, ctx, history, TODAY, { states: approved, requireReview: true });
 const out = (day: string, state: NowOutcome['state'], action: NowOutcome['action'], result: NowOutcome['result']): NowOutcome => ({ day, state, action, result });
 
-describe('safety lock', () => {
-  it('is on by default, and nothing is offered while every row is a draft', () => {
-    expect(REQUIRE_DOCTOR_REVIEW).toBe(true);
-    for (const s of NOW_STATES) {
-      const r = rightNow(s.id, { eatingScreen: 'clear' }, [], TODAY);
-      expect(r.kind === 'suggest').toBe(false);
-    }
-    expect(rightNow('neck_back', {}, [], TODAY)).toEqual({ kind: 'none', reason: 'no_review' });
+describe('the user is never blocked', () => {
+  const every = (fn: (state: (typeof NOW_STATES)[number]['id'], ctx: Parameters<typeof rightNow>[1]) => void) => {
+    const contexts = [
+      {}, { redFlag: true }, { healthRisk: true }, { minutes: 1 }, { daylight: false }, { dayPart: 'night' as const },
+      { eatingScreen: 'risk' as const }, { under18: true, diabetes: true, kidney: true, weightMedicine: true },
+      { redFlag: true, healthRisk: true, minutes: 1, daylight: false, dayPart: 'night' as const },
+    ];
+    for (const st of NOW_STATES) for (const c of contexts) fn(st.id, c);
+  };
+  it('always gives a suggestion, for every state and every situation', () => {
+    every((st, c) => {
+      const r = rightNow(st, c, [], TODAY);
+      expect(r.kind).toBe('suggest');
+      if (r.kind === 'suggest') expect(r.main.action).toBeTruthy();
+    });
   });
-  it('offers an approved row', () => {
-    const r = run('neck_back');
-    expect(r.kind).toBe('suggest');
+  it('the doctor lock is off by default (doctors supervise, nobody waits)', () => {
+    expect(REQUIRE_DOCTOR_REVIEW).toBe(false);
+    expect(rightNow('neck_back', {}, [], TODAY).kind).toBe('suggest');
+  });
+  it('the lock can be turned on: only approved rows, and then it can say none', () => {
+    expect(rightNow('neck_back', {}, [], TODAY, { requireReview: true })).toEqual({ kind: 'none', reason: 'no_review' });
+    expect(rightNow('neck_back', {}, [], TODAY, { requireReview: true, states: approved }).kind).toBe('suggest');
+  });
+  it('an unknown state returns none instead of crashing', () => {
+    expect(rightNow('nope' as never, {}, [], TODAY)).toEqual({ kind: 'none', reason: 'unknown_state' });
   });
 });
 
-describe('red flags', () => {
-  it('stop everything, even for approved rows', () => {
-    expect(run('headache', { redFlag: true })).toEqual({ kind: 'stop', reason: 'red_flag' });
-    expect(run('craving', { redFlag: true, eatingScreen: 'clear' })).toEqual({ kind: 'stop', reason: 'red_flag' });
+describe('the small note', () => {
+  const advice = (st: Parameters<typeof rightNow>[0], ctx: Parameters<typeof rightNow>[1] = {}) => {
+    const r = rightNow(st, ctx, [], TODAY);
+    return r.kind === 'suggest' ? r.advice : null;
+  };
+  it('a red-flag "yes" adds one gentle sentence and keeps the suggestion', () => {
+    expect(advice('headache', { redFlag: true })).toBe('note');
+    const r = rightNow('headache', { redFlag: true }, [], TODAY);
+    expect(r.kind === 'suggest' && r.main.action).toBe('neck_shoulder_relax');
   });
-});
-
-describe('food gate', () => {
-  it('closes when the eating screen is unknown or risky, and shows only calm non-food options', () => {
-    for (const screen of [undefined, 'unknown', 'risk'] as const) {
-      const r = run('craving', { eatingScreen: screen });
-      expect(r.kind).toBe('gate');
-      if (r.kind === 'gate') {
-        expect(r.gate).toBe('eating_screen');
-        expect(r.talkToPro).toBe(true);
-        expect(r.safe.every((id) => ['walk_break', 'daylight_break'].includes(id))).toBe(true);
-      }
+  it('food topics and low mood get a quiet hint', () => {
+    for (const st of ['craving', 'stress_eating', 'weight_on_mind', 'low_mood'] as const) expect(advice(st)).toBe('hint');
+  });
+  it('other topics get no note unless a red flag was ticked', () => {
+    for (const st of ['neck_back', 'eyes', 'stress', 'headache', 'stiff', 'focus', 'cant_sleep', 'low_energy'] as const) expect(advice(st)).toBe('none');
+  });
+  it('the eating screen and health groups only change the note, never the suggestion', () => {
+    const base = rightNow('weight_on_mind', { eatingScreen: 'clear' }, [], TODAY);
+    for (const ctx of [{ eatingScreen: 'risk' as const }, { diabetes: true }, { under18: true }, { healthRisk: true }, {}]) {
+      const r = rightNow('weight_on_mind', ctx, [], TODAY);
+      expect(r.kind).toBe('suggest');
+      if (base.kind === 'suggest' && r.kind === 'suggest' && !ctx.healthRisk) expect(r.main.action).toBe(base.main.action);
     }
-  });
-  it('closes for groups that need a doctor first', () => {
-    for (const flag of ['under18', 'diabetes', 'kidney', 'weightMedicine', 'healthRisk'] as const) {
-      const r = run('weight_on_mind', { eatingScreen: 'clear', [flag]: true });
-      expect(r).toMatchObject({ kind: 'gate', gate: 'food_excluded' });
-    }
-  });
-  it('opens when the screen is clear, and always shows "talk to a professional"', () => {
-    const r = run('stress_eating', { eatingScreen: 'clear' });
-    expect(r).toMatchObject({ kind: 'suggest', talkToPro: true });
-  });
-  it('never touches non-food states', () => {
-    expect(run('eyes').kind).toBe('suggest');
   });
 });
 
@@ -68,21 +74,31 @@ describe('what fits', () => {
     expect(h.kind === 'suggest' && [h.main, ...h.alternatives].some((p) => p.action === 'drink_water')).toBe(false);
     expect(run('low_energy').kind === 'suggest' && true).toBe(true);
   });
-  it('respects the time the user has', () => {
-    const r = run('stress', { minutes: 2 });
-    expect(r).toEqual({ kind: 'none', reason: 'no_option' }); // slow breathing takes 3 min
-    expect(run('stress', { minutes: 3 }).kind).toBe('suggest');
+  it('prefers what fits the time, but never leaves the user with nothing', () => {
+    // headache: only a 3-minute action exists; with 2 minutes it is still offered rather than nothing
+    const r = run('headache', { minutes: 2 });
+    expect(r.kind === 'suggest' && r.main.action).toBe('neck_shoulder_relax');
+    // stress with 2 minutes: the 3-minute breathing stays (the sigh is pending research)
+    const s2 = run('stress', { minutes: 2 });
+    expect(s2.kind === 'suggest' && s2.main.action).toBe('slow_breathing');
+    // when a shorter option exists, it wins
+    const quick = rightNow('neck_back', { minutes: 2 }, [], TODAY);
+    expect(quick.kind === 'suggest' && quick.main.action).toBe('shoulder_neck_reset');
   });
   it('needs daylight for the daylight break', () => {
     const r = run('focus', { daylight: false });
     expect(r.kind === 'suggest' && r.main.action).toBe('drink_water');
   });
-  it('shows the warm shower only in the evening or at night', () => {
-    expect(run('cant_sleep', { dayPart: 'day' })).toEqual({ kind: 'none', reason: 'no_option' });
-    expect(run('cant_sleep', { dayPart: 'evening' }).kind).toBe('suggest');
+  it('shows the warm shower in the evening or at night; by day it still gives something', () => {
+    const eve = run('cant_sleep', { dayPart: 'evening' });
+    expect(eve.kind === 'suggest' && eve.main.action).toBe('warm_shower');
+    const day = run('cant_sleep', { dayPart: 'day' });
+    expect(day.kind === 'suggest' && day.main.action).toBe('warm_shower'); // relaxed: the moment can't hide the only option
   });
-  it('hides the warm shower for pregnancy, a heart condition or illness', () => {
-    expect(run('cant_sleep', { dayPart: 'night', healthRisk: true })).toEqual({ kind: 'none', reason: 'no_option' });
+  it('never offers the warm shower to pregnancy, a heart condition or illness: it picks another action', () => {
+    const r = run('cant_sleep', { dayPart: 'night', healthRisk: true });
+    expect(r.kind).toBe('suggest');
+    expect(r.kind === 'suggest' && r.main.action).toBe('slow_breathing');
   });
   it('gives one main pick and at most two alternatives', () => {
     const r = run('weight_on_mind', { eatingScreen: 'clear' });
@@ -155,7 +171,7 @@ describe('data is consistent', () => {
       else expect(o.sources.length).toBeGreaterThan(0);
     }
   });
-  it('no row is approved yet (a doctor flips that)', () => {
+  it('every row is a draft until a doctor approves it', () => {
     for (const s of NOW_STATES) for (const o of s.options) expect(o.review).toBe('draft');
   });
   it('every state and action has its text, and each state has its red-flag questions', () => {
@@ -168,11 +184,15 @@ describe('data is consistent', () => {
       expect(tList(`now.actions.${a.id}.steps`).length).toBeGreaterThan(0);
     }
   });
-  it('food states always carry the professional link and the same two red flags', () => {
+  it('food states carry the quiet professional hint', () => {
     for (const s of NOW_STATES.filter((x) => x.group === 'food')) {
       expect(s.food).toBe(true);
       expect(s.talkToPro).toBe(true);
     }
+  });
+  it('the note texts exist', () => {
+    expect(t('now.advice.hint')).not.toBe('now.advice.hint');
+    expect(t('now.advice.note')).not.toBe('now.advice.note');
   });
   it('no shame words in the food texts', () => {
     const banned = /\b(fat|overweight|obese|cheat|bad food|guilt|clean eating|diet|calorie)/i;

@@ -2,8 +2,9 @@
  * "Right now" data (owner decision: the app's core is a button for the moment you're in).
  * Source of every row: docs/problem-solution-matrix.md (PubMed reviews, searched 2026-11-16).
  *
- * Nothing here is shown to users until a doctor sets `review: 'approved'` on an option
- * (see REQUIRE_DOCTOR_REVIEW in src/engine/rightNow.ts). Texts live in src/i18n/en.json under `now.*`.
+ * Each option has a `review` status. Doctors supervise the rows (owner decision), but the app never blocks a user
+ * waiting for them; REQUIRE_DOCTOR_REVIEW in src/engine/rightNow.ts can lock unapproved rows if that ever changes.
+ * Texts live in src/i18n/en.json under `now.*`.
  */
 
 export type NowStateId =
@@ -54,9 +55,9 @@ export interface NowOption {
 export interface NowState {
   id: NowStateId;
   group: NowGroup;
-  /** Food, eating and weight: goes through the eating-problem gate first. */
+  /** Food, eating and weight. Same rules as the rest: never blocked, only a small note. */
   food?: boolean;
-  /** Always show "talk to a professional" next to the suggestion. */
+  /** Show a small "a professional can help too" hint next to the suggestion. */
   talkToPro?: boolean;
   options: NowOption[];
 }
@@ -146,13 +147,18 @@ export const NOW_STATES: NowState[] = [
 ];
 
 /**
- * Red-flag questions per state. A "yes" to any of them stops everything: the user sees
- * "talk to a doctor" and no tips. DRAFT: a doctor must write and approve these lists.
+ * Red-flag questions per state. They are optional. A "yes" never blocks anything (owner decision):
+ * the suggestion still shows, with a small note to check with a doctor. DRAFT: a doctor must write these lists.
  */
 export const RED_FLAG_COUNT: Record<NowStateId, number> = {
   neck_back: 4, eyes: 3, stress: 2, headache: 4, stiff: 2, focus: 1,
   low_mood: 3, cant_sleep: 2, low_energy: 2, craving: 2, stress_eating: 2, weight_on_mind: 2,
 };
 
-/** Actions with no food or weight link, safe to show when the food gate is closed. */
-export const GATE_SAFE_ACTIONS: NowActionId[] = ['walk_break', 'daylight_break'];
+/**
+ * Used when nothing else fits (owner decision: the user is never left with nothing).
+ * Slow breathing is low-risk, needs no equipment and works anywhere.
+ */
+export const FALLBACK_OPTION: NowOption = {
+  action: 'slow_breathing', strength: 'low', sources: [D.breathing, D.diaphragmatic], review: 'draft',
+};
