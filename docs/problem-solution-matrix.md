@@ -1,4 +1,4 @@
-# Problem → solution matrix (draft 1)
+# Problem → solution matrix (draft 2)
 
 **Status: DRAFT. Nothing here has been reviewed by a doctor.** Every row is marked `Doctor review: draft`.
 Source of evidence: PubMed (systematic reviews and meta-analyses), searched 2026-11-16.
@@ -129,6 +129,53 @@ Only indirect result: eating carbohydrate after vegetables or protein lowered af
 
 ---
 
+## Weight and food (strictest rules)
+
+This is the most sensitive area. The app helps with **habits and feelings around food**, never with a weight number. Weight-loss claims are not made anywhere.
+
+### Hard rules (draft, for doctor approval)
+
+1. **No weight, BMI, body measurements or calories**: the app never asks for them, shows them, or sets a goal on them. No "lose X kg", no before/after.
+2. **No food logging with numbers, no streaks or points on eating.** Reason: a review of 38 articles found diet and fitness apps are linked to more disordered-eating symptoms and body-image concerns, more so with more frequent use, and users described pressure to meet goals and guilt. It is cross-sectional, so cause is not proven. [Body Image 2024](https://doi.org/10.1016/j.bodyim.2024.101836)
+3. **No shame words.** Do not use "fat", "overweight", "obese", "cheat", "bad food", "guilt", "clean eating". Use people-first, neutral wording. Reason: a review of Canadian evidence links obesity with poorer mental health, and says the way care providers talk can add to bias and stigma. It is observational, and its authors are partly from a drug company, so treat it as a caution, not proof. [Adv Ther 2026](https://doi.org/10.1007/s12325-026-03736-8)
+4. **Screen first, then show food suggestions.** Before any food-related suggestion, the app asks in a kind way about past or present eating problems and past dieting. If the answer is yes or unsure, the user sees only "talk to a professional" plus habits that don't involve food or weight (sleep, movement for mood). Trials of weight programmes track exactly these areas as relevant to eating-disorder risk: dieting and weight-loss history, mental health, eating behaviours, sleep, and weight stigma. This is a consensus mapping, not a tested screening tool. [Eat Weight Disord 2026](https://doi.org/10.1007/s40519-026-01866-0) **A doctor must pick the real screening questions.**
+5. **Do not show food-change suggestions at all** (doctor to confirm the list) to: under 18, pregnant or breastfeeding, with diabetes or on blood-sugar medicine, with kidney or heart disease, or on weight-loss medicine. They get "ask your doctor or dietitian".
+6. **No fasting, diets, detoxes, supplements or "fat-burning" tips** in the "right now" mode.
+7. **Never tie mood or self-worth to weight** in any text.
+8. **"Binge" or "loss of control" is a stop sign:** if a user says they have episodes of eating a lot and can't stop, show "talk to a professional" first.
+
+### Rows
+
+**W1. "My weight is on my mind"** (entry wording is **app inference**; doctors decide the exact words)
+
+**Right now / habits:** movement, sleep, and mindful eating, framed as feeling better, not weight. A "talk to a professional" link is always visible.
+
+**Evidence**
+- In lifestyle weight-management programmes (18 trials), daily steps rose to about 8,500 and stayed there; weight loss was 4.39% at about 8 months and 3.28% at the maintenance phase; more steps went with more weight loss. This is a link seen inside structured, supervised programmes, not proof that walking alone causes weight loss. [Int J Environ Res Public Health 2026](https://doi.org/10.3390/ijerph23040522)
+- Sleep and weight loss (30 studies): evidence mixed. Restricting sleep reduced fat loss in manipulation studies; better sleep satisfaction and efficiency may support weight loss; sleep length showed inconsistent links. [Obes Rev 2026](https://doi.org/10.1111/obr.70199)
+- More legumes lowered total cholesterol, LDL and fasting glucose (moderate certainty). It did not report weight. [Eur J Nutr 2024](https://doi.org/10.1007/s00394-024-03576-8)
+
+**Strength:** `low` and `indirect`. **Doctor review:** draft
+
+**W2. "I eat when I'm stressed or upset"**
+
+**Right now:** a short mindfulness pause before eating **(app inference on format; the trials were multi-week digital programmes)**.
+
+**Evidence**
+- Mindfulness-based digital programmes (10 studies, 902 people) reduced emotional eating (SMD −0.23) and binge eating (SMD −0.59). BMI did not change significantly (MD −0.44, CI −1.70 to 0.82). [Front Nutr 2026](https://doi.org/10.3389/fnut.2026.1874656)
+
+**Strength:** `low` (small studies, wide ranges). Note the win is in the behaviour, not in weight. **Safety:** binge eating can be a clinical sign: see hard rule 8.
+**Doctor review:** draft
+
+### Still unresearched for weight and food
+
+- Whether protein or fibre keep people full (the search for protein and satiety returned unrelated studies).
+- Sugary drinks and weight (the results were about blood pressure and a secondary analysis, not usable).
+- Meal timing and breakfast, portion size, ultra-processed food.
+- A validated eating-problem screen for adults, and who may see food suggestions (doctor and dietitian).
+
+---
+
 ## What this tells the decision engine
 
 1. **Evidence is weak for most small desk-time actions.** Most reviews say low or very low certainty. The app has to speak softly ("may help") and should not rank a tiny action above a clear safety message.
@@ -136,12 +183,14 @@ Only indirect result: eating carbohydrate after vegetables or protein lowered af
 3. **Some of the current app ideas are not supported as a fix:** sleep-hygiene education and relaxation for insomnia; sit-stand desks for pain. Doctors should review the sleep habits.
 4. **Most evidence is in clinical groups** (diagnosed headache, depression, chronic insomnia). Using it for "I feel it right now" is an **extrapolation** that doctors must sign off.
 5. **All 35 current habits have `evidence_level: null`.** This matrix is the first source to fill that in, for the matching habits only.
+6. **Food and weight need a gate, not a score.** The engine should not suggest food habits until the eating-problem screen is passed, and should hide them for the excluded groups. This is a safety filter that runs before scoring.
+7. **Tracking can harm here.** The streak, points, goals and logging that work for movement must be switched off for food habits. The current app counts food habits like any other (for example, protein and water amounts); doctors should decide which of those stay.
 
 ## Not done yet
 
 - Problems 9 and 10, plus the focus and sleep-onset gaps above.
-- Weight and food (kept out of this pass on purpose; needs the hardest safety rules).
-- Eating-disorder and mental-health screening wording.
+- Weight and food: a first pass is above (rules and two rows). The unresearched parts are listed there.
+- Eating-disorder and mental-health screening wording (a doctor must write it).
 - Check each claim against the full text, not only the abstract (done here for abstracts only).
 - Doctor review of every row, and the red-flag list in Persian and English.
 
