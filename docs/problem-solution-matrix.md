@@ -1,4 +1,4 @@
-# Problem → solution matrix (draft 2)
+# Problem → solution matrix (draft 3)
 
 **Status: DRAFT. Nothing here has been reviewed by a doctor.** Every row is marked `Doctor review: draft`.
 Source of evidence: PubMed (systematic reviews and meta-analyses), searched 2026-11-16.
@@ -88,12 +88,13 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 
 ## 6. Can't focus
 
-**Right now:** drink water if you have not had any for a long time.
+**Right now:** get brighter light (a window, outside, a well-lit spot) and drink water if you have not had any for a long time.
 
 **Evidence**
+- Light during the day: across 62 studies in healthy adults, alertness and working memory were the most affected; bright white light improved self-reported alertness and working memory. Sustained attention and attentional control were inconclusive, and the studies differed a lot. [Biol Psychol 2024](https://doi.org/10.1016/j.biopsycho.2024.108845)
 - Dehydration impaired cognition (effect −0.21), and attention most (−0.52), mainly when body-water loss was above about 2%. A normal desk day usually does not reach that. [Med Sci Sports Exerc 2018](https://doi.org/10.1249/MSS.0000000000001682)
 
-**Strength:** `low` and narrow. **Pending:** short exercise or walking breaks for attention in healthy adults. Our first query returned only studies in children and in dementia, so none are cited.
+**Strength:** `low`. **App inference:** "go near daylight" for the light advice; the studies used lab or office lights. **Pending:** short exercise or walking breaks for attention in healthy adults. Two queries returned only older adults, brain stimulation or children, so none are cited.
 **Doctor review:** draft
 
 ## 7. Low mood, no motivation
@@ -109,23 +110,40 @@ Rule: an action is only listed with a claim the abstract supports. Anything that
 
 ## 8. Can't fall asleep tonight
 
-**Right now:** not established. See the warning below.
+**Right now:** a warm shower or bath 1–2 hours before bed. The rest is not established; see the warning below.
 
-**Evidence** (chronic insomnia disorder, mostly therapist-led CBT-I)
-- The parts that mattered most: cognitive restructuring, sleep restriction, stimulus control. Sleep-hygiene education was not essential (iOR 1.01), and relaxation procedures were "potentially counterproductive" (iOR 0.81, CI 0.64–1.02). [JAMA Psychiatry 2024](https://doi.org/10.1001/jamapsychiatry.2023.5060)
+**Evidence**
+- A warm shower or bath at 40–42.5 °C improved self-rated sleep quality and sleep efficiency (17 studies, 13 in the meta-analysis). Scheduled 1–2 hours before bedtime, even 10 minutes shortened the time to fall asleep. The authors say research is scarce and the best timing and length are not settled. [Sleep Med Rev 2019](https://doi.org/10.1016/j.smrv.2019.04.008)
+- In chronic insomnia disorder (mostly therapist-led CBT-I): the parts that mattered most were cognitive restructuring, sleep restriction and stimulus control. Sleep-hygiene education was not essential (iOR 1.01), and relaxation procedures were "potentially counterproductive" (iOR 0.81, CI 0.64–1.02). [JAMA Psychiatry 2024](https://doi.org/10.1001/jamapsychiatry.2023.5060)
 - CBT-I shortened time to fall asleep by about 19 minutes in chronic insomnia. [Ann Intern Med 2015](https://doi.org/10.7326/M14-2841)
 
-**Strength:** `indirect`. **Warning for the engine:** the app currently offers relaxation (NSDR, breathing) and sleep-hygiene habits for sleep. This evidence is about *chronic insomnia*, not one bad night, so it does not prove they are wrong, but it does not support selling them as the fix either. Doctors should decide the wording. **Pending:** evidence for one sleepless night; warm bath or shower before bed (our query returned nothing usable).
+**Strength:** `low` for the warm bath; `indirect` for the CBT-I findings. **Warning for the engine:** the app offers relaxation (NSDR, breathing) and sleep-hygiene habits for sleep. The insomnia evidence is about *chronic insomnia*, not one bad night, so it does not prove them wrong, but it does not support selling them as the fix either. Doctors should decide the wording. **Safety (doctor to confirm):** hot baths may not suit people with heart conditions, low blood pressure, or pregnancy; sleeplessness for weeks goes to "talk to a professional".
 **Doctor review:** draft
 
 ## 9. Hungry, craving something sweet
 
-**Status: `pending`.** Our search found no review of cravings.
-Only indirect result: eating carbohydrate after vegetables or protein lowered after-meal glucose and insulin (moderate certainty), but hunger and fullness did not differ consistently (very low certainty). [J Am Nutr Assoc 2022](https://doi.org/10.1080/27697061.2022.2161664) This is about blood sugar, not cravings.
+**Right now:** a short pause to notice the urge before eating **(app inference on the format)**. Longer run: meals with legumes.
+
+**Evidence**
+- Meals with pulses (40 acute studies): lower glucose (28 of 40) and insulin (16 of 24) responses than other starchy foods. Hunger fell in 3 of 5 studies and not significantly in the other 2; fullness was higher in 3 of 6; satiety was higher in only 1 of 6. [Nutr Rev 2026](https://doi.org/10.1093/nutrit/nuaf190)
+- Mindfulness-based interventions reduced attention to high-energy food cues; other mindfulness programmes eased hedonic hunger and craving without changing attention. Six small, mixed studies, described as preliminary. [Nutrients 2025](https://doi.org/10.3390/nu17243885)
+- Eating carbohydrate after vegetables or protein lowered after-meal glucose and insulin (moderate certainty), but hunger and fullness did not differ consistently. [J Am Nutr Assoc 2022](https://doi.org/10.1080/27697061.2022.2161664)
+- **Safety link:** in people with diagnosed eating disorders, craving was consistently linked to binge eating (trait craving more than state craving). The app must not treat "craving" as a failing, and the food gate (see "Weight and food") applies. [Neurosci Biobehav Rev 2025](https://doi.org/10.1016/j.neubiorev.2025.106515)
+
+**Strength:** `low`. Fibre and protein: a search on glucomannan and resistant starch found mostly animal studies and several null human results; a search on protein and appetite returned unrelated studies. Neither is cited as support.
+**Doctor review:** draft
 
 ## 10. Low energy in the afternoon
 
-**Status: `pending`.** Two searches returned nothing usable for short-term fatigue or sleepiness in healthy adults (one returned unrelated studies).
+**Right now:** brighter light and a short break to move **(app inference on pairing them)**.
+
+**Evidence**
+- Daytime light: bright white light improved self-reported alertness (62 studies, healthy adults, very different set-ups). [Biol Psychol 2024](https://doi.org/10.1016/j.biopsycho.2024.108845)
+- Workplace lighting (5 studies, 282 workers): cool, high-colour-temperature light may improve alertness (SMD −0.69, CI −1.28 to −0.10) but not mood; the authors rate the evidence very low and two studies were industry-sponsored. [Cochrane 2018](https://doi.org/10.1002/14651858.CD012243.pub2)
+- Sitting breaks: see row 5 (they act on blood glucose, not on feeling energetic).
+
+**Strength:** `low`. **Pending:** naps and caffeine (queries returned unrelated or no results) and exercise for fatigue in healthy adults (no usable review found).
+**Doctor review:** draft
 
 ---
 
@@ -169,7 +187,7 @@ This is the most sensitive area. The app helps with **habits and feelings around
 
 ### Still unresearched for weight and food
 
-- Whether protein or fibre keep people full (the search for protein and satiety returned unrelated studies).
+- Whether protein or fibre keep people full (searches found cancer-care studies and mostly animal studies).
 - Sugary drinks and weight (the results were about blood pressure and a secondary analysis, not usable).
 - Meal timing and breakfast, portion size, ultra-processed food.
 - A validated eating-problem screen for adults, and who may see food suggestions (doctor and dietitian).
@@ -185,14 +203,15 @@ This is the most sensitive area. The app helps with **habits and feelings around
 5. **All 35 current habits have `evidence_level: null`.** This matrix is the first source to fill that in, for the matching habits only.
 6. **Food and weight need a gate, not a score.** The engine should not suggest food habits until the eating-problem screen is passed, and should hide them for the excluded groups. This is a safety filter that runs before scoring.
 7. **Tracking can harm here.** The streak, points, goals and logging that work for movement must be switched off for food habits. The current app counts food habits like any other (for example, protein and water amounts); doctors should decide which of those stay.
+8. **The 35 habits are not enough for "right now".** Several actions with some support are not habits in the app: bright daytime light (only "morning light" exists), a warm shower 1–2 hours before bed, a sitting break about every 30 minutes, slow breathing for stress (the sigh is there, but not tested here), and a mindful pause before eating. "Right now" needs its own small set of actions, separate from the weekly habits.
 
 ## Not done yet
 
-- Problems 9 and 10, plus the focus and sleep-onset gaps above.
+- Gaps: exercise for fatigue and attention in healthy adults, naps, caffeine for sleepiness. Several queries returned unrelated results (brain stimulation, older adults, adolescent sleep, cancer care) or nothing.
 - Weight and food: a first pass is above (rules and two rows). The unresearched parts are listed there.
 - Eating-disorder and mental-health screening wording (a doctor must write it).
 - Check each claim against the full text, not only the abstract (done here for abstracts only).
-- Doctor review of every row, and the red-flag list in Persian and English.
+- Doctor review of every row, and the red-flag list in simple English (owner decision: the app stays in plain English for now).
 
 ## Notes on the search tool
 
